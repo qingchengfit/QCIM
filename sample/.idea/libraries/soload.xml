@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="soload">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/sdk/libs/soload.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

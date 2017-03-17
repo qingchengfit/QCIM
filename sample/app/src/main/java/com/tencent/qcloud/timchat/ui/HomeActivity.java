@@ -15,13 +15,15 @@ import android.widget.Toast;
 
 import com.tencent.TIMManager;
 import com.tencent.TIMUserStatusListener;
-import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.FriendshipInfo;
-import com.tencent.qcloud.timchat.model.GroupInfo;
-import com.tencent.qcloud.timchat.model.UserInfo;
+import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.ui.customview.DialogActivity;
-import com.tencent.qcloud.ui.NotifyDialog;
+import com.tencent.qcloud.timchat.ui.qcchat.ConversationFragment;
+import com.tencent.qcloud.timchat.ui.qcchat.SplashActivity;
+import com.tencent.qcloud.timchat.widget.NotifyDialog;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 
 /**
@@ -31,7 +33,7 @@ public class HomeActivity extends FragmentActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
     private FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {ConversationFragment.class, ContactFragment.class, SettingFragment.class};
+    private final Class fragmentArray[] = {ConversationFragment.class};
     private int mTitleArray[] = {R.string.home_conversation_tab, R.string.home_contact_tab, R.string.home_setting_tab};
     private int mImageViewArray[] = {R.drawable.tab_conversation, R.drawable.tab_contact, R.drawable.tab_setting};
     private String mTextviewArray[] = {"contact", "conversation", "setting"};
@@ -77,7 +79,6 @@ public class HomeActivity extends FragmentActivity {
             //将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
             mTabHost.getTabWidget().setDividerDrawable(null);
-
         }
 
     }

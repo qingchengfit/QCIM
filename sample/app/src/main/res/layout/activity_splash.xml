@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:background="#cccccc"
-    tools:context=".SplashActivity">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/start_image" />
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#cccccc">
 
-</RelativeLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/tv_logining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="正在登录，请稍后..."
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

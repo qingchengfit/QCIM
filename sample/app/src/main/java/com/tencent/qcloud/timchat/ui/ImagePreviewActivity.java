@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.ui.TemplateTitle;
+import com.tencent.qcloud.timchat.widget.TemplateTitle;
 
 import java.io.File;
 import java.io.IOException;

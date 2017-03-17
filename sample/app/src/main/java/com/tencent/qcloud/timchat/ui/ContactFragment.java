@@ -17,10 +17,10 @@ import android.widget.TextView;
 
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ExpandGroupListAdapter;
-import com.tencent.qcloud.timchat.model.FriendProfile;
-import com.tencent.qcloud.timchat.model.FriendshipInfo;
-import com.tencent.qcloud.timchat.model.GroupInfo;
-import com.tencent.qcloud.ui.TemplateTitle;
+import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
+import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.widget.TemplateTitle;
 
 import java.util.List;
 import java.util.Map;

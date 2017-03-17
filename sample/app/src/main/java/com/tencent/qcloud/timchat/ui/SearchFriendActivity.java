@@ -10,12 +10,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tencent.TIMUserProfile;
-import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
-import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
-import com.tencent.qcloud.timchat.model.FriendProfile;
-import com.tencent.qcloud.timchat.model.ProfileSummary;
+import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
+import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
+import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
+import com.tencent.qcloud.timchat.viewfeatures.FriendInfoView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.ui.TemplateTitle;
+import com.tencent.qcloud.timchat.widget.TemplateTitle;
 
 /**
  * 修改文本页面

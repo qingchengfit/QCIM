@@ -6,36 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.AboutActivity">
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canBack="true"
         app:titleText="@string/about_title" />
 
 
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/imsdk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:name="@string/about_imsdk" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/qalsdk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/about_qalsdk" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/tlssdk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/about_tlssdk" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/env"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canNav="true"
         app:name="@string/about_env" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/logLevel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

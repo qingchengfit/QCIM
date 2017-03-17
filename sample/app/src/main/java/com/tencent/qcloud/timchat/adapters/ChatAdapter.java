@@ -1,7 +1,6 @@
 package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.Message;
+import com.tencent.qcloud.timchat.chatmodel.Message;
 
 import java.util.List;
 
@@ -65,7 +64,6 @@ public class ChatAdapter extends ArrayAdapter<Message> {
         }
         return view;
     }
-
 
     public class ViewHolder{
         public RelativeLayout leftMessage;

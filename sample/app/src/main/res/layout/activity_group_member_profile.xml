@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/background"
     tools:context="com.tencent.qcloud.timchat.ui.GroupMemberProfileActivity">
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/GroupMemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-        <com.tencent.qcloud.ui.CircleImageView
+        <com.tencent.qcloud.timchat.widget.CircleImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginLeft="20dp"
@@ -44,19 +44,19 @@
         android:layout_marginBottom="20dp"
         android:background="@color/line" />
 
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/manager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/group_member_manage"
         app:isSwitch="true" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/setQuiet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/group_member_quiet"
         app:canNav="true"/>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/groupCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

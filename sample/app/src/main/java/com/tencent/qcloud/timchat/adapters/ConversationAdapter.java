@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.Conversation;
-import com.tencent.qcloud.ui.CircleImageView;
-import com.tencent.qcloud.timchat.utils.TimeUtil;
+import com.tencent.qcloud.timchat.chatmodel.Conversation;
+import com.tencent.qcloud.timchat.chatutils.TimeUtil;
+import com.tencent.qcloud.timchat.widget.CircleImageView;
 
 import java.util.List;
 

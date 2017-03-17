@@ -34,37 +34,29 @@ public class AccountLoginService {
 
 
     public AccountLoginService(Context context,
-                               EditText txt_username,
-                               EditText txt_password,
-                               Button btn_login) {
+                               String txt_username,
+                               String txt_password) {
         this.context = context;
-        this.txt_username = txt_username;
-        this.txt_password = txt_password;
+        this.username = txt_username;
+        this.password = txt_password;
 
         tlsService = TLSService.getInstance();
         pwdLoginListener = new PwdLoginListener();
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                username = AccountLoginService.this.txt_username.getText().toString();
-                password = AccountLoginService.this.txt_password.getText().toString();
+        // 验证用户名和密码的有效性
+        if (username.length() == 0) {
+            Util.showToast(AccountLoginService.this.context, "用户名密码不能为空");
+            return;
+        }
 
-                // 验证用户名和密码的有效性
-                if (username.length() == 0) {
-                    Util.showToast(AccountLoginService.this.context, "用户名密码不能为空");
-                    return;
-                }
-
-                tlsService.TLSPwdLogin(username, password, pwdLoginListener);
-            }
-        });
+        tlsService.TLSPwdLogin(username, password, pwdLoginListener);
     }
+
+
 
     class PwdLoginListener implements TLSPwdLoginListener {
         @Override
         public void OnPwdLoginSuccess(TLSUserInfo userInfo) {
-            Util.showToast(context, "登录成功");
             TLSService.getInstance().setLastErrno(0);
             AccountLoginService.this.jumpToSuccActivity();
         }
@@ -96,10 +88,10 @@ public class AccountLoginService {
     }
 
     void jumpToSuccActivity() {
-        Log.d(TAG, "jumpToSuccActivity");
         String thirdappPackageNameSucc = Constants.thirdappPackageNameSucc;
         String thirdappClassNameSucc = Constants.thirdappClassNameSucc;
 
+        Log.d(TAG, "jumpToSuccActivity" + thirdappPackageNameSucc + thirdappClassNameSucc);
         Intent intent = new Intent();
         intent.putExtra(Constants.EXTRA_LOGIN_WAY, Constants.USRPWD_LOGIN);
         intent.putExtra(Constants.EXTRA_USRPWD_LOGIN, Constants.USRPWD_LOGIN_SUCCESS);

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.tencent.qcloud.timchat.ui.ApplyGroupActivity">
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/apply_group_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

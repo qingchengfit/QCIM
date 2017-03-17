@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.ProfileSummary;
-import com.tencent.qcloud.ui.CircleImageView;
+import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
+import com.tencent.qcloud.timchat.widget.CircleImageView;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class ProfileSummaryAdapter extends ArrayAdapter<ProfileSummary> {
             viewHolder = new ViewHolder();
             viewHolder.avatar = (CircleImageView) view.findViewById(R.id.avatar);
             viewHolder.name = (TextView) view.findViewById(R.id.name);
-            viewHolder.des = (TextView) view.findViewById(R.id.description);
+//            viewHolder.des = (TextView) view.findViewById(R.id.description);
             view.setTag(viewHolder);
         }
         ProfileSummary data = getItem(position);

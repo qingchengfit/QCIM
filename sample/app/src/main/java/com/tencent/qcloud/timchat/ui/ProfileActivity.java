@@ -1,7 +1,6 @@
 package com.tencent.qcloud.timchat.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,21 +11,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
-import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendResult;
 import com.tencent.TIMFriendStatus;
 import com.tencent.TIMValueCallBack;
-import com.tencent.qcloud.presentation.event.FriendshipEvent;
-import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
-import com.tencent.qcloud.presentation.viewfeatures.FriendshipManageView;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.FriendProfile;
-import com.tencent.qcloud.timchat.model.FriendshipInfo;
-import com.tencent.qcloud.ui.LineControllerView;
-import com.tencent.qcloud.ui.ListPickerDialog;
+import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
+import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
+import com.tencent.qcloud.timchat.event.FriendshipEvent;
+import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
+import com.tencent.qcloud.timchat.viewfeatures.FriendshipManageView;
+import com.tencent.qcloud.timchat.widget.LineControllerView;
 
 import java.util.Collections;
 import java.util.List;
+
 
 public class ProfileActivity extends FragmentActivity implements FriendshipManageView,  View.OnClickListener {
 
@@ -121,36 +119,36 @@ public class ProfileActivity extends FragmentActivity implements FriendshipManag
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnChat:
-                Intent intent = new Intent(this, ChatActivity.class);
-                intent.putExtra("identify", identify);
-                intent.putExtra("type", TIMConversationType.C2C);
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.btnDel:
-                friendshipManagerPresenter.delFriend(identify);
-                break;
-            case R.id.group:
-                final String[] groups = FriendshipInfo.getInstance().getGroupsArray();
-                for (int i = 0; i < groups.length; ++i) {
-                    if (groups[i].equals("")) {
-                        groups[i] = getString(R.string.default_group_name);
-                        break;
-                    }
-                }
-                new ListPickerDialog().show(groups, getSupportFragmentManager(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (groups[which].equals(categoryStr)) return;
-                        friendshipManagerPresenter.changeFriendGroup(identify,
-                                categoryStr.equals(getString(R.string.default_group_name))?null:categoryStr,
-                                groups[which].equals(getString(R.string.default_group_name))?null:groups[which]);
-                    }
-                });
-                break;
-        }
+//        switch (v.getId()){
+//            case R.id.btnChat:
+//                Intent intent = new Intent(this, ChatActivity.class);
+//                intent.putExtra("identify", identify);
+//                intent.putExtra("type", TIMConversationType.C2C);
+//                startActivity(intent);
+//                finish();
+//                break;
+//            case R.id.btnDel:
+//                friendshipManagerPresenter.delFriend(identify);
+//                break;
+//            case R.id.group:
+//                final String[] groups = FriendshipInfo.getInstance().getGroupsArray();
+//                for (int i = 0; i < groups.length; ++i) {
+//                    if (groups[i].equals("")) {
+//                        groups[i] = getString(R.string.default_group_name);
+//                        break;
+//                    }
+//                }
+//                new ListPickerDialog().show(groups, getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if (groups[which].equals(categoryStr)) return;
+//                        friendshipManagerPresenter.changeFriendGroup(identify,
+//                                categoryStr.equals(getString(R.string.default_group_name))?null:categoryStr,
+//                                groups[which].equals(getString(R.string.default_group_name))?null:groups[which]);
+//                    }
+//                });
+//                break;
+//        }
     }
 
 

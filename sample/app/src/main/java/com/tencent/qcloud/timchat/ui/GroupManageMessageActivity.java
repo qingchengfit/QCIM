@@ -2,15 +2,14 @@ package com.tencent.qcloud.timchat.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.tencent.TIMGroupPendencyItem;
-import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
-import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.GroupManageMessageAdapter;
-import com.tencent.qcloud.timchat.model.GroupFuture;
+import com.tencent.qcloud.timchat.chatmodel.GroupFuture;
+import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
+import com.tencent.qcloud.timchat.viewfeatures.GroupManageMessageView;
 
 import java.util.ArrayList;
 import java.util.List;

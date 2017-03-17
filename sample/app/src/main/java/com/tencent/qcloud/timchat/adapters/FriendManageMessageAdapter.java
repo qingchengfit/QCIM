@@ -12,10 +12,10 @@ import android.widget.TextView;
 import com.tencent.TIMFriendResult;
 import com.tencent.TIMFutureFriendType;
 import com.tencent.TIMValueCallBack;
-import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.FriendFuture;
-import com.tencent.qcloud.ui.CircleImageView;
+import com.tencent.qcloud.timchat.chatmodel.FriendFuture;
+import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
+import com.tencent.qcloud.timchat.widget.CircleImageView;
 
 import java.util.List;
 

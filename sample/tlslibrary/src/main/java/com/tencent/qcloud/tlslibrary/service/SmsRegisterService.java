@@ -70,11 +70,11 @@ public class SmsRegisterService {
                     Util.showToast(SmsRegisterService.this.context, "请输入验证码");
                     return;
                 }else{
-                    tlsService.smsRegCommit(smsRegListener);
+//                    tlsService.smsRegCommit(smsRegListener);
                 }
 
                 // 3. 向TLS验证手机号和验证码
-                SmsRegisterService.this.tlsService.smsRegVerifyCode(checkCode, smsRegListener);
+//                SmsRegisterService.this.tlsService.smsRegVerifyCode(checkCode, smsRegListener);
             }
         });
 
@@ -120,7 +120,7 @@ public class SmsRegisterService {
         // 短信验证成功，接下来只需要用户确认操作，然后调用SmsRegCommit 完成注册流程
         @Override
         public void OnSmsRegVerifyCodeSuccess() {
-            tlsService.smsRegCommit(smsRegListener);
+//            tlsService.smsRegCommit(smsRegListener);
         }
 
         // 最终注册成功，接下来可以引导用户进行短信登录

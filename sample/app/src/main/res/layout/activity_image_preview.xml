@@ -12,7 +12,7 @@
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/imagePreviewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

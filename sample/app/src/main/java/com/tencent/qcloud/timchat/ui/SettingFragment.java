@@ -14,12 +14,12 @@ import android.widget.Toast;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendAllowType;
 import com.tencent.TIMUserProfile;
-import com.tencent.qcloud.presentation.business.LoginBusiness;
-import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
-import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.ui.LineControllerView;
-import com.tencent.qcloud.ui.ListPickerDialog;
+import com.tencent.qcloud.timchat.business.LoginBusiness;
+import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
+import com.tencent.qcloud.timchat.viewfeatures.FriendInfoView;
+import com.tencent.qcloud.timchat.widget.LineControllerView;
+import com.tencent.qcloud.timchat.widget.ListPickerDialog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * 设置页面
  */
-public class SettingFragment extends Fragment implements FriendInfoView{
+public class SettingFragment extends Fragment implements FriendInfoView {
 
     private static final String TAG = SettingFragment.class.getSimpleName();
     private View view;
@@ -135,8 +135,8 @@ public class SettingFragment extends Fragment implements FriendInfoView{
             about.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), AboutActivity.class);
+//                    startActivity(intent);
                 }
             });
 

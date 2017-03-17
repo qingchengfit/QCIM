@@ -51,7 +51,6 @@ public class HostLoginActivity extends Activity {
         tlsService = TLSService.getInstance();
 
         if ((login_way & Constants.SMS_LOGIN) != 0) { // 短信登录
-            initSmsService();
 /*            smsContentObserver = new SmsContentObserver(new Handler(),
                     this,
                     (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "checkCode_hostLogin")),
@@ -60,15 +59,6 @@ public class HostLoginActivity extends Activity {
             this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, smsContentObserver);*/
         }
 
-        if ((login_way & Constants.QQ_LOGIN) != 0) { // QQ登录
-            tlsService.initQQLoginService(this,
-                    (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_qqlogin")));
-        }
-
-        if ((login_way & Constants.WX_LOGIN) != 0) { // 微信登录
-            tlsService.initWXLoginService(this,
-                    (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_wxlogin")));
-        }
 
         SharedPreferences settings = getSharedPreferences(Constants.TLS_SETTING, 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -77,54 +67,7 @@ public class HostLoginActivity extends Activity {
     }
 
 
-    private void initSmsService() {
-//        tlsService.initTlsSdk(HostLoginActivity.this);
-        tlsService.initSmsLoginService(this,
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "selectCountryCode_hostLogin")),
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "phoneNumber_hostLogin")),
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "checkCode_hostLogin")),
-                (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_requireCheckCode_hostLogin")),
-                (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_hostLogin"))
-        );
 
-//        initTLSLogin();
-
-        // 设置点击"注册新用户"事件
-        findViewById(MResource.getIdByName(getApplication(), "id", "hostRegisterNewUser"))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(HostLoginActivity.this, HostRegisterActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-
-        // 用户名登录
-        findViewById(MResource.getIdByName(getApplication(), "id", "accountLogin"))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(HostLoginActivity.this, IndependentLoginActivity.class);
-                        if (Constants.thirdappPackageNameSucc != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_PACKAGE_NAME_SUCC, Constants.thirdappPackageNameSucc);
-                        }
-                        if (Constants.thirdappClassNameSucc != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_CLASS_NAME_SUCC, Constants.thirdappClassNameSucc);
-                        }
-                        if (Constants.thirdappPackageNameFail != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_PACKAGE_NAME_FAIL, Constants.thirdappPackageNameFail);
-                        }
-                        if (Constants.thirdappClassNameFail != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_CLASS_NAME_FAIL, Constants.thirdappClassNameFail);
-                        }
-                        intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-    }
 
     private void initTLSLogin() {
 
@@ -161,7 +104,6 @@ public class HostLoginActivity extends Activity {
         } else {
             if (requestCode == com.tencent.connect.common.Constants.REQUEST_API) {
                 if (resultCode == com.tencent.connect.common.Constants.RESULT_LOGIN) {
-                    tlsService.onActivityResultForQQLogin(requestCode, requestCode, data);
                 }
             }
         }
@@ -204,52 +146,6 @@ public class HostLoginActivity extends Activity {
         // 判断是否是从注册界面返回的
         String countryCode = intent.getStringExtra(Constants.COUNTRY_CODE);
         String phoneNumber = intent.getStringExtra(Constants.PHONE_NUMBER);
-
-        if (countryCode != null && phoneNumber != null) {
-
-            Log.e(TAG, "onResume" + countryCode + "-" + phoneNumber);
-
-            tlsService.smsLogin(countryCode, phoneNumber, new TLSSmsLoginListener() {
-                @Override
-                public void OnSmsLoginAskCodeSuccess(int i, int i1) {}
-
-                @Override
-                public void OnSmsLoginReaskCodeSuccess(int i, int i1) {}
-
-                @Override
-                public void OnSmsLoginVerifyCodeSuccess() {}
-
-                @Override
-                public void OnSmsLoginSuccess(TLSUserInfo tlsUserInfo) {
-                    Util.showToast(HostLoginActivity.this, "短信登录成功");
-                    TLSService.getInstance().setLastErrno(0);
-                    Intent intent = new Intent();
-                    intent.putExtra(Constants.EXTRA_LOGIN_WAY, Constants.SMS_LOGIN);
-                    intent.putExtra(Constants.EXTRA_SMS_LOGIN, Constants.SMS_LOGIN_SUCCESS);
-
-                    if (Constants.thirdappPackageNameSucc != null && Constants.thirdappClassNameSucc != null) {
-                        intent.setClassName(Constants.thirdappPackageNameSucc, Constants.thirdappClassNameSucc);
-                        startActivity(intent);
-                    } else {
-                        setResult(Activity.RESULT_OK, intent);
-                    }
-                    finish();
-                }
-
-                @Override
-                public void OnSmsLoginFail(TLSErrInfo tlsErrInfo) {
-                    TLSService.getInstance().setLastErrno(-1);
-                    Util.notOK(HostLoginActivity.this, tlsErrInfo);
-                }
-
-                @Override
-                public void OnSmsLoginTimeout(TLSErrInfo tlsErrInfo) {
-                    TLSService.getInstance().setLastErrno(-1);
-                    Util.notOK(HostLoginActivity.this, tlsErrInfo);
-                }
-            });
-            return;
-        }
 
     }
 

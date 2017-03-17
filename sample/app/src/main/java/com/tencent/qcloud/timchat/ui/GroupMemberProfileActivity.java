@@ -15,12 +15,12 @@ import com.tencent.TIMGroupMemberResult;
 import com.tencent.TIMGroupMemberRoleType;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.GroupInfo;
-import com.tencent.qcloud.timchat.model.GroupMemberProfile;
-import com.tencent.qcloud.timchat.model.UserInfo;
-import com.tencent.qcloud.ui.LineControllerView;
-import com.tencent.qcloud.ui.ListPickerDialog;
-import com.tencent.qcloud.ui.TemplateTitle;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
+import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.widget.LineControllerView;
+import com.tencent.qcloud.timchat.widget.ListPickerDialog;
+import com.tencent.qcloud.timchat.widget.TemplateTitle;
 
 import java.util.Calendar;
 import java.util.Collections;

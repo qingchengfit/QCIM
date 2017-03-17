@@ -4,12 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.tencent.qcloud.timchat.ui.ConversationFragment">
+    tools:context="com.tencent.qcloud.timchat.ui.qcchat.ConversationFragment">
 
-    <com.tencent.qcloud.ui.TemplateTitle
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleText="@string/home_conversation_tab"/>
     <ListView
         android:id="@id/list"
         android:layout_width="match_parent"

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_gray4"
-    tools:context="com.tencent.qcloud.timchat.ui.ChatActivity">
+    tools:context="com.tencent.qcloud.timchat.ui.qcchat.ChatActivity">
 
     <LinearLayout
         android:id="@id/title"

@@ -35,14 +35,6 @@ public class ResetPhonePwdActivity extends Activity {
                 });
 
         tlsService = TLSService.getInstance();
-        tlsService.initResetPhonePwdService(this,
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "selectCountryCode")),
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "phone")),
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "txt_checkcode")),
-                (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_requirecheckcode")),
-                (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_verify"))
-        );
-
 /*        smsContentObserver = new SmsContentObserver(new Handler(),
                 this,
                 (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "txt_checkcode")),

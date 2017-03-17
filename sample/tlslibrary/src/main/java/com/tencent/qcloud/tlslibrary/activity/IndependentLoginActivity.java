@@ -46,16 +46,6 @@ public class IndependentLoginActivity extends Activity {
             initAccountLoginService();
         }
 
-        if ((login_way & Constants.QQ_LOGIN) != 0) { // QQ登录
-            tlsService.initQQLoginService(this,
-                    (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_qqlogin")));
-        }
-
-        if ((login_way & Constants.WX_LOGIN) != 0) { // 微信登录
-            tlsService.initWXLoginService(this,
-                    (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_wxlogin")));
-        }
-
         SharedPreferences settings = getSharedPreferences(Constants.TLS_SETTING, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(Constants.SETTING_LOGIN_WAY, Constants.USRPWD_LOGIN);
@@ -83,44 +73,6 @@ public class IndependentLoginActivity extends Activity {
                 (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "username")),
                 (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "password")),
                 (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_login")));
-
-        // 设置点击"注册新用户"事件
-        findViewById(MResource.getIdByName(getApplication(), "id", "registerNewUser"))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(IndependentLoginActivity.this, IndependentRegisterActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-
-        // 手机短信登录
-        findViewById(MResource.getIdByName(getApplication(), "id", "hostLogin"))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(IndependentLoginActivity.this, HostLoginActivity.class);
-                        if (Constants.thirdappPackageNameSucc != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_PACKAGE_NAME_SUCC, Constants.thirdappPackageNameSucc);
-                        }
-                        if (Constants.thirdappClassNameSucc != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_CLASS_NAME_SUCC, Constants.thirdappClassNameSucc);
-                        }
-                        if (Constants.thirdappPackageNameFail != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_PACKAGE_NAME_FAIL, Constants.thirdappPackageNameFail);
-                        }
-                        if (Constants.thirdappClassNameFail != null) {
-                            intent.putExtra(Constants.EXTRA_THIRDAPP_CLASS_NAME_FAIL, Constants.thirdappClassNameFail);
-                        }
-                        intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-
-//        initTLSLogin();
     }
 
     //应用调用Andriod_SDK接口时，使能成功接收到回调
@@ -140,13 +92,6 @@ public class IndependentLoginActivity extends Activity {
                 finish();
             }
         }
-
-        if(requestCode == com.tencent.connect.common.Constants.REQUEST_API) {
-            if (resultCode == com.tencent.connect.common.Constants.RESULT_LOGIN) {
-                tlsService.onActivityResultForQQLogin(requestCode, requestCode, data);
-            }
-        }
-
     }
 
     @Override

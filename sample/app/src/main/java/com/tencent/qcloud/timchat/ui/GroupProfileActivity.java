@@ -4,29 +4,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
-import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupAddOpt;
 import com.tencent.TIMGroupDetailInfo;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberRoleType;
 import com.tencent.TIMGroupReceiveMessageOpt;
-import com.tencent.qcloud.presentation.presenter.GroupInfoPresenter;
-import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
-import com.tencent.qcloud.presentation.viewfeatures.GroupInfoView;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.GroupInfo;
-import com.tencent.qcloud.timchat.model.UserInfo;
-import com.tencent.qcloud.ui.LineControllerView;
-import com.tencent.qcloud.ui.ListPickerDialog;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.presenter.GroupInfoPresenter;
+import com.tencent.qcloud.timchat.viewfeatures.GroupInfoView;
+import com.tencent.qcloud.timchat.widget.LineControllerView;
+import com.tencent.qcloud.timchat.widget.ListPickerDialog;
 
-import java.security.acl.Group;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +74,15 @@ public class GroupProfileActivity extends FragmentActivity implements GroupInfoV
         LineControllerView member = (LineControllerView) findViewById(R.id.member);
         if (isInGroup){
             member.setContent(String.valueOf(info.getMemberNum()));
-            member.setOnClickListener(this);
+            member.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intentGroupMem = new Intent(GroupProfileActivity.this, GroupMemberActivity.class);
+                    intentGroupMem.putExtra("id", identify);
+                    intentGroupMem.putExtra("type",type);
+                    startActivity(intentGroupMem);
+                }
+            });
         }else{
             member.setVisibility(View.GONE);
         }
@@ -112,7 +116,29 @@ public class GroupProfileActivity extends FragmentActivity implements GroupInfoV
                     msgNotify.setContent(getString(R.string.chat_setting_rev_not_notify));
                     break;
             }
-            msgNotify.setOnClickListener(this);
+            msgNotify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final String[] messageOptList = messageOptContent.keySet().toArray(new String[messageOptContent.size()]);
+                    new ListPickerDialog().show(messageOptList,getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, final int which) {
+                            TIMGroupManager.getInstance().modifyReceiveMessageOpt(identify, messageOptContent.get(messageOptList[which]), new TIMCallBack() {
+                                @Override
+                                public void onError(int i, String s) {
+                                    Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_change_err),Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onSuccess() {
+                                    LineControllerView msgNotify = (LineControllerView) findViewById(R.id.messageNotify);
+                                    msgNotify.setContent(messageOptList[which]);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
             messageOptContent = new HashMap<>();
             messageOptContent.put(getString(R.string.chat_setting_no_rev), TIMGroupReceiveMessageOpt.NotReceive);
             messageOptContent.put(getString(R.string.chat_setting_rev_not_notify), TIMGroupReceiveMessageOpt.ReceiveNotNotify);
@@ -145,120 +171,100 @@ public class GroupProfileActivity extends FragmentActivity implements GroupInfoV
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btnChat:
-                ChatActivity.navToChat(this,identify, TIMConversationType.Group);
-                break;
-            case R.id.btnDel:
-                if (isGroupOwner){
-                    GroupManagerPresenter.dismissGroup(identify, new TIMCallBack() {
-                        @Override
-                        public void onError(int i, String s) {
-                            Log.i(TAG, "onError code" + i + " msg " + s);
-                            if (i == 10004 && type.equals(GroupInfo.privateGroup)){
-                                Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_quit_fail_private),Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_dismiss_succ),Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    });
-                }else{
-                    GroupManagerPresenter.quitGroup(identify, new TIMCallBack() {
-                        @Override
-                        public void onError(int i, String s) {
-                            Log.i(TAG, "onError code" + i + " msg " + s);
-                        }
-
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_quit_succ),Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    });
-                }
-                break;
-            case R.id.controlOutGroup:
-                Intent intent = new Intent(this, ApplyGroupActivity.class);
-                intent.putExtra("identify", identify);
-                startActivity(intent);
-                break;
-            case R.id.member:
-                Intent intentGroupMem = new Intent(this, GroupMemberActivity.class);
-                intentGroupMem.putExtra("id", identify);
-                intentGroupMem.putExtra("type",type);
-                startActivity(intentGroupMem);
-                break;
-            case R.id.addOpt:
-                final String[] stringList = allowTypeContent.keySet().toArray(new String[allowTypeContent.size()]);
-                new ListPickerDialog().show(stringList,getSupportFragmentManager(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, final int which) {
-                        TIMGroupManager.getInstance().modifyGroupAddOpt(identify, allowTypeContent.get(stringList[which]), new TIMCallBack() {
-                            @Override
-                            public void onError(int i, String s) {
-                                Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_change_err),Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onSuccess() {
-                                LineControllerView opt = (LineControllerView) findViewById(R.id.addOpt);
-                                opt.setContent(stringList[which]);
-                            }
-                        });
-                    }
-                });
-                break;
-            case R.id.nameText:
-                name.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditActivity.navToEdit(GroupProfileActivity.this, getString(R.string.chat_setting_change_group_name), info.getGroupName(), REQ_CHANGE_NAME, new EditActivity.EditInterface() {
-                            @Override
-                            public void onEdit(final String text, TIMCallBack callBack) {
-                                TIMGroupManager.getInstance().modifyGroupName(identify, text, callBack);
-                            }
-                        },20);
-
-                    }
-                });
-                break;
-            case R.id.groupIntro:
-                intro.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditActivity.navToEdit(GroupProfileActivity.this, getString(R.string.chat_setting_change_group_intro), intro.getContent(), REQ_CHANGE_INTRO, new EditActivity.EditInterface() {
-                            @Override
-                            public void onEdit(final String text, TIMCallBack callBack) {
-                                TIMGroupManager.getInstance().modifyGroupIntroduction(identify, text, callBack);
-                            }
-                        },20);
-
-                    }
-                });
-                break;
-            case R.id.messageNotify:
-                final String[] messageOptList = messageOptContent.keySet().toArray(new String[messageOptContent.size()]);
-                new ListPickerDialog().show(messageOptList,getSupportFragmentManager(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, final int which) {
-                        TIMGroupManager.getInstance().modifyReceiveMessageOpt(identify, messageOptContent.get(messageOptList[which]), new TIMCallBack() {
-                            @Override
-                            public void onError(int i, String s) {
-                                Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_change_err),Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onSuccess() {
-                                LineControllerView msgNotify = (LineControllerView) findViewById(R.id.messageNotify);
-                                msgNotify.setContent(messageOptList[which]);
-                            }
-                        });
-                    }
-                });
-                break;
+//            case R.id.btnChat:
+//                ChatActivity.navToChat(this,identify, TIMConversationType.Group);
+//                break;
+//            case R.id.btnDel:
+//                if (isGroupOwner){
+//                    GroupManagerPresenter.dismissGroup(identify, new TIMCallBack() {
+//                        @Override
+//                        public void onError(int i, String s) {
+//                            Log.i(TAG, "onError code" + i + " msg " + s);
+//                            if (i == 10004 && type.equals(GroupInfo.privateGroup)){
+//                                Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_quit_fail_private),Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onSuccess() {
+//                            Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_dismiss_succ),Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        }
+//                    });
+//                }else{
+//                    GroupManagerPresenter.quitGroup(identify, new TIMCallBack() {
+//                        @Override
+//                        public void onError(int i, String s) {
+//                            Log.i(TAG, "onError code" + i + " msg " + s);
+//                        }
+//
+//                        @Override
+//                        public void onSuccess() {
+//                            Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_quit_succ),Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.controlOutGroup:
+////                Intent intent = new Intent(this, ApplyGroupActivity.class);
+////                intent.putExtra("identify", identify);
+////                startActivity(intent);
+//                break;
+//            case R.id.member:
+//
+//                break;
+//            case R.id.addOpt:
+//                final String[] stringList = allowTypeContent.keySet().toArray(new String[allowTypeContent.size()]);
+//                new ListPickerDialog().show(stringList,getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, final int which) {
+//                        TIMGroupManager.getInstance().modifyGroupAddOpt(identify, allowTypeContent.get(stringList[which]), new TIMCallBack() {
+//                            @Override
+//                            public void onError(int i, String s) {
+//                                Toast.makeText(GroupProfileActivity.this, getString(R.string.chat_setting_change_err),Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            @Override
+//                            public void onSuccess() {
+//                                LineControllerView opt = (LineControllerView) findViewById(R.id.addOpt);
+//                                opt.setContent(stringList[which]);
+//                            }
+//                        });
+//                    }
+//                });
+//                break;
+//            case R.id.nameText:
+//                name.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        EditActivity.navToEdit(GroupProfileActivity.this, getString(R.string.chat_setting_change_group_name), info.getGroupName(), REQ_CHANGE_NAME, new EditActivity.EditInterface() {
+//                            @Override
+//                            public void onEdit(final String text, TIMCallBack callBack) {
+//                                TIMGroupManager.getInstance().modifyGroupName(identify, text, callBack);
+//                            }
+//                        },20);
+//
+//                    }
+//                });
+//                break;
+//            case R.id.groupIntro:
+//                intro.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        EditActivity.navToEdit(GroupProfileActivity.this, getString(R.string.chat_setting_change_group_intro), intro.getContent(), REQ_CHANGE_INTRO, new EditActivity.EditInterface() {
+//                            @Override
+//                            public void onEdit(final String text, TIMCallBack callBack) {
+//                                TIMGroupManager.getInstance().modifyGroupIntroduction(identify, text, callBack);
+//                            }
+//                        },20);
+//
+//                    }
+//                });
+//                break;
+//            case R.id.messageNotify:
+//
+//                break;
         }
     }
 

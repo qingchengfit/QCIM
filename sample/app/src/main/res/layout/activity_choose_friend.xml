@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.ChooseFriendActivity">
-    <com.tencent.qcloud.ui.TemplateTitle
+    tools:context=".ui.qcchat.ChooseFriendActivity">
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/chooseTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

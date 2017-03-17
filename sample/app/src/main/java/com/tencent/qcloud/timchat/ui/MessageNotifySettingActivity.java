@@ -10,7 +10,7 @@ import com.tencent.TIMManager;
 import com.tencent.TIMOfflinePushSettings;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.ui.LineControllerView;
+import com.tencent.qcloud.timchat.widget.LineControllerView;
 
 public class MessageNotifySettingActivity extends Activity {
 
@@ -25,7 +25,6 @@ public class MessageNotifySettingActivity extends Activity {
         TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
             @Override
             public void onError(int i, String s) {
-                Log.e(TAG, "get offline push setting error " + s);
             }
 
             @Override

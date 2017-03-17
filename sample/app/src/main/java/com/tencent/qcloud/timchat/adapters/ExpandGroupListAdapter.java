@@ -8,14 +8,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tencent.TIMFriendGroup;
-import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.FriendProfile;
-import com.tencent.qcloud.timchat.model.ProfileSummary;
+import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

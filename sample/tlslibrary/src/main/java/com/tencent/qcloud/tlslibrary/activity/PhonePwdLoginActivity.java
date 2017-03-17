@@ -56,53 +56,10 @@ public class PhonePwdLoginActivity extends Activity {
 
         tlsService = TLSService.getInstance();
 
-        if ((login_way & Constants.PHONEPWD_LOGIN) != 0) { // 手机号密码登录
-            initPhonePwdService();
-        }
-
-        if ((login_way & Constants.QQ_LOGIN) != 0) { // QQ登录
-            tlsService.initQQLoginService(this,
-                    (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_qqlogin")));
-        }
-
-        if ((login_way & Constants.WX_LOGIN) != 0) { // 微信登录
-            tlsService.initWXLoginService(this,
-                    (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_wxlogin")));
-        }
-
         SharedPreferences settings = getSharedPreferences(Constants.TLS_SETTING, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(Constants.SETTING_LOGIN_WAY, Constants.PHONEPWD_LOGIN);
         editor.commit();
-    }
-
-    private void initPhonePwdService() {
-        tlsService.initPhonePwdLoginService(this,
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "selectCountryCode")),
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "phone")),
-                (EditText) findViewById(MResource.getIdByName(getApplication(), "id", "password")),
-                (Button) findViewById(MResource.getIdByName(getApplication(), "id", "btn_login"))
-        );
-
-        // 设置点击"注册新用户"事件
-        findViewById(MResource.getIdByName(getApplication(), "id", "registerNewUser"))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(PhonePwdLoginActivity.this, PhonePwdRegisterActivity.class);
-                        startActivityForResult(intent, SMS_REG_REQUEST);
-                    }
-                });
-
-        // 设置点击"重置密码"事件
-        findViewById(MResource.getIdByName(getApplication(), "id", "resetPassword"))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(PhonePwdLoginActivity.this, ResetPhonePwdActivity.class);
-                        startActivityForResult(intent, SMS_RESET_REQUEST);
-                    }
-                });
     }
 
     //应用调用Andriod_SDK接口时，使能成功接收到回调
@@ -122,7 +79,6 @@ public class PhonePwdLoginActivity extends Activity {
         } else {
             if (requestCode == com.tencent.connect.common.Constants.REQUEST_API) {
                 if (resultCode == com.tencent.connect.common.Constants.RESULT_LOGIN) {
-                    tlsService.onActivityResultForQQLogin(requestCode, requestCode, data);
                 }
             }
         }

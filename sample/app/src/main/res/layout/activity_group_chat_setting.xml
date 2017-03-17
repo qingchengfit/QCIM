@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.GroupProfileActivity">
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/chat_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,35 +14,35 @@
         app:titleText="@string/chat_setting_title"
         app:canBack="true" />
 
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/idText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:name="@string/chat_setting_group_id"/>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canNav="true"
         app:name="@string/chat_setting_group_member"/>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/nameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/chat_setting_group_name" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/groupIntro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/chat_setting_group_introduce" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/messageNotify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canNav="true"
         app:name="@string/chat_setting_group_msg_alert" />
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/addOpt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

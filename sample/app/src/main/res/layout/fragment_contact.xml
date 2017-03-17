@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.ContactFragment">
 
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/contact_antionbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

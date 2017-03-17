@@ -11,13 +11,13 @@ import android.widget.Toast;
 
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
-import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.FriendshipInfo;
-import com.tencent.qcloud.timchat.model.GroupInfo;
-import com.tencent.qcloud.timchat.model.UserInfo;
-import com.tencent.qcloud.timchat.ui.SplashActivity;
-import com.tencent.qcloud.timchat.utils.NetUtil;
+import com.tencent.qcloud.timchat.business.LoginBusiness;
+import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.ui.qcchat.SplashActivity;
+import com.tencent.qcloud.timchat.chatutils.NetUtil;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -41,41 +41,41 @@ public class DialogActivity extends Activity implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnOk:
-                final String id = UserInfo.getInstance().getId();
-                NetUtil netUtil = new NetUtil(id);
-                netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
-                    @Override
-                    public void onSuccessed(String userSig) {
-                        LoginBusiness.loginIm(id, userSig,
-                                new TIMCallBack() {
-                                    @Override
-                                    public void onError(int i, String s) {
-                                        Toast.makeText(DialogActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
-                                        logout();
-                                    }
+        int i = v.getId();
+        if (i == R.id.btnOk) {
+            final String id = UserInfo.getInstance().getId();
+            NetUtil netUtil = new NetUtil(id);
+            netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
+                @Override
+                public void onSuccessed(String userSig) {
+                    LoginBusiness.loginIm(id, userSig,
+                            new TIMCallBack() {
+                                @Override
+                                public void onError(int i, String s) {
+                                    Toast.makeText(DialogActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
+                                    logout();
+                                }
 
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(DialogActivity.this, getString(R.string.login_succ), Toast.LENGTH_SHORT).show();
-                                        String deviceMan = android.os.Build.MANUFACTURER;
-                                        //注册小米和华为推送
-                                        if (deviceMan.equals("Xiaomi") && shouldMiInit()){
-                                            MiPushClient.registerPush(getApplicationContext(), "2882303761517480335", "5411748055335");
-                                        }else if (deviceMan.equals("HUAWEI")){
-                                            PushManager.requestToken(getApplicationContext());
-                                        }
-                                        finish();
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(DialogActivity.this, getString(R.string.login_succ), Toast.LENGTH_SHORT).show();
+                                    String deviceMan = android.os.Build.MANUFACTURER;
+                                    //注册小米和华为推送
+                                    if (deviceMan.equals("Xiaomi") && shouldMiInit()) {
+                                        MiPushClient.registerPush(getApplicationContext(), "2882303761517480335", "5411748055335");
+                                    } else if (deviceMan.equals("HUAWEI")) {
+                                        PushManager.requestToken(getApplicationContext());
                                     }
-                                });
-                    }
-                });
+                                    finish();
+                                }
+                            });
+                }
+            });
 
-                break;
-            case R.id.btnCancel:
-                logout();
-                break;
+
+        } else if (i == R.id.btnCancel) {
+            logout();
+
         }
     }
 

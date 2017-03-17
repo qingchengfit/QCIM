@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.ProfileActivity">
 
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/profile_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.tencent.qcloud.ui.CircleImageView
+        <com.tencent.qcloud.timchat.widget.CircleImageView
             android:id="@+id/avatar"
             android:layout_width="115dp"
             android:layout_height="115dp"
@@ -38,25 +38,25 @@
             android:textColor="@color/text_gray1"
             android:textSize="16sp" />
     </LinearLayout>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:name="@string/profile_id"/>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/remark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canNav="true"
         app:name="@string/profile_remark"/>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/blackList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:isSwitch="true"
         app:name="@string/profile_black"/>
-    <com.tencent.qcloud.ui.LineControllerView
+    <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

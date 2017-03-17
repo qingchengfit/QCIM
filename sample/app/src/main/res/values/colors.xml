@@ -29,7 +29,16 @@
     <!--蒙版-->
     <color name="colorMask">#66000000</color>
 
+    <!--组件添加的颜色-->
+    <color name="toolbar">#4e4e4e</color>
+    <color name="qc_green">#00BFBF</color>
 
+    <color name="chat_background">#0db14b</color>
+
+    <color name="bg_grey">#f4f4f4</color>
+    <color name="qc_text_black">#333333</color>
+    <color name="qc_text_grey">#9d9d9d</color>
+    <color name="bg_red">#1aea6161</color>
 
 
 </resources>

@@ -1,7 +1,6 @@
 package com.tencent.qcloud.timchat.ui;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +12,8 @@ import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
-import com.tencent.qcloud.timchat.model.FriendProfile;
-import com.tencent.qcloud.timchat.model.ProfileSummary;
+import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
+import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 
 import java.util.ArrayList;
 import java.util.List;

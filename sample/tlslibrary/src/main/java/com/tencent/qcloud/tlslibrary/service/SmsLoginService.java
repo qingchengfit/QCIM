@@ -70,7 +70,6 @@ public class SmsLoginService {
                 }
 
                 // 3. 向TLS验证手机号和验证码
-                SmsLoginService.this.tlsService.smsLoginVerifyCode(checkCode, smsLoginListener);
             }
         });
 
@@ -88,7 +87,6 @@ public class SmsLoginService {
                 }
 
                 // 2. 请求验证码
-                SmsLoginService.this.tlsService.smsLoginAskCode(countrycode, phoneNumber, smsLoginListener);
             }
         });
     }
@@ -116,7 +114,6 @@ public class SmsLoginService {
         // 短信验证通过，下一步调用登录接口TLSSmsLogin完成登录
         @Override
         public void OnSmsLoginVerifyCodeSuccess() {
-            tlsService.smsLogin(countrycode, phoneNumber, smsLoginListener);
         }
 
         // 登录成功了，在这里可以获取用户数据

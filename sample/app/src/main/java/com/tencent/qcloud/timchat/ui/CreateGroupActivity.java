@@ -9,8 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.TIMValueCallBack;
-import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.timchat.R;
+import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
+import com.tencent.qcloud.timchat.ui.qcchat.ChooseFriendActivity;
 
 /**
  * 创建群页面

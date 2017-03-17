@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.BlackListActivity">
-    <com.tencent.qcloud.ui.TemplateTitle
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/group_mem_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

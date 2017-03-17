@@ -3,19 +3,17 @@ package com.tencent.qcloud.timchat.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendFutureItem;
 import com.tencent.TIMFutureFriendType;
-import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
-import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.FriendManageMessageAdapter;
-import com.tencent.qcloud.timchat.model.FriendFuture;
+import com.tencent.qcloud.timchat.chatmodel.FriendFuture;
+import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
+import com.tencent.qcloud.timchat.viewfeatures.FriendshipMessageView;
 
 import java.util.ArrayList;
 import java.util.List;

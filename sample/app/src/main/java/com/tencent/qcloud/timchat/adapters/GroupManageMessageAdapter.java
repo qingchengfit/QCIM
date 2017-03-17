@@ -2,7 +2,6 @@ package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,9 @@ import com.tencent.TIMGroupPendencyGetType;
 import com.tencent.TIMGroupPendencyHandledStatus;
 import com.tencent.TIMGroupPendencyItem;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.model.GroupFuture;
-import com.tencent.qcloud.timchat.model.UserInfo;
-import com.tencent.qcloud.ui.CircleImageView;
+import com.tencent.qcloud.timchat.chatmodel.GroupFuture;
+import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.widget.CircleImageView;
 
 import java.util.List;
 

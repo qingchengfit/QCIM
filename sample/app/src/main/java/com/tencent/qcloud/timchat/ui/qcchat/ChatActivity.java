@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +55,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatActivity extends FragmentActivity implements ChatView {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private static final String TAG = "ChatActivity";
 
@@ -129,7 +134,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
         TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
         switch (type) {
             case C2C:
-                title.setMoreImg(R.drawable.btn_person);
+                title.setMoreImg(R.drawable.ic_group_detail);
                 if (FriendshipInfo.getInstance().isFriend(identify)){
                     title.setMoreImgAction(new View.OnClickListener() {
                         @Override

@@ -16,9 +16,11 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.viewfeatures.ChatView;
@@ -42,14 +45,14 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
     private static final String TAG = "ChatInput";
 
-    private ImageButton btnAdd, btnSend, btnVoice, btnKeyboard, btnEmotion;
+    private ImageButton btnAdd;
+    private ImageView btnKeyboard, btnVoice;
     private EditText editText;
-    private boolean isSendVisible,isHoldVoiceBtn,isEmoticonReady;
+    private boolean isSendVisible,isHoldVoiceBtn;
     private InputMode inputMode = InputMode.NONE;
     private ChatView chatView;
     private LinearLayout morePanel,textPanel;
     private TextView voicePanel;
-    private LinearLayout emoticonPanel;
     private final int REQUEST_CODE_ASK_PERMISSIONS = 100;
 
 
@@ -63,12 +66,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         textPanel = (LinearLayout) findViewById(R.id.text_panel);
         btnAdd = (ImageButton) findViewById(R.id.btn_add);
         btnAdd.setOnClickListener(this);
-        btnSend = (ImageButton) findViewById(R.id.btn_send);
-        btnSend.setOnClickListener(this);
-        btnVoice = (ImageButton) findViewById(R.id.btn_voice);
+        btnVoice = (ImageView) findViewById(R.id.btn_voice);
+        btnVoice.setVisibility(VISIBLE);
         btnVoice.setOnClickListener(this);
-        btnEmotion = (ImageButton) findViewById(R.id.btnEmoticon);
-        btnEmotion.setOnClickListener(this);
         morePanel = (LinearLayout) findViewById(R.id.morePanel);
         LinearLayout BtnImage = (LinearLayout) findViewById(R.id.btn_photo);
         BtnImage.setOnClickListener(this);
@@ -79,17 +79,24 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         LinearLayout btnFile = (LinearLayout) findViewById(R.id.btn_file);
         btnFile.setOnClickListener(this);
         setSendBtn();
-        btnKeyboard = (ImageButton) findViewById(R.id.btn_keyboard);
+        btnKeyboard = (ImageView) findViewById(R.id.btn_keyboard);
         btnKeyboard.setOnClickListener(this);
         voicePanel = (TextView) findViewById(R.id.voice_panel);
         voicePanel.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                float y = event.getRawY();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         isHoldVoiceBtn = true;
                         updateVoiceView();
                         break;
+                    case MotionEvent.ACTION_MOVE:
+                        if ((event.getRawY() - y) < -50 ){
+                            Toast.makeText(getContext(), "已取消", Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+//                        break;
                     case MotionEvent.ACTION_UP:
                         isHoldVoiceBtn = false;
                         updateVoiceView();
@@ -108,8 +115,16 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 }
             }
         });
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEND){
+                    chatView.sendText();
+                }
+                return true;
+            }
+        });
         isSendVisible = editText.getText().length() != 0;
-        emoticonPanel = (LinearLayout) findViewById(R.id.emoticonPanel);
 
     }
 
@@ -132,12 +147,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 btnVoice.setVisibility(GONE);
                 btnKeyboard.setVisibility(VISIBLE);
                 break;
-            case EMOTICON:
-                if (!isEmoticonReady) {
-                    prepareEmoticon();
-                }
-                emoticonPanel.setVisibility(VISIBLE);
-                break;
         }
     }
 
@@ -158,8 +167,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 btnVoice.setVisibility(VISIBLE);
                 btnKeyboard.setVisibility(GONE);
                 break;
-            case EMOTICON:
-                emoticonPanel.setVisibility(GONE);
         }
     }
 
@@ -248,55 +255,53 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     private void setSendBtn(){
         if (isSendVisible){
             btnAdd.setVisibility(GONE);
-            btnSend.setVisibility(VISIBLE);
         }else{
             btnAdd.setVisibility(VISIBLE);
-            btnSend.setVisibility(GONE);
         }
     }
 
-    private void prepareEmoticon(){
-        if (emoticonPanel == null) return;
-        for (int i = 0; i < 5; ++i){
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f));
-            for (int j = 0;j < 7; ++j){
-
-                try{
-                    AssetManager am = getContext().getAssets();
-                    final int index = 7*i+j;
-                    InputStream is = am.open(String.format("emoticon/%d.gif", index));
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    Matrix matrix = new Matrix();
-                    int width = bitmap.getWidth();
-                    int height = bitmap.getHeight();
-                    matrix.postScale(3.5f, 3.5f);
-                    final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                            width, height, matrix, true);
-                    ImageView image = new ImageView(getContext());
-                    image.setImageBitmap(resizedBitmap);
-                    image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-                    linearLayout.addView(image);
-                    image.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String content = String.valueOf(index);
-                            SpannableString str = new SpannableString(String.valueOf(index));
-                            ImageSpan span = new ImageSpan(getContext(), resizedBitmap, ImageSpan.ALIGN_BASELINE);
-                            str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            editText.append(str);
-                        }
-                    });
-                    is.close();
-                }catch (IOException e){
-
-                }
-
-            }
-            emoticonPanel.addView(linearLayout);
-        }
-        isEmoticonReady = true;
-    }
+//    private void prepareEmoticon(){
+//        if (emoticonPanel == null) return;
+//        for (int i = 0; i < 5; ++i){
+//            LinearLayout linearLayout = new LinearLayout(getContext());
+//            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f));
+//            for (int j = 0;j < 7; ++j){
+//
+//                try{
+//                    AssetManager am = getContext().getAssets();
+//                    final int index = 7*i+j;
+//                    InputStream is = am.open(String.format("emoticon/%d.gif", index));
+//                    Bitmap bitmap = BitmapFactory.decodeStream(is);
+//                    Matrix matrix = new Matrix();
+//                    int width = bitmap.getWidth();
+//                    int height = bitmap.getHeight();
+//                    matrix.postScale(3.5f, 3.5f);
+//                    final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+//                            width, height, matrix, true);
+//                    ImageView image = new ImageView(getContext());
+//                    image.setImageBitmap(resizedBitmap);
+//                    image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+//                    linearLayout.addView(image);
+//                    image.setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            String content = String.valueOf(index);
+//                            SpannableString str = new SpannableString(String.valueOf(index));
+//                            ImageSpan span = new ImageSpan(getContext(), resizedBitmap, ImageSpan.ALIGN_BASELINE);
+//                            str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                            editText.append(str);
+//                        }
+//                    });
+//                    is.close();
+//                }catch (IOException e){
+//
+//                }
+//
+//            }
+//            emoticonPanel.addView(linearLayout);
+//        }
+//        isEmoticonReady = true;
+//    }
 
     /**
      * Called when a view has been clicked.
@@ -307,9 +312,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     public void onClick(View v) {
         Activity activity = (Activity) getContext();
         int id = v.getId();
-        if (id == R.id.btn_send){
-            chatView.sendText();
-        }
+
         if (id == R.id.btn_add){
             updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE);
         }
@@ -339,9 +342,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 }
             }
         }
-        if (id == R.id.btnEmoticon){
-            updateView(inputMode == InputMode.EMOTICON? InputMode.TEXT: InputMode.EMOTICON);
-        }
+//        if (id == R.id.btnEmoticon){
+//            updateView(inputMode == InputMode.EMOTICON? InputMode.TEXT: InputMode.EMOTICON);
+//        }
         if (id == R.id.btn_file){
             chatView.sendFile();
         }

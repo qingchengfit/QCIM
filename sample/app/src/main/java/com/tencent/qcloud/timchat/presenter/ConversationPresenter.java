@@ -2,6 +2,7 @@ package com.tencent.qcloud.timchat.presenter;
 
 import android.util.Log;
 
+import com.tencent.IMCoreWrapper;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupCacheInfo;

@@ -1,6 +1,8 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,7 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  * Created by fb on 2017/3/17.
  */
 
-public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexItem.ConversationViewHolder> {
+public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexItem.ConversationViewHolder> implements Comparable {
 
     private Conversation conversation;
     private Context context;
@@ -33,6 +35,13 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
 
     public Conversation getConversation() {
         return conversation;
+    }
+
+    public long getLastMessageTime(){
+        if (conversation != null){
+            return conversation.getLastMessageTime();
+        }
+        return 0;
     }
 
     @Override
@@ -61,12 +70,26 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
 
     @Override
     public ConversationViewHolder createViewHolder(FlexibleAdapter adapter, LayoutInflater inflater, ViewGroup parent) {
-        return super.createViewHolder(adapter, inflater, parent);
+        ConversationViewHolder vh = new ConversationViewHolder(inflater.inflate(R.layout.item_conversation, parent, false), adapter);
+        return vh;
     }
 
     @Override
     public boolean equals(Object o) {
         return false;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (o instanceof ConversationFlexItem){
+            ConversationFlexItem item = (ConversationFlexItem) o;
+            long timeGap = item.getConversation().getLastMessageTime() - getLastMessageTime();
+            if (timeGap > 0) return  1;
+            else if (timeGap < 0) return -1;
+            return 0;
+        }else{
+            throw new ClassCastException();
+        }
     }
 
     class ConversationViewHolder extends FlexibleViewHolder{

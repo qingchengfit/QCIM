@@ -1,61 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:paddingLeft="10dp">
-    <com.tencent.qcloud.timchat.widget.CircleImageView
-        android:id="@id/avatar"
-        android:layout_width="45dp"
-        android:layout_height="45dp" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp"
-        android:gravity="center_vertical"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:orientation="horizontal">
+
+        <com.tencent.qcloud.timchat.widget.CircleImageView
+            android:id="@id/avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            tools:background="@drawable/head" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                tools:text="我是可乐" />
+
+            <TextView
+                android:id="@+id/last_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:singleLine="true"
+                android:textColor="@color/text_gray1"
+                android:textSize="13sp"
+                tools:text="中午记得多准备一台设备" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="17sp"/>
-        <TextView
-            android:id="@+id/last_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:singleLine="true"
-            android:textColor="@color/text_gray1"
-            android:textSize="14sp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/message_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_gray1"
-            android:textSize="12sp" />
-        <TextView
-            android:id="@+id/unread_num"
-            android:layout_width="wrap_content"
-            android:layout_height="16dp"
-            android:minWidth="16dp"
-            android:layout_gravity="right"
-            android:gravity="center"
-            android:layout_marginTop="3dp"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            android:visibility="invisible"/>
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_gray1"
+                android:textSize="12sp"
+                tools:text="1分钟前" />
+
+            <TextView
+                android:id="@+id/unread_num"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:minWidth="16dp"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:visibility="invisible" />
+        </LinearLayout>
+
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/qc_text_grey" />
 
 </LinearLayout>

@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.util.Log;
 
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMLogLevel;
+import com.tencent.TIMManager;
 import com.tencent.qcloud.timchat.business.InitBusiness;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
@@ -100,7 +100,6 @@ public class LoginProcessor implements TIMCallBack {
         //登录之前要初始化群和好友关系链缓存
         FriendshipEvent.getInstance().init();
         GroupEvent.getInstance().init();
-        final String id = UserInfo.getInstance().getId();
         LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
     }
 
@@ -117,11 +116,12 @@ public class LoginProcessor implements TIMCallBack {
         MessageEvent.getInstance();
         String deviceMan = android.os.Build.MANUFACTURER;
         //注册小米和华为推送
-        if (deviceMan.equals("Xiaomi")) {
+        if (deviceMan.equals("Xiaomi") && shouldMiInit()) {
             MiPushClient.registerPush(context, "2882303761517480335", "5411748055335");
         } else if (deviceMan.equals("HUAWEI")) {
             PushManager.requestToken(context);
         }
+
         onLoginListener.onLoginSuccess();
     }
 

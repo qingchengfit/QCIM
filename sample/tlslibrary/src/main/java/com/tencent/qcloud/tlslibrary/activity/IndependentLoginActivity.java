@@ -92,6 +92,7 @@ public class IndependentLoginActivity extends Activity {
                 finish();
             }
         }
+
     }
 
     @Override

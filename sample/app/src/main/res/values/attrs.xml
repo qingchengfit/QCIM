@@ -28,6 +28,8 @@
         <attr name="moreImg" format="reference"/>
         <!-- 右侧更多功能按钮文字 -->
         <attr name="moreText" format="string"/>
+        <attr name="toolbarColor" format="color"/>
+        <attr name="statusbarColor" format="color"/>
     </declare-styleable>
 
 </resources>

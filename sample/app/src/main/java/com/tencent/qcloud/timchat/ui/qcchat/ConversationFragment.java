@@ -1,19 +1,15 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.ContextMenu;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tencent.TIMConversation;
@@ -23,7 +19,6 @@ import com.tencent.TIMGroupCacheInfo;
 import com.tencent.TIMGroupPendencyItem;
 import com.tencent.TIMMessage;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ConversationAdapter;
 import com.tencent.qcloud.timchat.chatmodel.Conversation;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
 import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
@@ -31,12 +26,11 @@ import com.tencent.qcloud.timchat.chatmodel.FriendshipConversation;
 import com.tencent.qcloud.timchat.chatmodel.GroupManageConversation;
 import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
 import com.tencent.qcloud.timchat.chatmodel.NomalConversation;
-import com.tencent.qcloud.timchat.event.AddConversationEvent;
+import com.tencent.qcloud.timchat.chatutils.PushUtil;
 import com.tencent.qcloud.timchat.presenter.ConversationPresenter;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.timchat.ui.HomeActivity;
-import com.tencent.qcloud.timchat.chatutils.PushUtil;
 import com.tencent.qcloud.timchat.viewfeatures.ConversationView;
 import com.tencent.qcloud.timchat.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.timchat.viewfeatures.GroupManageMessageView;
@@ -44,10 +38,7 @@ import com.tencent.qcloud.timchat.viewfeatures.GroupManageMessageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
@@ -55,16 +46,17 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
  * 会话列表界面
  */
 public class ConversationFragment extends Fragment implements ConversationView,
-        FriendshipMessageView,GroupManageMessageView, AddConversationProcessor.OnCreateConversation{
+        FriendshipMessageView,GroupManageMessageView, AddConversationProcessor.OnCreateConversation,
+        FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener{
 
     private final String TAG = "ConversationFragment";
 
     private View view;
-    private List<Conversation> conversationList = new LinkedList<>();
+//    private List<Conversation> conversationList = new LinkedList<>();
     private List<ConversationFlexItem> flexItemList = new ArrayList<>();
-    private ConversationAdapter adapter;
+//    private ConversationAdapter adapter;
     private FlexibleAdapter flexibleAdapter;
-    private ListView listView;
+    private RecyclerView listView;
     private ConversationPresenter presenter;
     private FriendshipManagerPresenter friendshipManagerPresenter;
     private GroupManagerPresenter groupManagerPresenter;
@@ -83,28 +75,31 @@ public class ConversationFragment extends Fragment implements ConversationView,
                              Bundle savedInstanceState) {
         if (view == null){
             view = inflater.inflate(R.layout.fragment_conversation, container, false);
-            listView = (ListView) view.findViewById(R.id.list);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    conversationList.get(position).navToDetail(getActivity());
-                    if (conversationList.get(position) instanceof GroupManageConversation) {
-                        groupManagerPresenter.getGroupManageLastMessage();
-                    }
-
-                }
-            });
+            listView = (RecyclerView) view.findViewById(R.id.recyclerView);
+//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    conversationList.get(position).navToDetail(getActivity());
+//                    if (conversationList.get(position) instanceof GroupManageConversation) {
+//                        groupManagerPresenter.getGroupManageLastMessage();
+//                    }
+//
+//                }
+//            });
             addConversationProcessor = new AddConversationProcessor(getContext());
             addConversationProcessor.setOnCreateConversation(this);
             friendshipManagerPresenter = new FriendshipManagerPresenter(this);
             groupManagerPresenter = new GroupManagerPresenter(this);
             presenter = new ConversationPresenter(this);
             presenter.getConversation();
-            adapter = new ConversationAdapter(getActivity(), R.layout.item_conversation, conversationList);
-            listView.setAdapter(adapter);
+//            adapter = new ConversationAdapter(getActivity(), R.layout.item_conversation, conversationList);
+            listView.setLayoutManager(new LinearLayoutManager(getContext()));
+            flexibleAdapter = new FlexibleAdapter(flexItemList, this);
+            listView.setAdapter(flexibleAdapter);
             registerForContextMenu(listView);
         }
-        adapter.notifyDataSetChanged();
+        flexibleAdapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
         return view;
 
     }
@@ -123,7 +118,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void initView(List<TIMConversation> conversationList) {
-        this.conversationList.clear();
+        this.flexItemList.clear();
         groupList = new ArrayList<>();
         for (TIMConversation item:conversationList){
             if (item.getIdentifer().equals("新朋友")){
@@ -132,7 +127,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
             switch (item.getType()){
                 case C2C:
                 case Group:
-                    this.conversationList.add(new NomalConversation(item));
+//                    this.conversationList.add(new NomalConversation(item));
                     this.flexItemList.add(new ConversationFlexItem(getContext(), new NomalConversation(item)));
                     groupList.add(item.getPeer());
                     break;
@@ -150,7 +145,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
     @Override
     public void updateMessage(TIMMessage message) {
         if (message == null){
-            adapter.notifyDataSetChanged();
+            flexibleAdapter.notifyDataSetChanged();
             return;
         }
         if (message.getConversation().getType() == TIMConversationType.System){
@@ -169,8 +164,8 @@ public class ConversationFragment extends Fragment implements ConversationView,
             }
         }
         conversation.setLastMessage(MessageFactory.getMessage(message));
-        conversationList.add(conversation);
-        Collections.sort(conversationList);
+        flexItemList.add(new ConversationFlexItem(getContext(), conversation));
+        Collections.sort(flexItemList);
         refresh();
     }
 
@@ -189,12 +184,12 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void removeConversation(String identify) {
-        Iterator<Conversation> iterator = conversationList.iterator();
+        Iterator<ConversationFlexItem> iterator = flexItemList.iterator();
         while(iterator.hasNext()){
-            Conversation conversation = iterator.next();
+            Conversation conversation = iterator.next().getConversation();
             if (conversation.getIdentify()!=null&&conversation.getIdentify().equals(identify)){
                 iterator.remove();
-                adapter.notifyDataSetChanged();
+                flexibleAdapter.notifyDataSetChanged();
                 return;
             }
         }
@@ -207,9 +202,10 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void updateGroupInfo(TIMGroupCacheInfo info) {
-        for (Conversation conversation : conversationList){
-            if (conversation.getIdentify()!=null && conversation.getIdentify().equals(info.getGroupInfo().getGroupId())){
-                adapter.notifyDataSetChanged();
+        for (ConversationFlexItem conversationItem : flexItemList){
+            if (conversationItem.getConversation().getIdentify()!=null && conversationItem.getConversation()
+                    .getIdentify().equals(info.getGroupInfo().getGroupId())){
+                flexibleAdapter.notifyDataSetChanged();
                 return;
             }
         }
@@ -220,8 +216,8 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void refresh() {
-        Collections.sort(conversationList);
-        adapter.notifyDataSetChanged();
+        Collections.sort(flexItemList);
+        flexibleAdapter.notifyDataSetChanged();
         if (getActivity() instanceof HomeActivity)
             ((HomeActivity) getActivity()).setMsgUnread(getTotalUnreadNum() == 0);
     }
@@ -243,12 +239,13 @@ public class ConversationFragment extends Fragment implements ConversationView,
     public void onGetFriendshipLastMessage(TIMFriendFutureItem message, long unreadCount) {
         if (friendshipConversation == null){
             friendshipConversation = new FriendshipConversation(message);
-            conversationList.add(friendshipConversation);
+//            conversationList.add(friendshipConversation);
+            flexItemList.add(new ConversationFlexItem(getContext(), friendshipConversation));
         }else{
             friendshipConversation.setLastMessage(message);
         }
         friendshipConversation.setUnreadCount(unreadCount);
-        Collections.sort(conversationList);
+        Collections.sort(flexItemList);
         refresh();
     }
 
@@ -272,12 +269,13 @@ public class ConversationFragment extends Fragment implements ConversationView,
     public void onGetGroupManageLastMessage(TIMGroupPendencyItem message, long unreadCount) {
         if (groupManageConversation == null){
             groupManageConversation = new GroupManageConversation(message);
-            conversationList.add(groupManageConversation);
+//            conversationList.add(groupManageConversation);
+            flexItemList.add(new ConversationFlexItem(getContext(), groupManageConversation));
         }else{
             groupManageConversation.setLastMessage(message);
         }
         groupManageConversation.setUnreadCount(unreadCount);
-        Collections.sort(conversationList);
+        Collections.sort(flexItemList);
         refresh();
     }
 
@@ -291,40 +289,45 @@ public class ConversationFragment extends Fragment implements ConversationView,
 
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        Conversation conversation = conversationList.get(info.position);
-        if (conversation instanceof NomalConversation){
-            menu.add(0, 1, Menu.NONE, getString(R.string.conversation_del));
-        }
-    }
-
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        NomalConversation conversation = (NomalConversation) conversationList.get(info.position);
-        switch (item.getItemId()) {
-            case 1:
-                if (conversation != null){
-                    if (presenter.delConversation(conversation.getType(), conversation.getIdentify())){
-                        conversationList.remove(conversation);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        return super.onContextItemSelected(item);
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v,
+//                                    ContextMenu.ContextMenuInfo menuInfo) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+//        Conversation conversation = flexItemList.get(info.position).getConversation();
+//        if (conversation instanceof NomalConversation){
+//            menu.add(0, 1, Menu.NONE, getString(R.string.conversation_del));
+//        }
+//    }
+//
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        ConversationFlexItem selectItem = flexItemList.get(info.position);
+//        NomalConversation conversation = null;
+//        if (selectItem != null) {
+//            conversation = ((NomalConversation) selectItem.getConversation());
+//        }
+//        switch (item.getItemId()) {
+//            case 1:
+//                if (conversation != null){
+//                    if (presenter.delConversation((conversation).getType(),
+//                            conversation.getIdentify())){
+//                        flexItemList.remove(selectItem);
+//                        flexibleAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//        return super.onContextItemSelected(item);
+//    }
 
     private long getTotalUnreadNum(){
         long num = 0;
-        for (Conversation conversation : conversationList){
-            num += conversation.getUnreadNum();
+        for (ConversationFlexItem item : flexItemList){
+            num += item.getConversation().getUnreadNum();
         }
         return num;
     }
@@ -339,5 +342,38 @@ public class ConversationFragment extends Fragment implements ConversationView,
     @Override
     public void onCreateFailed(int errorCode) {
         Toast.makeText(getContext(), "创建群组失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onItemClick(int position) {
+        flexItemList.get(position).getConversation().navToDetail(getActivity());
+        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
+            groupManagerPresenter.getGroupManageLastMessage();
+        }
+        return false;
+    }
+
+    @Override
+    public void onItemLongClick(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示")
+                .setMessage("确定删除会话")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ConversationFlexItem selectItem = flexItemList.get(position);
+                        NomalConversation conversation = null;
+                        if (selectItem != null) {
+                            conversation = ((NomalConversation) selectItem.getConversation());
+                        }
+                        if (conversation != null) {
+                            if (presenter.delConversation((conversation).getType(),
+                                    conversation.getIdentify())) {
+                                flexItemList.remove(selectItem);
+                                flexibleAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }).setNegativeButton("取消", null);
     }
 }

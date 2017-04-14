@@ -374,11 +374,11 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 dialog.dismiss();
             }
         }
-//        if (id == R.id.btn_voice){
-//            if(activity!=null && requestAudio(activity)){
-//                updateView(InputMode.VOICE);
-//            }
-//        }
+        if (id == R.id.btn_voice){
+            if(activity!=null && requestAudio(activity)){
+                updateView(InputMode.VOICE);
+            }
+        }
 //        if (id == R.id.btn_video){
 //            if (getContext() instanceof FragmentActivity){
 //                FragmentActivity fragmentActivity = (FragmentActivity) getContext();

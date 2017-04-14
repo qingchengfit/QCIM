@@ -42,7 +42,7 @@ public class AddConversationProcessor {
     /**
      * @param datas    id列表
      */
-    public void createGroupWithArg(List<String> datas, final String avatorUrl){
+    public void createGroupWithArg(List<String> datas, final String avatarUrl){
         if (datas.size() == 1){
             ChatActivity.navToChat(context, datas.get(0), TIMConversationType.C2C);
         }else {
@@ -52,7 +52,7 @@ public class AddConversationProcessor {
                     new TIMValueCallBack<String>() {
                         @Override
                         public void onError(int i, String s) {
-
+                            onCreateConversation.onCreateFailed(i, s);
                         }
 
                         @Override
@@ -61,9 +61,10 @@ public class AddConversationProcessor {
                             intent.putExtra(Configs.IDENTIFY, s);
                             intent.putExtra(Configs.CONVERSATION_TYPE, TIMConversationType.Group);
                             context.startActivity(intent);
-                            TIMGroupManager.getInstance().modifyGroupFaceUrl(s, avatorUrl, new TIMCallBack() {
+                            TIMGroupManager.getInstance().modifyGroupFaceUrl(s, avatarUrl, new TIMCallBack() {
                                 @Override
                                 public void onError(int i, String s) {
+                                    onCreateConversation.onCreateFailed(i, s);
                                 }
 
                                 @Override
@@ -77,6 +78,7 @@ public class AddConversationProcessor {
         }
     }
 
+    //
     private String getDefaultGroupName(List<String> datas){
 
         final StringBuilder s = new StringBuilder();
@@ -84,7 +86,7 @@ public class AddConversationProcessor {
         TIMFriendshipManager.getInstance().getFriendsProfile(datas, new TIMValueCallBack<List<TIMUserProfile>>() {
             @Override
             public void onError(int i, String s) {
-                onCreateConversation.onCreateFailed(i);
+                onCreateConversation.onCreateFailed(i, s);
             }
 
             @Override
@@ -100,7 +102,7 @@ public class AddConversationProcessor {
 
     public interface OnCreateConversation{
         void onCreateSuccess(String id);
-        void onCreateFailed(int errorCode);
+        void onCreateFailed(int errorCode, String s);
     }
 
 }

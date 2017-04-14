@@ -115,9 +115,9 @@ public class ContactFragment extends Fragment implements  View.OnClickListener, 
         addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SearchFriendActivity.class);
-                getActivity().startActivity(intent);
-                inviteDialog.dismiss();
+//                Intent intent = new Intent(getActivity(), SearchFriendActivity.class);
+//                getActivity().startActivity(intent);
+//                inviteDialog.dismiss();
             }
         });
         managerGroup.setOnClickListener(new View.OnClickListener() {
@@ -131,9 +131,9 @@ public class ContactFragment extends Fragment implements  View.OnClickListener, 
         addGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchGroupActivity.class);
-                getActivity().startActivity(intent);
-                inviteDialog.dismiss();
+//                Intent intent = new Intent(getActivity(), SearchGroupActivity.class);
+//                getActivity().startActivity(intent);
+//                inviteDialog.dismiss();
             }
         });
         Window window = inviteDialog.getWindow();

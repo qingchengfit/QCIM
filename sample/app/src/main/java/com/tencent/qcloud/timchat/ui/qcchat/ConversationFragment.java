@@ -60,6 +60,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
     private List<String> groupList;
     private AddConversationProcessor addConversationProcessor;
     private FriendshipManagerPresenter friendshipManagerPresenter;
+    private OnUnReadMessageListener onUnReadMessageListener;
 
     public ConversationFragment() {
         // Required empty public constructor
@@ -95,6 +96,10 @@ public class ConversationFragment extends Fragment implements ConversationView,
         super.onResume();
         refresh();
         PushUtil.getInstance().reset();
+    }
+
+    public void setOnUnReadMessageListener(OnUnReadMessageListener onUnReadMessageListener) {
+        this.onUnReadMessageListener = onUnReadMessageListener;
     }
 
     /**
@@ -200,6 +205,9 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void refresh() {
+        if (onUnReadMessageListener != null){
+            onUnReadMessageListener.onUnReadMessage(getTotalUnreadNum());
+        }
         Collections.sort(flexItemList);
         flexibleAdapter.notifyDataSetChanged();
     }
@@ -321,7 +329,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
     }
 
     @Override
-    public void onCreateFailed(int errorCode) {
+    public void onCreateFailed(int errorCode, String s) {
         Toast.makeText(getContext(), "创建群组失败", Toast.LENGTH_SHORT).show();
     }
 
@@ -357,4 +365,9 @@ public class ConversationFragment extends Fragment implements ConversationView,
                     }
                 }).setNegativeButton("取消", null);
     }
+
+    public interface OnUnReadMessageListener{
+        void onUnReadMessage(long count);
+    }
+
 }

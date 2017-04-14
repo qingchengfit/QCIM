@@ -19,6 +19,7 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 import com.tencent.qcloud.timchat.chatutils.MediaUtil;
+import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,27 +85,28 @@ public class VoiceMessage extends Message {
 //        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 //        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
 //        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, context.getResources().getDisplayMetrics());
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int height = Util.dpTopx(14f, context.getResources());
+        int width = Util.dpTopx(18f, context.getResources());
+//        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics());
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
         LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(width, height);
         lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         if (message.isSelf()){
 //            linearLayout.addView(tv);
-            imageLp.setMargins(10, 0, 0, 0);
-            voiceIcon.setLayoutParams(imageLp);
-            linearLayout.addView(voiceIcon);
+//            voiceIcon.setLayoutParams(imageLp);
+//            linearLayout.addView(voiceIcon);
+            getBubbleView(viewHolder).setGravity(Gravity.RIGHT);
         }else{
-            voiceIcon.setLayoutParams(imageLp);
-            linearLayout.addView(voiceIcon);
-            lp.setMargins(10, 0, 0, 0);
+//            voiceIcon.setLayoutParams(imageLp);
+//            linearLayout.addView(voiceIcon);
+//            lp.setMargins(10, 0, 0, 0);
 //            linearLayout.addView(tv);
+            getBubbleView(viewHolder).setGravity(Gravity.LEFT);
         }
 
         clearView(viewHolder);
-        getBubbleView(viewHolder).setPadding(12, 16, 22, 16);
-        getBubbleView(viewHolder).setGravity(Gravity.RIGHT);
-        getBubbleView(viewHolder).addView(linearLayout, lp);
+//        getBubbleView(viewHolder).setPadding(12, 16, 25, 16);
+        getBubbleView(viewHolder).addView(voiceIcon, lp);
 
         if (message.isSelf()){
             viewHolder.leftVoice.setVisibility(View.GONE);

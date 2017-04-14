@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="16sp"
-            android:textColor="@color/text_blue1"/>
+            android:textColor="@color/qc_text_black"/>
     </LinearLayout>
 
 </RelativeLayout>

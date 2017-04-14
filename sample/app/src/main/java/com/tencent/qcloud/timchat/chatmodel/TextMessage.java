@@ -11,7 +11,9 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -117,7 +119,11 @@ public class TextMessage extends Message {
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
-        getBubbleView(viewHolder).setPadding(0, 0, 0, 0);
+        getBubbleView(viewHolder).setGravity(Gravity.NO_GRAVITY);
+        getBubbleView(viewHolder).setPadding(Util.dpTopx(20f, context.getResources()),
+                Util.dpTopx(10f, context.getResources()), Util.dpTopx(12f, context.getResources()),
+                Util.dpTopx(10f, context.getResources()));
+        getBubbleView(viewHolder).setClipToPadding(true);
         clearView(viewHolder);
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
@@ -125,6 +131,8 @@ public class TextMessage extends Message {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         for (int i = 0; i < message.getElementCount(); ++i){
             elems.add(message.getElement(i));
             if (message.getElement(i).getType() == TIMElemType.Text){
@@ -136,7 +144,7 @@ public class TextMessage extends Message {
             stringBuilder.insert(0," ");
         }
         tv.setText(stringBuilder);
-        getBubbleView(viewHolder).addView(tv);
+        getBubbleView(viewHolder).addView(tv, params);
         showStatus(viewHolder);
     }
 

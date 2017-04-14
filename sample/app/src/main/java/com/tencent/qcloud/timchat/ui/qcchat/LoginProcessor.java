@@ -62,6 +62,7 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
 
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
+        sientInstall();
     }
 
     public void setOnLoginListener(OnLoginListener onLoginListener) {
@@ -252,7 +253,6 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
     public interface OnLoginListener{
         void onLoginSuccess();
         void onLoginFailed(TLSErrInfo errInfo);
-
     }
 
 }

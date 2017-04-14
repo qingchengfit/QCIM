@@ -54,14 +54,11 @@
                     android:id="@+id/leftMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
                     android:clickable="true"
                     android:longClickable="true"
-                    android:gravity="center"
-                    android:background="@drawable/chat_bubble_grey"/>
+                    android:background="@drawable/chat_bubble_grey"
+                    android:clipToPadding="true"/>
+
             </LinearLayout>
 
             <TextView
@@ -99,8 +96,7 @@
                 android:clickable="true"
                 android:longClickable="true"
                 android:layout_toLeftOf="@id/rightAvatar"
-                android:background="@drawable/chat_bubble_green"
-                android:clipChildren="false"/>
+                android:background="@drawable/chat_bubble_green"/>
 
             <TextView
                 android:id="@+id/rightDesc"

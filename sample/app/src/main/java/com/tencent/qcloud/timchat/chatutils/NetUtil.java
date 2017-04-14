@@ -19,7 +19,7 @@ public class NetUtil {
     }
 
     public void getUsersig(String identifier){
-        String urlPrefix = "http://192.168.8.151:7777/api/im/usersig/?identifier=";
+        String urlPrefix = "http://c1.qingchengfit.cn/api/im/usersig/?identifier=";
         final String urlWhole = urlPrefix + identifier;
         new Thread(new Runnable() {
             @Override

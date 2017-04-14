@@ -15,163 +15,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57fbf908-dadd-43f6-a0cb-665cccc8abfd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/btn_add.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/btn_minus.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_et_clear.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/glide_3_7_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/Common/Configs.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/BottomSelectDialog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/DeleteMemberActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/widget/PhotoUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/actionsheet_dialog_in.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/actionsheet_dialog_out.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_add_member.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_delete_member.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_form_group.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_talk_picture.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_delete_member.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_bottom_select.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_23_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_23_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_23_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/generated/mockable-android-22.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/generated/mockable-android-23.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/generated/mockable-android-24.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/btn_video.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/btn_video_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_expression.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_expression_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_keyboard.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_keyboard_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_more.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_more_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_right.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_voice.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/ic_voice_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/microphone1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/microphone2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/microphone3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/microphone4.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xhdpi/microphone5.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/btn_video.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/btn_video_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_expression.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_expression_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_file.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_image.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_keyboard.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_keyboard_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_more.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_more_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_photography.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_video.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_voice.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/ic_voice_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/microphone1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/microphone2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/microphone3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/microphone4.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/microphone5.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/send.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable-xxhdpi/send_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/animation_voice.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/bg_inputbox.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/bg_voice_sending.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/btn_send.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/btn_video_record.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/btn_voice_normal.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/btn_voice_pressed.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/ic_add_input.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/ic_face_input.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/ic_keyboard_input.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/ic_return.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/ic_voice_input.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/drawable/style_recorder_progress.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/layout/chat_input.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/layout/dialog_video_input.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/layout/title.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/layout/view_line_controller.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ui/src/main/res/layout/voice_sending.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/taskArtifacts/taskArtifacts.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_app_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_sdk_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.2/tasks/_tlslibrary_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ChatAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ChatAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ConversationAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ConversationAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ProfileSummaryAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ProfileSummaryAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/Conversation.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/Conversation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/FileMessage.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/FileMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/FriendProfile.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/FriendProfile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/FriendshipConversation.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/FriendshipConversation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/GroupManageConversation.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/GroupManageConversation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/GroupMemberProfile.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/GroupMemberProfile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/ImageMessage.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/ImageMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/Message.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/Message.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/NomalConversation.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/NomalConversation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/TextMessage.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/TextMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/VideoMessage.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/VideoMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/VoiceMessage.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/VoiceMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/presenter/ConversationPresenter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/presenter/ConversationPresenter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/GroupMemberActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/GroupMemberActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/SetGroupNameActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/SetGroupNameActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ChatActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ChatActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ChooseFriendActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ChooseFriendActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationBean.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationBean.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/LoginProcessor.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/LoginProcessor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/SplashActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/SplashActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/viewfeatures/ConversationView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/viewfeatures/ConversationView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/widget/ChatInput.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/widget/ChatInput.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/widget/TemplateTitle.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/widget/TemplateTitle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_chat.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_chat.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_group_detail.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_group_detail.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/chat_input.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/chat_input.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_conversation.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_conversation.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_group_detail_grid.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_group_detail_grid.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_change_group_name.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_change_group_name.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/title.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/title.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/voice_sending.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/voice_sending.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/sdk.iml" afterPath="$PROJECT_DIR$/sdk/sdk.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java" afterPath="$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/settings.gradle" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tlslibrary/src/main/java/com/tencent/qcloud/tlslibrary/helper/Util.java" afterPath="$PROJECT_DIR$/tlslibrary/src/main/java/com/tencent/qcloud/tlslibrary/helper/Util.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tlslibrary/src/main/java/com/tencent/qcloud/tlslibrary/service/AccountRegisterService.java" afterPath="$PROJECT_DIR$/tlslibrary/src/main/java/com/tencent/qcloud/tlslibrary/service/AccountRegisterService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tlslibrary/src/main/java/com/tencent/qcloud/tlslibrary/service/TLSService.java" afterPath="$PROJECT_DIR$/tlslibrary/src/main/java/com/tencent/qcloud/tlslibrary/service/TLSService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tlslibrary/tlslibrary.iml" afterPath="$PROJECT_DIR$/tlslibrary/tlslibrary.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ui/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/ui/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ui/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/ui/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ui/ui.iml" afterPath="$PROJECT_DIR$/ui/ui.iml" />
-    </list>
+    <list default="true" id="57fbf908-dadd-43f6-a0cb-665cccc8abfd" name="Default" comment="" />
     <ignored path="sample.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -246,8 +90,8 @@
       <file leaf-file-name="CustomMessage.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/CustomMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-164">
-              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+            <state relative-caret-position="697">
+              <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -4928,8 +4772,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/CustomMessage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-164">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        <state relative-caret-position="697">
+          <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
           <folding />
         </state>
       </provider>

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
+import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
@@ -31,7 +31,7 @@ public class SearchFriendActivity extends Activity implements FriendInfoView, Ad
     ListView mSearchList;
     EditText mSearchInput;
     TextView tvNoResult;
-    ProfileSummaryAdapter adapter;
+    ProfileSummaryItem adapter;
     List<ProfileSummary> list = new ArrayList<>();
 
     @Override
@@ -41,7 +41,7 @@ public class SearchFriendActivity extends Activity implements FriendInfoView, Ad
         mSearchInput = (EditText) findViewById(R.id.inputSearch);
         mSearchList =(ListView) findViewById(R.id.list);
         tvNoResult = (TextView) findViewById(R.id.noResult);
-        adapter = new ProfileSummaryAdapter(this, R.layout.item_profile_summary, list);
+        adapter = new ProfileSummaryItem(this, R.layout.item_profile_summary, list);
         mSearchList.setAdapter(adapter);
         mSearchList.setOnItemClickListener(this);
         presenter = new FriendshipManagerPresenter(this);

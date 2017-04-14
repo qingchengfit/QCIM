@@ -26,6 +26,7 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.business.InitBusiness;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.chatutils.NetUtil;
 import com.tencent.qcloud.timchat.chatutils.PushUtil;
 import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.event.GroupEvent;
@@ -96,16 +97,9 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
         GroupEvent.getInstance().init();
         final String id = UserInfo.getInstance().getId();
 
-        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
+//        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
 
         //获取自己账号系统的userSig，使用自己的账号系统的userSig登录IM SDK -- by fb
-//        NetUtil netUtil = new NetUtil(id);
-//        netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
-//            @Override
-//            public void onSuccessed(String userSig) {
-//                LoginBusiness.loginIm(id, userSig, SplashActivity.this);
-//            }
-//        });
     }
 
     /**

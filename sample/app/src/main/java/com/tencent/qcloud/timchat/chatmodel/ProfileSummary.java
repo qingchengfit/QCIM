@@ -2,10 +2,10 @@ package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
 
-import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
+import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 
 /**
- * {@link ProfileSummaryAdapter}的数据元素,可提取获取资料的摘要
+ * {@link ProfileSummaryItem}的数据元素,可提取获取资料的摘要
  */
 public interface ProfileSummary {
 

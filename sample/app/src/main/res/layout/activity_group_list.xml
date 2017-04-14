@@ -14,8 +14,8 @@
         app:moreImg="@drawable/ic_add_more" />
 
 
-    <ListView
-        android:id="@id/list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_member_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.tencent.TIMGroupDetailInfo;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
+import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 import com.tencent.qcloud.timchat.chatmodel.GroupProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
@@ -26,7 +26,7 @@ public class SearchGroupActivity extends Activity implements GroupInfoView, View
 
     private GroupManagerPresenter groupManagerPresenter;
     private List<ProfileSummary> list= new ArrayList<>();
-    private ProfileSummaryAdapter adapter;
+    private ProfileSummaryItem adapter;
     private EditText searchInput;
     private ListView listView;
 
@@ -36,7 +36,7 @@ public class SearchGroupActivity extends Activity implements GroupInfoView, View
         setContentView(R.layout.activity_search_group);
         searchInput = (EditText) findViewById(R.id.inputSearch);
         listView =(ListView) findViewById(R.id.list);
-        adapter = new ProfileSummaryAdapter(this, R.layout.item_profile_summary, list);
+        adapter = new ProfileSummaryItem(this, R.layout.item_profile_summary, list);
         listView.setAdapter(adapter);
         groupManagerPresenter = new GroupManagerPresenter(this);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -3,16 +3,16 @@ package com.tencent.qcloud.timchat.ui.qcchat;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.GridView;
 
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberResult;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
-import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
+import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.tlslibrary.helper.Util;
@@ -20,17 +20,20 @@ import com.tencent.qcloud.tlslibrary.helper.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+
 /**
  * Created by fb on 2017/4/13.
  */
 
-public class DeleteMemberActivity extends Activity implements ProfileSummaryAdapter.OnDeleteMemberListener {
-    private ProfileSummaryAdapter adapter;
+public class DeleteMemberActivity extends Activity implements ProfileSummaryItem.OnDeleteMemberListener {
     private List<ProfileSummary> dataList = new ArrayList<>();
-    private GridView gridView;
+    private List<ProfileSummaryItem> itemList = new ArrayList<>();
+    private RecyclerView gridView;
     private TemplateTitle title;
     private List<String> deleteList = new ArrayList<>();
     private String groupId;
+    private FlexibleAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +41,7 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryAdap
         setContentView(R.layout.activity_delete_member);
 
         title = (TemplateTitle) findViewById(R.id.toolbar_title);
-        gridView = (GridView) findViewById(R.id.grid_delete_member);
+        gridView = (RecyclerView) findViewById(R.id.grid_delete_member);
 
         setToolbar();
 
@@ -47,11 +50,18 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryAdap
             groupId = getIntent().getStringExtra("group");
         }
 
-        adapter = new ProfileSummaryAdapter(getApplicationContext(), R.layout.item_group_detail_grid, dataList);
-        adapter.setDelete(true);
-        adapter.setOnDeleteMemberListener(this);
+        for (ProfileSummary profileSummary : dataList){
+            ProfileSummaryItem item = new ProfileSummaryItem(getApplicationContext(), profileSummary);
+            item.setOnDeleteMemberListener(this);
+            item.setDelete(true);
+            itemList.add(item);
+        }
+
+        adapter = new FlexibleAdapter(itemList);
+
+        gridView.setLayoutManager(new GridLayoutManager(this, 5));
+        gridView.setItemAnimator(new DefaultItemAnimator());
         gridView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     private void setToolbar(){
@@ -69,7 +79,7 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryAdap
 
                         @Override
                         public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
-                            Util.showToast(getApplicationContext(), "移出群成员成功，请重试");
+                            Util.showToast(getApplicationContext(), "移出群成员成功");
                             setResult(RESULT_OK);
                             finish();
                         }
@@ -83,7 +93,7 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryAdap
 
     @Override
     public void onDelete(String position) {
-        gridView.removeViewAt(Integer.valueOf(position));
+        adapter.removeItem(Integer.valueOf(position));
         deleteList.add(position);
     }
 }

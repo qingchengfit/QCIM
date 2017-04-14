@@ -3,30 +3,36 @@ package com.tencent.qcloud.timchat.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tencent.TIMGroupCacheInfo;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
+import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.chatmodel.GroupProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GroupListActivity extends Activity implements Observer {
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 
-    private ProfileSummaryAdapter adapter;
-    private ListView listView;
+public class GroupListActivity extends Activity implements Observer, FlexibleAdapter.OnItemClickListener {
+
+    private RecyclerView listView;
     private String type;
-    private List<ProfileSummary> list;
+    private List<ProfileSummary> list = new ArrayList<>();
+    private List<ProfileSummaryItem> itemList = new ArrayList<>();
+    private FlexibleAdapter flexibleAdapter;
     private final int CREATE_GROUP_CODE = 100;
 
 
@@ -36,16 +42,15 @@ public class GroupListActivity extends Activity implements Observer {
         setContentView(R.layout.activity_group_list);
         type = getIntent().getStringExtra("type");
         setTitle();
-        listView =(ListView) findViewById(R.id.list);
+        listView =(RecyclerView) findViewById(R.id.recycler_member_list);
         list = GroupInfo.getInstance().getGroupListByType(type);
-        adapter = new ProfileSummaryAdapter(this, R.layout.item_profile_summary, list);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                list.get(position).onClick(GroupListActivity.this);
-            }
-        });
+        for (ProfileSummary profileSummary : list){
+            itemList.add(new ProfileSummaryItem(getApplicationContext(), profileSummary));
+        }
+        flexibleAdapter = new FlexibleAdapter(itemList, this);
+        listView.setLayoutManager(new GridLayoutManager(this, 5));
+        listView.setAdapter(flexibleAdapter);
+
         TemplateTitle title = (TemplateTitle) findViewById(R.id.groupListTitle);
         title.setMoreTextAction(new View.OnClickListener() {
             @Override
@@ -113,7 +118,7 @@ public class GroupListActivity extends Activity implements Observer {
             ProfileSummary item = it.next();
             if (item.getIdentify().equals(groupId)){
                 it.remove();
-                adapter.notifyDataSetChanged();
+                flexibleAdapter.notifyDataSetChanged();
                 return;
             }
         }
@@ -124,7 +129,7 @@ public class GroupListActivity extends Activity implements Observer {
         if (info!=null && info.getGroupInfo().getGroupType().equals(type)){
             GroupProfile profile = new GroupProfile(info);
             list.add(profile);
-            adapter.notifyDataSetChanged();
+            flexibleAdapter.notifyDataSetChanged();
         }
 
     }
@@ -132,5 +137,11 @@ public class GroupListActivity extends Activity implements Observer {
     private void updateGroup(TIMGroupCacheInfo info){
         delGroup(info.getGroupInfo().getGroupId());
         addGroup(info);
+    }
+
+    @Override
+    public boolean onItemClick(int position) {
+        list.get(position).onClick(GroupListActivity.this);
+        return false;
     }
 }

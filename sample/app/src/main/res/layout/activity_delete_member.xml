@@ -13,7 +13,7 @@
         app:canBack="true"
         app:backText="取消"/>
 
-    <GridView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/grid_delete_member"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

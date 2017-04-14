@@ -21,6 +21,7 @@ import com.tencent.TIMManager;
 import com.tencent.qcloud.timchat.business.InitBusiness;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.chatutils.NetUtil;
 import com.tencent.qcloud.timchat.chatutils.PushUtil;
 import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.event.GroupEvent;
@@ -56,9 +57,6 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
 
     public LoginProcessor(Context context, String username, String password) throws Exception {
         this.context = context;
-        if (username.length() < 4 || password.length() < 8){
-            throw new Exception("请输入正确的用户id（大于4字符）或者密码（大于8字符）");
-        }
         this.username = username;
         this.password = password;
 
@@ -155,7 +153,15 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
         //登录之前要初始化群和好友关系链缓存
         FriendshipEvent.getInstance().init();
         GroupEvent.getInstance().init();
-        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
+//        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
+        final String id = UserInfo.getInstance().getId();
+        NetUtil netUtil = new NetUtil(id);
+        netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
+            @Override
+            public void onSuccessed(String userSig) {
+                LoginBusiness.loginIm(id, userSig, LoginProcessor.this);
+            }
+        });
     }
 
     @Override

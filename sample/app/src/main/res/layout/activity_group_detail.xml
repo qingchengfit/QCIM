@@ -64,7 +64,7 @@
         android:textColor="@color/qc_text_black"
         android:paddingTop="14dp"
         android:paddingBottom="5dp"/>
-    <GridView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/gridView_group_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

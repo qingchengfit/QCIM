@@ -84,7 +84,7 @@ public class AddConversationProcessor {
         TIMFriendshipManager.getInstance().getFriendsProfile(datas, new TIMValueCallBack<List<TIMUserProfile>>() {
             @Override
             public void onError(int i, String s) {
-
+                onCreateConversation.onCreateFailed(i);
             }
 
             @Override

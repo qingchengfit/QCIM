@@ -124,13 +124,13 @@ public class SettingFragment extends Fragment implements FriendInfoView {
                 }
             });
             LineControllerView blackList = (LineControllerView) view.findViewById(R.id.blackList);
-            blackList.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), BlackListActivity.class);
-                    startActivity(intent);
-                }
-            });
+//            blackList.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getActivity(), BlackListActivity.class);
+//                    startActivity(intent);
+//                }
+//            });
             LineControllerView about = (LineControllerView) view.findViewById(R.id.about);
             about.setOnClickListener(new View.OnClickListener() {
                 @Override

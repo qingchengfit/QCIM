@@ -1,6 +1,7 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -8,8 +9,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
+
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
+import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
 import com.tencent.qcloud.timchat.business.InitBusiness;
@@ -21,6 +27,7 @@ import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.event.RefreshEvent;
 import com.tencent.qcloud.tlslibrary.helper.Util;
+import com.tencent.qcloud.tlslibrary.service.AccountRegisterService;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -31,21 +38,30 @@ import java.util.List;
 
 import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSPwdLoginListener;
+import tencent.tls.platform.TLSStrAccRegListener;
 import tencent.tls.platform.TLSUserInfo;
 
 /**
  * Created by fb on 2017/3/15.
  */
 
-public class LoginProcessor implements TIMCallBack {
+public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
 
     private Context context;
     private TLSService tlsService;
     private PwdLoginListener pwdLoginListener;
     private OnLoginListener onLoginListener;
+    private String username;
+    private String password;
 
-    public LoginProcessor(Context context) {
+    public LoginProcessor(Context context, String username, String password) throws Exception {
         this.context = context;
+        if (username.length() < 4 || password.length() < 8){
+            throw new Exception("请输入正确的用户id（大于4字符）或者密码（大于8字符）");
+        }
+        this.username = username;
+        this.password = password;
+
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
     }
@@ -54,7 +70,14 @@ public class LoginProcessor implements TIMCallBack {
         this.onLoginListener = onLoginListener;
     }
 
-    public void sientInstall(String username, String password){
+    public void initAccount(){
+        int result = tlsService.TLSStrAccReg(username, password, this);
+        if (result == TLSErrInfo.INPUT_INVALID) {
+            Util.showToast(context, "IM账号注册失败");
+        }
+    }
+
+    public void sientInstall(){
         pwdLoginListener = new LoginProcessor.PwdLoginListener();
 
 
@@ -81,9 +104,41 @@ public class LoginProcessor implements TIMCallBack {
         }
     }
 
+    /**
+     * 设置用户昵称以及头像
+     * @param username       用户名
+     * @param avatarUrl     头像
+     */
+    public void setUserInfo(String username, String avatarUrl){
+        TIMFriendshipManager.getInstance().setNickName(username, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+                Toast.makeText(context, "设置用户昵称：" + s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, "设置用户昵称：成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        TIMFriendshipManager.getInstance().setFaceUrl(avatarUrl, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+                Toast.makeText(context, "设置用户头像：" + s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, "设置用户头像：成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     private void init(){
 
-        SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences("data", Context.MODE_PRIVATE);
         int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
         //初始化IMSDK
         InitBusiness.start(context,loglvl);
@@ -105,7 +160,10 @@ public class LoginProcessor implements TIMCallBack {
 
     @Override
     public void onError(int i, String s) {
-        onLoginListener.onLoginFailed(i);
+        TLSErrInfo tlsErrInfo = new TLSErrInfo();
+        tlsErrInfo.ErrCode = i;
+        tlsErrInfo.Msg = s;
+        onLoginListener.onLoginFailed(tlsErrInfo);
     }
 
     @Override
@@ -128,7 +186,7 @@ public class LoginProcessor implements TIMCallBack {
     /**
      * 判断小米推送是否已经初始化
      */
-    private boolean shouldMiInit() {
+    @TargetApi(Build.VERSION_CODES.CUPCAKE) private boolean shouldMiInit() {
         ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
         List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
         String mainProcessName = context.getPackageName();
@@ -139,6 +197,20 @@ public class LoginProcessor implements TIMCallBack {
             }
         }
         return false;
+    }
+
+    @Override public void OnStrAccRegSuccess(TLSUserInfo tlsUserInfo) {
+        Util.showToast(context, "成功注册 " + tlsUserInfo.identifier);
+        TLSService.getInstance().setLastErrno(0);
+        sientInstall();
+    }
+
+    @Override public void OnStrAccRegFail(TLSErrInfo tlsErrInfo) {
+        Util.showToast(context, "注册聊天失败，请重试");
+    }
+
+    @Override public void OnStrAccRegTimeout(TLSErrInfo tlsErrInfo) {
+        Util.showToast(context, "注册聊天超时，请重试");
     }
 
     //登录TLService
@@ -160,7 +232,8 @@ public class LoginProcessor implements TIMCallBack {
         @Override
         public void OnPwdLoginFail(TLSErrInfo errInfo) {
             TLSService.getInstance().setLastErrno(-1);
-            Util.notOK(context, errInfo);
+            onLoginListener.onLoginFailed(errInfo);
+            //Util.notOK(context, errInfo);
         }
 
         @Override
@@ -172,7 +245,8 @@ public class LoginProcessor implements TIMCallBack {
 
     public interface OnLoginListener{
         void onLoginSuccess();
-        void onLoginFailed(int errorCode);
+        void onLoginFailed(TLSErrInfo errInfo);
+
     }
 
 }

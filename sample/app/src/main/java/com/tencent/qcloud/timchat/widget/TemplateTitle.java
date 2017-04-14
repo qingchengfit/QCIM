@@ -3,6 +3,7 @@ package com.tencent.qcloud.timchat.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ public class TemplateTitle extends RelativeLayout {
     private String moreText;
     private int moreImg;
     private TextView tvMore;
+    private ImageView imgBack;
+    private TextView textBack;
 
 
     public TemplateTitle(Context context, AttributeSet attrs) {
@@ -66,6 +69,14 @@ public class TemplateTitle extends RelativeLayout {
         }
         tvMore = (TextView) findViewById(R.id.txt_more);
         tvMore.setText(moreText);
+    }
+
+    public void setLeftTxt(String text){
+        imgBack = (ImageView) findViewById(R.id.img_back);
+        textBack = (TextView) findViewById(R.id.txt_back);
+        imgBack.setVisibility(GONE);
+        textBack.setText(text);
+        textBack.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
     }
 
 
@@ -135,10 +146,5 @@ public class TemplateTitle extends RelativeLayout {
             backBtn.setOnClickListener(listener);
         }
     }
-
-
-
-
-
 
 }

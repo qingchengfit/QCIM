@@ -64,6 +64,8 @@ public class VideoMessage extends Message {
      */
     @Override
     public void showMessage(final ChatAdapter.ViewHolder viewHolder, final Context context) {
+        viewHolder.leftVoice.setVisibility(View.GONE);
+        viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);
         final TIMVideoElem e = (TIMVideoElem) message.getElement(0);
         switch (message.status()){

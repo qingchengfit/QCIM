@@ -14,11 +14,27 @@
         android:paddingTop="8dp"
         android:orientation="horizontal">
 
-        <com.tencent.qcloud.timchat.widget.CircleImageView
-            android:id="@id/avatar"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            tools:background="@drawable/head" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.tencent.qcloud.timchat.widget.CircleImageView
+                android:id="@id/avatar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                tools:background="@drawable/head" />
+
+            <ImageView
+                android:id="@+id/new_red_dot"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:src="@drawable/red"
+                android:layout_alignRight="@id/avatar"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginBottom="-5dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -71,9 +87,10 @@
                 android:layout_marginTop="3dp"
                 android:gravity="center"
                 android:minWidth="16dp"
+                tools:text="11"
                 android:textColor="@color/white"
                 android:textSize="11sp"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

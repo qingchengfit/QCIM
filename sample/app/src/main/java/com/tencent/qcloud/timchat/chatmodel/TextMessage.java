@@ -5,11 +5,14 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.icu.util.Measure;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tencent.TIMElem;
@@ -22,6 +25,7 @@ import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatutils.EmoticonUtil;
+import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import eu.davidea.flexibleadapter.utils.Utils;
 
 /**
  * 文本消息数据
@@ -109,10 +115,14 @@ public class TextMessage extends Message {
      */
     @Override
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+        viewHolder.leftVoice.setVisibility(View.GONE);
+        viewHolder.rightVoice.setVisibility(View.GONE);
+        getBubbleView(viewHolder).setPadding(0, 0, 0, 0);
         clearView(viewHolder);
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        tv.setPadding(10, 12, 10, 12);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();
         for (int i = 0; i < message.getElementCount(); ++i){

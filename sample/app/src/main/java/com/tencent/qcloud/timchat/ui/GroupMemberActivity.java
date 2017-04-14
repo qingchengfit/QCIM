@@ -2,8 +2,11 @@ package com.tencent.qcloud.timchat.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -11,17 +14,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.TIMCallBack;
+import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMGroupMemberResult;
+import com.tencent.TIMManager;
+import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryAdapter;
 import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
+import com.tencent.qcloud.timchat.ui.qcchat.DeleteMemberActivity;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
+import com.tencent.qcloud.tlslibrary.helper.Util;
 
+import java.io.Serializable;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +49,8 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     private final int MEM_REQ = 100;
     private final int CHOOSE_MEM_CODE = 200;
     private int memIndex;
+    private List<String> users = new ArrayList<>();
+    private List<TIMGroupMemberInfo> infos = new ArrayList<>();
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -51,6 +64,39 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         rlGroupName = (RelativeLayout) findViewById(R.id.set_group_name);
         tvTitle = (TextView) findViewById(R.id.tv_member_count);
         btnExit = (TextView) findViewById(R.id.btn_exit_group);
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(GroupMemberActivity.this);
+                builder.setMessage("确定退出群聊？")
+                        .setTitle("提示")
+                        .setCancelable(true)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                TIMGroupManager.getInstance().quitGroup(groupId, new TIMCallBack() {
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        Util.showToast(getApplicationContext(), s);
+                                    }
+
+                                    @Override
+                                    public void onSuccess() {
+                                        setResult(RESULT_OK);
+                                        finish();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("取消", null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
+                dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
+
+            }
+        });
 
         listView = (GridView) findViewById(R.id.gridView_group_member);
         adapter = new ProfileSummaryAdapter(this, R.layout.item_group_detail_grid, list);
@@ -60,13 +106,30 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                memIndex = position;
-                Intent intent = new Intent(GroupMemberActivity.this, GroupMemberProfileActivity.class);
-                GroupMemberProfile profile = (GroupMemberProfile) list.get(position);
-                intent.putExtra("data", profile);
-                intent.putExtra("groupId", groupId);
-                intent.putExtra("type",type);
-                startActivityForResult(intent, MEM_REQ);
+                if (position < list.size()) {
+                    memIndex = position;
+                    Intent intent = new Intent(GroupMemberActivity.this, GroupMemberProfileActivity.class);
+                    GroupMemberProfile profile = (GroupMemberProfile) list.get(position);
+                    intent.putExtra("data", profile);
+                    intent.putExtra("groupId", groupId);
+                    intent.putExtra("type", type);
+                    startActivityForResult(intent, MEM_REQ);
+                }else if (position == list.size() + 1){
+                    Intent intent = new Intent(GroupMemberActivity.this, DeleteMemberActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("member", (Serializable) list);
+                    intent.putExtra("datas", b);
+                    intent.putExtra("group", groupId);
+                    startActivityForResult(intent, 0);
+                }else{
+                    String packageName = getApplication().getPackageName();
+                    Intent intent = new Intent();
+                    if (packageName.substring(17,packageName.length()).equals("staffkit")){
+
+                    }else{
+
+                    }
+                }
             }
         });
 
@@ -91,10 +154,26 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         list.clear();
         if (timGroupMemberInfos == null) return;
         for (TIMGroupMemberInfo item : timGroupMemberInfos){
-            list.add(new GroupMemberProfile(item));
+            users.add(item.getUser());
+            infos.add(item);
         }
-        adapter.notifyDataSetChanged();
-        tvTitle.setText(getApplicationContext().getString(R.string.title_group_member_count, list.size()));
+        TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>() {
+            @Override
+            public void onError(int i, String s) {
+            }
+
+            @Override
+            public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                int index = 0;
+                for (TIMUserProfile profile : timUserProfiles) {
+                    infos.get(index).setCustomInfo("iconUrl", profile.getFaceUrl().getBytes());
+                    list.add(new GroupMemberProfile(infos.get(index)));
+                    index++;
+                }
+                adapter.notifyDataSetChanged();
+                tvTitle.setText(getApplicationContext().getString(R.string.title_group_member_count, list.size()));
+            }
+        });
 
     }
 
@@ -135,9 +214,12 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                         });
 
             }
+        }else if (requestCode == 0){
+            if (resultCode == RESULT_OK){
+                TIMGroupManager.getInstance().getGroupMembers(groupId, this);
+            }
         }
     }
-
 
 
 

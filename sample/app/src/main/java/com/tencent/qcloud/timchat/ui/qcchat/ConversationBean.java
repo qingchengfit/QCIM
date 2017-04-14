@@ -11,7 +11,7 @@ import java.util.List;
 public class ConversationBean {
 
     private List<String> identifyList;
-    private List<FriendProfile> memberList;
+    private List<String> memberList;
 
     public ConversationBean() {
     }
@@ -24,11 +24,11 @@ public class ConversationBean {
         return identifyList;
     }
 
-    public void setMemberList(List<FriendProfile> memberList) {
+    public void setMemberList(List<String> memberList) {
         this.memberList = memberList;
     }
 
-    public List<FriendProfile> getMemberList() {
+    public List<String> getMemberList() {
         return memberList;
     }
 }

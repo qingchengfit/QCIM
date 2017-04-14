@@ -1,6 +1,8 @@
 package com.tencent.qcloud.tlslibrary.helper;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -73,6 +75,11 @@ public class Util {
         showToast(context, String.format("%s: %s",
                 errInfo.ErrCode == TLSErrInfo.TIMEOUT ?
                         "网络超时" : "错误", errInfo.Msg));
+    }
+
+    public static int dpTopx(float dp, Resources resources){
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
+        return (int) px;
     }
 
 }

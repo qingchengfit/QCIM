@@ -52,18 +52,14 @@ public class ConversationFragment extends Fragment implements ConversationView,
     private final String TAG = "ConversationFragment";
 
     private View view;
-//    private List<Conversation> conversationList = new LinkedList<>();
     private List<ConversationFlexItem> flexItemList = new ArrayList<>();
-//    private ConversationAdapter adapter;
     private FlexibleAdapter flexibleAdapter;
     private RecyclerView listView;
     private ConversationPresenter presenter;
-    private FriendshipManagerPresenter friendshipManagerPresenter;
     private GroupManagerPresenter groupManagerPresenter;
     private List<String> groupList;
-    private FriendshipConversation friendshipConversation;
-    private GroupManageConversation groupManageConversation;
     private AddConversationProcessor addConversationProcessor;
+    private FriendshipManagerPresenter friendshipManagerPresenter;
 
     public ConversationFragment() {
         // Required empty public constructor
@@ -76,30 +72,20 @@ public class ConversationFragment extends Fragment implements ConversationView,
         if (view == null){
             view = inflater.inflate(R.layout.fragment_conversation, container, false);
             listView = (RecyclerView) view.findViewById(R.id.recyclerView);
-//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    conversationList.get(position).navToDetail(getActivity());
-//                    if (conversationList.get(position) instanceof GroupManageConversation) {
-//                        groupManagerPresenter.getGroupManageLastMessage();
-//                    }
-//
-//                }
-//            });
+
             addConversationProcessor = new AddConversationProcessor(getContext());
             addConversationProcessor.setOnCreateConversation(this);
             friendshipManagerPresenter = new FriendshipManagerPresenter(this);
             groupManagerPresenter = new GroupManagerPresenter(this);
             presenter = new ConversationPresenter(this);
             presenter.getConversation();
-//            adapter = new ConversationAdapter(getActivity(), R.layout.item_conversation, conversationList);
             listView.setLayoutManager(new LinearLayoutManager(getContext()));
+            listView.setNestedScrollingEnabled(false);
             flexibleAdapter = new FlexibleAdapter(flexItemList, this);
             listView.setAdapter(flexibleAdapter);
             registerForContextMenu(listView);
         }
         flexibleAdapter.notifyDataSetChanged();
-//        adapter.notifyDataSetChanged();
         return view;
 
     }
@@ -127,13 +113,11 @@ public class ConversationFragment extends Fragment implements ConversationView,
             switch (item.getType()){
                 case C2C:
                 case Group:
-//                    this.conversationList.add(new NomalConversation(item));
                     this.flexItemList.add(new ConversationFlexItem(getContext(), new NomalConversation(item)));
                     groupList.add(item.getPeer());
                     break;
             }
         }
-        friendshipManagerPresenter.getFriendshipLastMessage();
         groupManagerPresenter.getGroupManageLastMessage();
     }
 
@@ -218,13 +202,11 @@ public class ConversationFragment extends Fragment implements ConversationView,
     public void refresh() {
         Collections.sort(flexItemList);
         flexibleAdapter.notifyDataSetChanged();
-        if (getActivity() instanceof HomeActivity)
-            ((HomeActivity) getActivity()).setMsgUnread(getTotalUnreadNum() == 0);
     }
 
     @Override
-    public void createGroupp(List<String> datas, List<FriendProfile> memberList) {
-        addConversationProcessor.createGroupWithArg(datas, memberList);
+    public void createGroup(List<String> datas, List<String> memberList) {
+        addConversationProcessor.createGroupWithArg(datas, "");
 
     }
 
@@ -237,16 +219,15 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void onGetFriendshipLastMessage(TIMFriendFutureItem message, long unreadCount) {
-        if (friendshipConversation == null){
-            friendshipConversation = new FriendshipConversation(message);
-//            conversationList.add(friendshipConversation);
-            flexItemList.add(new ConversationFlexItem(getContext(), friendshipConversation));
-        }else{
-            friendshipConversation.setLastMessage(message);
-        }
-        friendshipConversation.setUnreadCount(unreadCount);
-        Collections.sort(flexItemList);
-        refresh();
+//        if (friendshipConversation == null){
+//            friendshipConversation = new FriendshipConversation(message);
+//            flexItemList.add(new ConversationFlexItem(getContext(), friendshipConversation));
+//        }else{
+//            friendshipConversation.setLastMessage(message);
+//        }
+//        friendshipConversation.setUnreadCount(unreadCount);
+//        Collections.sort(flexItemList);
+//        refresh();
     }
 
     /**
@@ -256,7 +237,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void onGetFriendshipMessage(List<TIMFriendFutureItem> message) {
-        friendshipManagerPresenter.getFriendshipLastMessage();
+//        friendshipManagerPresenter.getFriendshipLastMessage();
     }
 
     /**
@@ -267,16 +248,16 @@ public class ConversationFragment extends Fragment implements ConversationView,
      */
     @Override
     public void onGetGroupManageLastMessage(TIMGroupPendencyItem message, long unreadCount) {
-        if (groupManageConversation == null){
-            groupManageConversation = new GroupManageConversation(message);
-//            conversationList.add(groupManageConversation);
-            flexItemList.add(new ConversationFlexItem(getContext(), groupManageConversation));
-        }else{
-            groupManageConversation.setLastMessage(message);
-        }
-        groupManageConversation.setUnreadCount(unreadCount);
-        Collections.sort(flexItemList);
-        refresh();
+//        if (groupManageConversation == null){
+//            groupManageConversation = new GroupManageConversation(message);
+////            conversationList.add(groupManageConversation);
+//            flexItemList.add(new ConversationFlexItem(getContext(), groupManageConversation));
+//        }else{
+//            groupManageConversation.setLastMessage(message);
+//        }
+//        groupManageConversation.setUnreadCount(unreadCount);
+//        Collections.sort(flexItemList);
+//        refresh();
     }
 
     /**
@@ -324,7 +305,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
 //        return super.onContextItemSelected(item);
 //    }
 
-    private long getTotalUnreadNum(){
+    public long getTotalUnreadNum(){
         long num = 0;
         for (ConversationFlexItem item : flexItemList){
             num += item.getConversation().getUnreadNum();

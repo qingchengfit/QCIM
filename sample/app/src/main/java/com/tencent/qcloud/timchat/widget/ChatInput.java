@@ -4,22 +4,21 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -29,12 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.viewfeatures.ChatView;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +49,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     private LinearLayout morePanel,textPanel;
     private TextView voicePanel;
     private final int REQUEST_CODE_ASK_PERMISSIONS = 100;
-
+    private TextView textSendPicture, textOpenCarmera, textSelectAlbum, textCancel;
+    private AppCompatDialog dialog;
+    private View inflate;
 
     public ChatInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -78,7 +75,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         btnVideo.setOnClickListener(this);
         LinearLayout btnFile = (LinearLayout) findViewById(R.id.btn_file);
         btnFile.setOnClickListener(this);
-        setSendBtn();
+        //setSendBtn();
         btnKeyboard = (ImageView) findViewById(R.id.btn_keyboard);
         btnKeyboard.setOnClickListener(this);
         voicePanel = (TextView) findViewById(R.id.voice_panel);
@@ -124,6 +121,21 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 return true;
             }
         });
+        editText.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                if(morePanel.getVisibility() == VISIBLE){
+                    updateView(InputMode.TEXT);
+                }
+            }
+        });
+        editText.setOnKeyListener(new OnKeyListener() {
+            @Override public boolean onKey(View view, int keyboard, KeyEvent keyEvent) {
+                if (keyboard == KeyEvent.KEYCODE_ENTER){
+                    chatView.sendText();
+                }
+                return false;
+            }
+        });
         isSendVisible = editText.getText().length() != 0;
 
     }
@@ -152,14 +164,14 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
     private void leavingCurrentState(){
         switch (inputMode){
-            case TEXT:
-                View view = ((Activity) getContext()).getCurrentFocus();
-                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                editText.clearFocus();
-                break;
             case MORE:
                 morePanel.setVisibility(GONE);
+                break;
+            case TEXT:
+                View view = ((Activity) getContext()).getCurrentFocus();
+                InputMethodManager imm= (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                editText.clearFocus();
                 break;
             case VOICE:
                 voicePanel.setVisibility(GONE);
@@ -225,7 +237,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         isSendVisible = s!=null&&s.length()>0;
-        setSendBtn();
+        //setSendBtn();
         if (isSendVisible){
             chatView.sending();
         }
@@ -253,11 +265,11 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     }
 
     private void setSendBtn(){
-        if (isSendVisible){
-            btnAdd.setVisibility(GONE);
-        }else{
-            btnAdd.setVisibility(VISIBLE);
-        }
+        //if (isSendVisible){
+        //    btnAdd.setVisibility(GONE);
+        //}else{
+        //    btnAdd.setVisibility(VISIBLE);
+        //}
     }
 
 //    private void prepareEmoticon(){
@@ -303,6 +315,29 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 //        isEmoticonReady = true;
 //    }
 
+    private void initDialog(){
+        dialog = new AppCompatDialog(getContext(),R.style.ActionSheetDialogStyle);
+        //填充对话框的布局
+        inflate = LayoutInflater.from(getContext()).inflate(R.layout.layout_bottom_select, null);
+        //初始化控件
+        textOpenCarmera = (TextView) inflate.findViewById(R.id.open_camera);
+        textSelectAlbum = (TextView) inflate.findViewById(R.id.select_from_album);
+        textCancel = (TextView) inflate.findViewById(R.id.text_cancel);
+
+        textOpenCarmera.setOnClickListener(this);
+        textSelectAlbum.setOnClickListener(this);
+        textCancel.setOnClickListener(this);
+
+        //将布局设置给Dialog
+        dialog.setContentView(inflate);
+        //获取当前Activity所在的窗体
+        Window dialogWindow = dialog.getWindow();
+        //设置Dialog从窗体底部弹出
+        dialogWindow.setGravity( Gravity.BOTTOM);
+        //获得窗体的属性
+        dialog.show();//显示对话框
+    }
+
     /**
      * Called when a view has been clicked.
      *
@@ -314,40 +349,50 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         int id = v.getId();
 
         if (id == R.id.btn_add){
-            updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE);
+            if (dialog == null){
+                initDialog();
+            }else{
+                dialog.show();
+            }
         }
-        if (id == R.id.btn_photo){
+
+        if (id == R.id.open_camera){
             if(activity!=null && requestCamera(activity)){
                 chatView.sendPhoto();
             }
         }
-        if (id == R.id.btn_image){
+        if (id == R.id.select_from_album){
             if(activity!=null && requestStorage(activity)){
                 chatView.sendImage();
-            }
-        }
-        if (id == R.id.btn_voice){
-            if(activity!=null && requestAudio(activity)){
-                updateView(InputMode.VOICE);
             }
         }
         if (id == R.id.btn_keyboard){
             updateView(InputMode.TEXT);
         }
-        if (id == R.id.btn_video){
-            if (getContext() instanceof FragmentActivity){
-                FragmentActivity fragmentActivity = (FragmentActivity) getContext();
-                if (requestVideo(fragmentActivity)){
-                    VideoInputDialog.show(fragmentActivity.getSupportFragmentManager());
-                }
+        if (id == R.id.text_cancel){
+            if (dialog.isShowing()){
+                dialog.dismiss();
             }
         }
-//        if (id == R.id.btnEmoticon){
-//            updateView(inputMode == InputMode.EMOTICON? InputMode.TEXT: InputMode.EMOTICON);
+//        if (id == R.id.btn_voice){
+//            if(activity!=null && requestAudio(activity)){
+//                updateView(InputMode.VOICE);
+//            }
 //        }
-        if (id == R.id.btn_file){
-            chatView.sendFile();
-        }
+//        if (id == R.id.btn_video){
+//            if (getContext() instanceof FragmentActivity){
+//                FragmentActivity fragmentActivity = (FragmentActivity) getContext();
+//                if (requestVideo(fragmentActivity)){
+//                    VideoInputDialog.show(fragmentActivity.getSupportFragmentManager());
+//                }
+//            }
+//        }
+////        if (id == R.id.btnEmoticon){
+////            updateView(inputMode == InputMode.EMOTICON? InputMode.TEXT: InputMode.EMOTICON);
+////        }
+//        if (id == R.id.btn_file){
+//            chatView.sendFile();
+//        }
     }
 
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/toolbar">
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/toolbar"
+    >
     <LinearLayout
         android:id="@+id/title_back"
         android:layout_width="wrap_content"
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="16sp"
+            android:layout_marginLeft="15dp"
             android:textColor="@color/text_blue1"/>
 
     </LinearLayout>

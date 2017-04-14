@@ -23,6 +23,7 @@ import com.tencent.TIMConversationType;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 import com.tencent.TIMMessageStatus;
+import com.tencent.qcloud.timchat.Common.Configs;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
@@ -71,6 +72,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     private static final int IMAGE_STORE = 200;
     private static final int FILE_CODE = 300;
     private static final int IMAGE_PREVIEW = 400;
+    private static final int MEMBER_OPERA = 500;
     private Uri fileUri;
     private VoiceSendingView voiceSendingView;
     private String identify;
@@ -82,8 +84,8 @@ public class ChatActivity extends FragmentActivity implements ChatView {
 
     public static void navToChat(Context context, String identify, TIMConversationType type){
         Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra("identify", identify);
-        intent.putExtra("type", type);
+        intent.putExtra(Configs.IDENTIFY, identify);
+        intent.putExtra(Configs.CONVERSATION_TYPE, type);
         context.startActivity(intent);
     }
 
@@ -93,8 +95,8 @@ public class ChatActivity extends FragmentActivity implements ChatView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        identify = getIntent().getStringExtra("identify");
-        type = (TIMConversationType) getIntent().getSerializableExtra("type");
+        identify = getIntent().getStringExtra(Configs.IDENTIFY);
+        type = (TIMConversationType) getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE);
         presenter = new ChatPresenter(this, identify, type);
         input = (ChatInput) findViewById(R.id.input_panel);
         input.setChatView(this);
@@ -134,39 +136,39 @@ public class ChatActivity extends FragmentActivity implements ChatView {
         TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
         switch (type) {
             case C2C:
-                title.setMoreImg(R.drawable.ic_group_detail);
+//                title.setMoreImg(R.drawable.ic_group_detail);
                 if (FriendshipInfo.getInstance().isFriend(identify)){
-                    title.setMoreImgAction(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(ChatActivity.this, ProfileActivity.class);
-                            intent.putExtra("identify", identify);
-                            startActivity(intent);
-                        }
-                    });
+                    //title.setMoreImgAction(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        Intent intent = new Intent(ChatActivity.this, ProfileActivity.class);
+                    //        intent.putExtra("identify", identify);
+                    //        startActivity(intent);
+                    //    }
+                    //});
                     FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
                     title.setTitleText(titleStr = profile == null ? identify : profile.getName());
                 }else{
-                    title.setMoreImgAction(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            Intent person = new Intent(ChatActivity.this,AddFriendActivity.class);
-//                            person.putExtra("id",identify);
-//                            person.putExtra("name",identify);
-//                            startActivity(person);
-                        }
-                    });
+//                    title.setMoreImgAction(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+////                            Intent person = new Intent(ChatActivity.this,AddFriendActivity.class);
+////                            person.putExtra("id",identify);
+////                            person.putExtra("name",identify);
+////                            startActivity(person);
+//                        }
+//                    });
                     title.setTitleText(titleStr = identify);
                 }
                 break;
             case Group:
-                title.setMoreImg(R.drawable.btn_group);
+                title.setMoreImg(R.drawable.ic_form_group);
                 title.setMoreImgAction(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(ChatActivity.this, GroupMemberActivity.class);
                         intent.putExtra("identify", identify);
-                        startActivity(intent);
+                        startActivityForResult(intent, MEMBER_OPERA);
                     }
                 });
                 title.setTitleText(GroupInfo.getInstance().getGroupName(identify));
@@ -490,6 +492,10 @@ public class ChatActivity extends FragmentActivity implements ChatView {
                 }else{
                     Toast.makeText(this, getString(R.string.chat_file_not_exist),Toast.LENGTH_SHORT).show();
                 }
+            }
+        }else if (requestCode == MEMBER_OPERA){
+            if(resultCode == RESULT_OK){
+                finish();
             }
         }
 

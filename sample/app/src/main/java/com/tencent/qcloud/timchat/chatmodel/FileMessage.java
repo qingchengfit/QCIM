@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class FileMessage extends Message {
      */
     @Override
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+        viewHolder.leftVoice.setVisibility(View.GONE);
+        viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);
         TIMFileElem e = (TIMFileElem) message.getElement(0);
         TextView tv = new TextView(MyApplication.getContext());

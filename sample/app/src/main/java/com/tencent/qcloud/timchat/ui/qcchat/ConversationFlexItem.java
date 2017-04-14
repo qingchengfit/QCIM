@@ -1,17 +1,21 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Conversation;
 import com.tencent.qcloud.timchat.chatutils.TimeUtil;
 import com.tencent.qcloud.timchat.widget.CircleImageView;
+import com.tencent.qcloud.timchat.widget.PhotoUtils;
 
 import java.util.List;
 
@@ -47,24 +51,27 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ConversationViewHolder holder, int position, List payloads) {
         holder.tvName.setText(conversation.getName());
-        holder.avator.setImageResource(conversation.getAvatar());
+        Glide.with(context)
+                .load(PhotoUtils.getSmall(conversation.getAvatar()))
+                .asBitmap()
+                .into(holder.avator);
         holder.lastMessage.setText(conversation.getLastMessageSummary());
         holder.time.setText(TimeUtil.getTimeStr(conversation.getLastMessageTime()));
         long unRead = conversation.getUnreadNum();
         if (unRead <= 0){
-            holder.unread.setVisibility(View.INVISIBLE);
+            holder.imageDot.setVisibility(View.GONE);
         }else{
-            holder.unread.setVisibility(View.VISIBLE);
+            holder.imageDot.setVisibility(View.VISIBLE);
             String unReadStr = String.valueOf(unRead);
-            if (unRead < 10){
-                holder.unread.setBackground(context.getResources().getDrawable(R.drawable.point1));
-            }else{
-                holder.unread.setBackground(context.getResources().getDrawable(R.drawable.point2));
-                if (unRead > 99){
-                    unReadStr = context.getResources().getString(R.string.time_more);
-                }
-            }
-            holder.unread.setText(unReadStr);
+//            if (unRead < 10){
+//                holder.unread.setBackground(context.getResources().getDrawable(R.drawable.point1));
+//            }else{
+//                holder.unread.setBackground(context.getResources().getDrawable(R.drawable.point2));
+//                if (unRead > 99){
+//                    unReadStr = context.getResources().getString(R.string.time_more);
+//                }
+//            }
+//            holder.unread.setText(unReadStr);
         }
     }
 
@@ -98,7 +105,7 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
         private CircleImageView avator;
         private TextView lastMessage;
         private TextView time;
-        private TextView unread;
+        private ImageView imageDot;
 
         public ConversationViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
@@ -106,7 +113,7 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
             avator = (CircleImageView) view.findViewById(R.id.avatar);
             lastMessage = (TextView) view.findViewById(R.id.last_message);
             time = (TextView) view.findViewById(R.id.message_time);
-            unread = (TextView) view.findViewById(R.id.unread_num);
+            imageDot = (ImageView) view.findViewById(R.id.new_red_dot);
         }
 
 

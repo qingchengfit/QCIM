@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tencent.TIMElemType;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 
@@ -50,12 +52,17 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             viewHolder.leftMessage = (RelativeLayout) view.findViewById(R.id.leftMessage);
             viewHolder.rightMessage = (RelativeLayout) view.findViewById(R.id.rightMessage);
             viewHolder.leftPanel = (RelativeLayout) view.findViewById(R.id.leftPanel);
+            viewHolder.leftVoice = (TextView) view.findViewById(R.id.text_voice_time_left);
+            viewHolder.leftVoice.setVisibility(View.GONE);
             viewHolder.rightPanel = (RelativeLayout) view.findViewById(R.id.rightPanel);
             viewHolder.sending = (ProgressBar) view.findViewById(R.id.sending);
             viewHolder.error = (ImageView) view.findViewById(R.id.sendError);
             viewHolder.sender = (TextView) view.findViewById(R.id.sender);
             viewHolder.rightDesc = (TextView) view.findViewById(R.id.rightDesc);
+            viewHolder.rightVoice = (TextView) view.findViewById(R.id.text_voice_time_right);
+            viewHolder.leftVoice.setVisibility(View.GONE);
             viewHolder.systemMessage = (TextView) view.findViewById(R.id.systemMessage);
+            viewHolder.senderLayout = (RelativeLayout) view.findViewById(R.id.sendStatus);
             view.setTag(viewHolder);
         }
         if (position < getCount()){
@@ -70,10 +77,13 @@ public class ChatAdapter extends ArrayAdapter<Message> {
         public RelativeLayout rightMessage;
         public RelativeLayout leftPanel;
         public RelativeLayout rightPanel;
+        public RelativeLayout senderLayout;
         public ProgressBar sending;
         public ImageView error;
         public TextView sender;
         public TextView systemMessage;
         public TextView rightDesc;
+        public TextView leftVoice;
+        public TextView rightVoice;
     }
 }

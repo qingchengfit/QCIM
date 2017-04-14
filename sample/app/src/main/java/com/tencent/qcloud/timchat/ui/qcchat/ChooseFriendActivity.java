@@ -46,7 +46,7 @@ public class ChooseFriendActivity extends Activity {
                     return;
                 }
                 bean.setIdentifyList(getSelectIds());
-                bean.setMemberList(selectList);
+//                bean.setMemberList(selectList);
                 AddConversationEvent.getInstance().onAddNewConversation(bean);
 //                Intent intent = new Intent();
 //                intent.putStringArrayListExtra("select", getSelectIds());

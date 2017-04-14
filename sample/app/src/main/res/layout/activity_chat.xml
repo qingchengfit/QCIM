@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.tencent.qcloud.timchat.ui.qcchat.ChatActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/chat_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
         app:canBack="true" />
     <com.tencent.qcloud.timchat.widget.ChatInput

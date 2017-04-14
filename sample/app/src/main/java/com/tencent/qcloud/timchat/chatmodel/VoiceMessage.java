@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tencent.TIMMessage;
@@ -73,22 +74,23 @@ public class VoiceMessage extends Message {
     @Override
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
         LinearLayout linearLayout = new LinearLayout(MyApplication.getContext());
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setGravity(Gravity.CENTER|Gravity.RIGHT);
         ImageView voiceIcon = new ImageView(MyApplication.getContext());
         voiceIcon.setBackgroundResource(message.isSelf()?R.drawable.right_voice: R.drawable.left_voice);
         final AnimationDrawable frameAnimatio = (AnimationDrawable) voiceIcon.getBackground();
 
-        TextView tv = new TextView(MyApplication.getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
-        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
+//        TextView tv = new TextView(MyApplication.getContext());
+//        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+//        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
+//        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, context.getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(width, height);
+        lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         if (message.isSelf()){
-            linearLayout.addView(tv);
+//            linearLayout.addView(tv);
             imageLp.setMargins(10, 0, 0, 0);
             voiceIcon.setLayoutParams(imageLp);
             linearLayout.addView(voiceIcon);
@@ -96,11 +98,24 @@ public class VoiceMessage extends Message {
             voiceIcon.setLayoutParams(imageLp);
             linearLayout.addView(voiceIcon);
             lp.setMargins(10, 0, 0, 0);
-            tv.setLayoutParams(lp);
-            linearLayout.addView(tv);
+//            linearLayout.addView(tv);
         }
+
         clearView(viewHolder);
-        getBubbleView(viewHolder).addView(linearLayout);
+        getBubbleView(viewHolder).setPadding(12, 16, 22, 16);
+        getBubbleView(viewHolder).setGravity(Gravity.RIGHT);
+        getBubbleView(viewHolder).addView(linearLayout, lp);
+
+        if (message.isSelf()){
+            viewHolder.leftVoice.setVisibility(View.GONE);
+            viewHolder.rightVoice.setVisibility(View.VISIBLE);
+            viewHolder.rightVoice.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
+        }else{
+            viewHolder.leftVoice.setVisibility(View.VISIBLE);
+            viewHolder.rightVoice.setVisibility(View.GONE);
+            viewHolder.leftVoice.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
+        }
+
         getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +126,6 @@ public class VoiceMessage extends Message {
         });
         showStatus(viewHolder);
     }
-
 
     /**
      * 获取消息摘要

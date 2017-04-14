@@ -74,7 +74,7 @@ public class ConversationPresenter implements Observer {
             view.refresh();
         }else if (observable instanceof AddConversationEvent){
             ConversationBean bean = (ConversationBean)data;
-            view.createGroupp(bean.getIdentifyList(), bean.getMemberList());
+            view.createGroup(bean.getIdentifyList(), bean.getMemberList());
         }
     }
 

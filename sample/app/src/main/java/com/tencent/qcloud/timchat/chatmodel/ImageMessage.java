@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
@@ -66,6 +70,8 @@ public class ImageMessage extends Message {
      */
     @Override
     public void showMessage(final ChatAdapter.ViewHolder viewHolder, final Context context) {
+        viewHolder.leftVoice.setVisibility(View.GONE);
+        viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);
         TIMImageElem e = (TIMImageElem) message.getElement(0);
         switch (message.status()){
@@ -73,12 +79,19 @@ public class ImageMessage extends Message {
 
                 ImageView imageView = new ImageView(MyApplication.getContext());
                 imageView.setImageBitmap(getThumb(e.getPath()));
+
                 clearView(viewHolder);
-                getBubbleView(viewHolder).addView(imageView);
+                RelativeLayout layout = getBubbleView(viewHolder);
+                layout.setBackground(new BitmapDrawable(getThumb(e.getPath())));
+//                layout.setPadding(0,0,0,0);
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+//                params.addRule(RelativeLayout.LEFT_OF, R.id.rightAvatar);
+//                layout.setLayoutParams(params);
+//                layout.addView(imageView);
                 break;
             case SendSucc:
                 for(final TIMImage image : e.getImageList()) {
-                    if (image.getType() == TIMImageType.Thumb){
+                    if (image.getType() == TIMImageType.Large){
                         final String uuid = image.getUuid();
                         if (FileUtil.isCacheFileExist(uuid)){
                             showThumb(viewHolder,uuid);
@@ -206,11 +219,17 @@ public class ImageMessage extends Message {
         }
     }
 
-    private void showThumb(final ChatAdapter.ViewHolder viewHolder,String filename){
+    private void showThumb(final ChatAdapter.ViewHolder viewHolder,String filename) {
         Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(filename));
         ImageView imageView = new ImageView(MyApplication.getContext());
         imageView.setImageBitmap(bitmap);
-        getBubbleView(viewHolder).addView(imageView);
+        RelativeLayout layout = getBubbleView(viewHolder);
+        layout.removeAllViews();
+        layout.setPadding(0, 0, 0, 0);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.LEFT_OF, R.id.rightAvatar);
+        layout.addView(imageView, params);
     }
 
     private void setImageEvent(final ChatAdapter.ViewHolder viewHolder, final String fileName,final Context context){

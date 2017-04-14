@@ -35,14 +35,15 @@ public class NomalConversation extends Conversation {
 
 
     @Override
-    public int getAvatar() {
-        switch (type){
-            case C2C:
-                return R.drawable.head_other;
-            case Group:
-                return R.drawable.head_group;
+    public String getAvatar() {
+        if (type == TIMConversationType.Group){
+//            avator = GroupInfo.getInstance().getGroupProfile("Private",identify).getAvatarUrl();
+            if (avator.equals("")) avator = String.valueOf(R.drawable.head_other);
+        }else{
+            FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
+            avator = profile == null ? String.valueOf(R.drawable.head_me):profile.getAvatarUrl();
         }
-        return 0;
+        return avator;
     }
 
     /**
@@ -90,7 +91,7 @@ public class NomalConversation extends Conversation {
 
 
     /**
-     * 获取未读消息数量
+     * o
      */
     @Override
     public long getUnreadNum(){

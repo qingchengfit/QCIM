@@ -12,17 +12,23 @@ import java.io.Serializable;
  * 群成员数据
  */
 public class GroupMemberProfile implements ProfileSummary,Serializable {
+    public static final int NORMAL = 0;
+    public static final int ADD = 1;
+    public static final int REMOVE = 2;
 
     private String name;
     private String id;
     private long quietTime;
     private TIMGroupMemberRoleType roleType;
+    private byte[] headUrl;
+    private int type = NORMAL;
 
     public GroupMemberProfile(TIMGroupMemberInfo info){
         name = info.getNameCard();
         id = info.getUser();
         quietTime = info.getSilenceSeconds();
         roleType = info.getRole();
+        headUrl = info.getCustomInfo().get("iconUrl");
     }
 
     /**
@@ -30,6 +36,12 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
      */
     @Override
     public int getAvatarRes() {
+        if (type == ADD){
+
+        }
+        if (type == REMOVE){
+
+        }
         return R.drawable.head;
     }
 
@@ -38,7 +50,7 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
      */
     @Override
     public String getAvatarUrl() {
-        return null;
+        return headUrl.toString();
     }
 
     /**

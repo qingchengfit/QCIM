@@ -49,6 +49,7 @@ public abstract class Message {
         viewHolder.systemMessage.setVisibility(hasTime?View.VISIBLE:View.GONE);
         viewHolder.systemMessage.setText(TimeUtil.getChatTimeStr(message.timestamp()));
         showDesc(viewHolder);
+
         if (message.isSelf()){
             viewHolder.leftPanel.setVisibility(View.GONE);
             viewHolder.rightPanel.setVisibility(View.VISIBLE);

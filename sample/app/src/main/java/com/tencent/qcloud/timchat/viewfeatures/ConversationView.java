@@ -47,7 +47,7 @@ public interface ConversationView extends MvpView {
      */
     void refresh();
 
-    void createGroupp(List<String> datas, List<FriendProfile> memberList);
+    void createGroup(List<String> datas, List<String> memberList);
 
 
 }

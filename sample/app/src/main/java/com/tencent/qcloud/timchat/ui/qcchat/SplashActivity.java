@@ -95,6 +95,7 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
         FriendshipEvent.getInstance().init();
         GroupEvent.getInstance().init();
         final String id = UserInfo.getInstance().getId();
+
         LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
 
         //获取自己账号系统的userSig，使用自己的账号系统的userSig登录IM SDK -- by fb

@@ -10,7 +10,7 @@
     <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/group_mem_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         app:titleText="@string/chat_setting_group_member"
         app:canBack="true" />
 
@@ -63,7 +63,7 @@
         android:paddingLeft="16dp"
         android:textColor="@color/qc_text_black"
         android:paddingTop="14dp"
-        android:paddingBottom="15dp"/>
+        android:paddingBottom="5dp"/>
     <GridView
         android:id="@+id/gridView_group_member"
         android:layout_width="match_parent"

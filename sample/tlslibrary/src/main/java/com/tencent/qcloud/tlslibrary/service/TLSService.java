@@ -217,7 +217,7 @@ public class TLSService {
                                            EditText txt_password,
                                            EditText txt_repassword,
                                            Button btn_register) {
-        accountRegisterService = new AccountRegisterService(context, txt_username, txt_password, txt_repassword, btn_register);
+        accountRegisterService = new AccountRegisterService(context, txt_username.getText().toString(), txt_password.getText().toString());
     }
 
     public int TLSPwdResetAskCode(String countryCode, String phoneNumber, TLSPwdResetListener listener) {

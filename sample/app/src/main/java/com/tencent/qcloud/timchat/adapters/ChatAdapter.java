@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.tencent.TIMElemType;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Message;
+import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.util.List;
 
@@ -50,7 +51,9 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             view = LayoutInflater.from(getContext()).inflate(resourceId, null);
             viewHolder = new ViewHolder();
             viewHolder.leftMessage = (RelativeLayout) view.findViewById(R.id.leftMessage);
+            viewHolder.leftMessage.setMinimumWidth(Util.dpTopx(64f, getContext().getResources()));
             viewHolder.rightMessage = (RelativeLayout) view.findViewById(R.id.rightMessage);
+            viewHolder.rightMessage.setMinimumWidth(Util.dpTopx(64f, getContext().getResources()));
             viewHolder.leftPanel = (RelativeLayout) view.findViewById(R.id.leftPanel);
             viewHolder.leftVoice = (TextView) view.findViewById(R.id.text_voice_time_left);
             viewHolder.leftVoice.setVisibility(View.GONE);

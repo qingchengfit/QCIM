@@ -44,7 +44,7 @@ public class DialogActivity extends Activity implements View.OnClickListener {
         int i = v.getId();
         if (i == R.id.btnOk) {
             final String id = UserInfo.getInstance().getId();
-            NetUtil netUtil = new NetUtil(id);
+            NetUtil netUtil = new NetUtil(id, "");
             netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
                 @Override
                 public void onSuccessed(String userSig) {

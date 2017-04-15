@@ -54,11 +54,13 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
     private OnLoginListener onLoginListener;
     private String username;
     private String password;
+    private String host;
 
-    public LoginProcessor(Context context, String username, String password) throws Exception {
+    public LoginProcessor(Context context, String username, String password, String host) throws Exception {
         this.context = context;
         this.username = username;
         this.password = password;
+        this.host = host;
 
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
@@ -156,7 +158,7 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
         GroupEvent.getInstance().init();
 //        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
         final String id = UserInfo.getInstance().getId();
-        NetUtil netUtil = new NetUtil(id);
+        NetUtil netUtil = new NetUtil(id,  host);
         netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
             @Override
             public void onSuccessed(String userSig) {

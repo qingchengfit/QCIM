@@ -332,10 +332,11 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         dialog.setContentView(inflate);
         //获取当前Activity所在的窗体
         Window dialogWindow = dialog.getWindow();
+        dialog.show();//显示对话框
         //设置Dialog从窗体底部弹出
         dialogWindow.setGravity( Gravity.BOTTOM);
+        dialogWindow.setBackgroundDrawableResource(android.R.color.transparent);
         //获得窗体的属性
-        dialog.show();//显示对话框
     }
 
     /**

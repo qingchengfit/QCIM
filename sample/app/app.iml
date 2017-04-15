@@ -130,5 +130,19 @@
     <orderEntry type="library" exported="" name="support-core-utils-25.1.0" level="project" />
     <orderEntry type="module" module-name="sdk" exported="" />
     <orderEntry type="module" module-name="tlslibrary" exported="" />
+    <orderEntry type="library" exported="" name="bugly_1.3.0_imsdk_release" level="project" />
+    <orderEntry type="library" exported="" name="MiPush_SDK_Client_3_0_3" level="project" />
+    <orderEntry type="library" exported="" name="qalsdk" level="project" />
+    <orderEntry type="library" exported="" name="libammsdk" level="project" />
+    <orderEntry type="library" exported="" name="tls_sdk" level="project" />
+    <orderEntry type="library" exported="" name="HwPush_SDK_V2705" level="project" />
+    <orderEntry type="library" exported="" name="imsdk" level="project" />
+    <orderEntry type="library" exported="" name="soload" level="project" />
+    <orderEntry type="library" exported="" name="open_sdk" level="project" />
+    <orderEntry type="library" exported="" name="mobilepb" level="project" />
+    <orderEntry type="library" exported="" name="wup-1.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-22.2.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-22.2.1" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-22.2.1" level="project" />
   </component>
 </module>

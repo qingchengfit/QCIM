@@ -13,10 +13,13 @@ import java.net.URL;
 public class NetUtil {
 
     public OnUserSigListener onUserSigListener;
+    private String host;
 
-    public NetUtil(String identifier){
+    public NetUtil(String identifier, String host){
         getUsersig(identifier);
     }
+
+
 
     public void getUsersig(String identifier){
         String urlPrefix = "http://c1.qingchengfit.cn/api/im/usersig/?identifier=";

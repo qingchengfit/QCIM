@@ -85,8 +85,8 @@ public class VoiceMessage extends Message {
 //        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 //        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
 //        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
-        int height = Util.dpTopx(14f, context.getResources());
-        int width = Util.dpTopx(18f, context.getResources());
+        int height = Util.dpTopx(22f, context.getResources());
+        int width = Util.dpTopx(16f, context.getResources());
 //        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
         LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(width, height);
@@ -99,7 +99,7 @@ public class VoiceMessage extends Message {
         }else{
 //            voiceIcon.setLayoutParams(imageLp);
 //            linearLayout.addView(voiceIcon);
-//            lp.setMargins(10, 0, 0, 0);
+            lp.setMargins(10, 0, 0, 0);
 //            linearLayout.addView(tv);
             getBubbleView(viewHolder).setGravity(Gravity.LEFT);
         }

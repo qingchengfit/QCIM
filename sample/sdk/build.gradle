@@ -1,9 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+def libs = rootProject.ext.libraries;
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 16
@@ -29,7 +30,7 @@ dependencies {
 }
 
 group 'cn.qingchegfit.chat'
-version '1.0'
+version rootProject.ext.chat_version
 uploadArchives{
 //    repositories {
 //        mavenDeployer {
@@ -40,7 +41,7 @@ uploadArchives{
 //    }
     repositories {
         mavenDeployer {
-            repository(url: uri('../../../../../android-fitstaff/repo'))
+            repository(url: uri('../../../repo'))
             pom.artifactId = 'sdk'
 
         }

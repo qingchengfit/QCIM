@@ -5,13 +5,30 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.1'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
+//        classpath 'com.google.gms:google-services:3.0.0'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
+
+}
+ext {
+    libraries = [supportVersion  : "25.2.0",
+//                 dagger          : "2.10",
+//                 rxjava          : "1.1.6",
+//                 rxandroid       : "1.2.1",
+//                 retrofit        : "2.0.2",
+//                 rxbind          : "0.4.0",
+//                 okhttp          : "3.2.0",
+//                 butterknife     : "8.4.0",
+//                 javax_annotation: "10.0-b28",
+//                 glide           : "3.6.0",
+//                 circleimageview : "1.3.0"
+    ]
+    chat_version = "1.0.1"
 }
 
 allprojects {

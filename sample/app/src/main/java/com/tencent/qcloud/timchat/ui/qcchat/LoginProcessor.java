@@ -11,6 +11,7 @@ import android.os.Build;
 
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.huawei.android.pushagent.PushManager;
@@ -23,6 +24,7 @@ import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
 import com.tencent.qcloud.timchat.chatutils.NetUtil;
 import com.tencent.qcloud.timchat.chatutils.PushUtil;
+import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.event.MessageEvent;
@@ -46,11 +48,10 @@ import tencent.tls.platform.TLSUserInfo;
  * Created by fb on 2017/3/15.
  */
 
-public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
+public class LoginProcessor implements TIMCallBack {
 
     private Context context;
     private TLSService tlsService;
-    private PwdLoginListener pwdLoginListener;
     private OnLoginListener onLoginListener;
     private String username;
     private String password;
@@ -71,23 +72,17 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
         this.onLoginListener = onLoginListener;
     }
 
-    public void initAccount(){
-        int result = tlsService.TLSStrAccReg(username, password, this);
-        if (result == TLSErrInfo.INPUT_INVALID) {
-            Util.showToast(context, "IM账号注册失败");
-        }
-    }
-
     public void sientInstall(){
-        pwdLoginListener = new LoginProcessor.PwdLoginListener();
-
 
         // 验证用户名和密码的有效性
         if (username.length() == 0) {
             Util.showToast(context, "用户名密码不能为空");
             return;
         }
-        tlsService.TLSPwdLogin(username, password, pwdLoginListener);
+        init();
+        if (TextUtils.isEmpty(AppData.getUSerSig(context))) {
+            navToHome();
+        }
     }
 
     public void checkPermission(WeakReference<Activity> weakReference){
@@ -111,6 +106,9 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
      * @param avatarUrl     头像
      */
     public void setUserInfo(String username, String avatarUrl){
+        if(!TextUtils.isEmpty(avatarUrl)){
+            AppData.putUserAvatar(context, avatarUrl);
+        }
         TIMFriendshipManager.getInstance().setNickName(username, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
@@ -147,22 +145,22 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
         TlsBusiness.init(context);
         //设置刷新监听
         RefreshEvent.getInstance();
-        String id =  TLSService.getInstance().getLastUserIdentifier();
-        UserInfo.getInstance().setId(id);
-        UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
+//        String id =  TLSService.getInstance().getLastUserIdentifier();
+        UserInfo.getInstance().setId(username);
     }
 
     private void navToHome(){
         //登录之前要初始化群和好友关系链缓存
         FriendshipEvent.getInstance().init();
         GroupEvent.getInstance().init();
-//        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
-        final String id = UserInfo.getInstance().getId();
-        NetUtil netUtil = new NetUtil(id,  host);
+//        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);;
+        NetUtil netUtil = new NetUtil(username,  host);
         netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
             @Override
             public void onSuccessed(String userSig) {
-                LoginBusiness.loginIm(id, userSig, LoginProcessor.this);
+                LoginBusiness.loginIm(username, userSig, LoginProcessor.this);
+                AppData.putUserSig(context, userSig);
+                UserInfo.getInstance().setUserSig(userSig);
             }
         });
     }
@@ -206,50 +204,6 @@ public class LoginProcessor implements TIMCallBack, TLSStrAccRegListener {
             }
         }
         return false;
-    }
-
-    @Override public void OnStrAccRegSuccess(TLSUserInfo tlsUserInfo) {
-        Util.showToast(context, "成功注册 " + tlsUserInfo.identifier);
-        TLSService.getInstance().setLastErrno(0);
-        sientInstall();
-    }
-
-    @Override public void OnStrAccRegFail(TLSErrInfo tlsErrInfo) {
-        Util.showToast(context, "注册聊天失败，请重试");
-    }
-
-    @Override public void OnStrAccRegTimeout(TLSErrInfo tlsErrInfo) {
-        Util.showToast(context, "注册聊天超时，请重试");
-    }
-
-    //登录TLService
-    class PwdLoginListener implements TLSPwdLoginListener {
-        @Override
-        public void OnPwdLoginSuccess(TLSUserInfo userInfo) {
-            TLSService.getInstance().setLastErrno(0);
-            navToHome();
-        }
-
-        @Override
-        public void OnPwdLoginReaskImgcodeSuccess(byte[] picData) {
-        }
-
-        @Override
-        public void OnPwdLoginNeedImgcode(byte[] picData, TLSErrInfo errInfo) {
-        }
-
-        @Override
-        public void OnPwdLoginFail(TLSErrInfo errInfo) {
-            TLSService.getInstance().setLastErrno(-1);
-            onLoginListener.onLoginFailed(errInfo);
-            //Util.notOK(context, errInfo);
-        }
-
-        @Override
-        public void OnPwdLoginTimeout(TLSErrInfo errInfo) {
-            TLSService.getInstance().setLastErrno(-1);
-            Util.notOK(context, errInfo);
-        }
     }
 
     public interface OnLoginListener{

@@ -67,8 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/setting_friend_confirm"
-        app:content="@string/setting_friend_need_confirm"
         app:canNav="true"/>
+        <!--app:content="@string/setting_friend_need_confirm"-->
     <com.tencent.qcloud.timchat.widget.LineControllerView
         android:id="@+id/messageNotify"
         android:layout_width="match_parent"

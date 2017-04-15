@@ -1,6 +1,7 @@
 package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.tencent.TIMElemType;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Message;
+import com.tencent.qcloud.timchat.widget.CircleImageView;
 import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.util.List;
@@ -66,6 +68,8 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             viewHolder.leftVoice.setVisibility(View.GONE);
             viewHolder.systemMessage = (TextView) view.findViewById(R.id.systemMessage);
             viewHolder.senderLayout = (RelativeLayout) view.findViewById(R.id.sendStatus);
+            viewHolder.leftAvatar = (CircleImageView) view.findViewById(R.id.leftAvatar);
+            viewHolder.rightAvatar = (CircleImageView) view.findViewById(R.id.rightAvatar);
             view.setTag(viewHolder);
         }
         if (position < getCount()){
@@ -88,5 +92,7 @@ public class ChatAdapter extends ArrayAdapter<Message> {
         public TextView rightDesc;
         public TextView leftVoice;
         public TextView rightVoice;
+        public CircleImageView leftAvatar;
+        public CircleImageView rightAvatar;
     }
 }

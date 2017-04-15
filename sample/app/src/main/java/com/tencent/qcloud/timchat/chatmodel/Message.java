@@ -1,14 +1,18 @@
 package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageStatus;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatutils.TimeUtil;
+import com.tencent.qcloud.timchat.common.AppData;
+import com.tencent.qcloud.timchat.widget.PhotoUtils;
 
 /**
  * 消息数据基类
@@ -48,11 +52,21 @@ public abstract class Message {
     public RelativeLayout getBubbleView(ChatAdapter.ViewHolder viewHolder){
         viewHolder.systemMessage.setVisibility(hasTime?View.VISIBLE:View.GONE);
         viewHolder.systemMessage.setText(TimeUtil.getChatTimeStr(message.timestamp()));
+        Glide.with(viewHolder.leftAvatar.getContext())
+                .load(PhotoUtils.getSmall(new NomalConversation(message.getConversation()).getAvatar()))
+                .asBitmap()
+                .into(viewHolder.leftAvatar);
+
+        Glide.with(viewHolder.rightAvatar.getContext())
+                .load(PhotoUtils.getSmall(AppData.getAvatar(viewHolder.rightAvatar.getContext())))
+                .asBitmap()
+                .into(viewHolder.rightAvatar);
         showDesc(viewHolder);
 
         if (message.isSelf()){
             viewHolder.leftPanel.setVisibility(View.GONE);
             viewHolder.rightPanel.setVisibility(View.VISIBLE);
+            viewHolder.rightMessage.setGravity(Gravity.NO_GRAVITY);
             return viewHolder.rightMessage;
         }else{
             viewHolder.leftPanel.setVisibility(View.VISIBLE);

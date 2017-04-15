@@ -1,5 +1,8 @@
 package com.tencent.qcloud.timchat.chatutils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,12 +45,24 @@ public class NetUtil {
                     String strResponse = new String(data,"utf-8");
                     inStream.close();
                     bos.close();
-                    onUserSigListener.onSuccessed(strResponse);
+                    onUserSigListener.onSuccessed(dealData(strResponse));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    private String dealData(String response){
+        String userSig = "";
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject jsonUserSig = jsonObject.getJSONObject("data");
+            userSig = jsonUserSig.getString("usersig");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return userSig;
     }
 
     public void setOnUserSigListener(OnUserSigListener onUserSigListener) {

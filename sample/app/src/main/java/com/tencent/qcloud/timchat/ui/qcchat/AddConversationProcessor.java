@@ -2,17 +2,14 @@ package com.tencent.qcloud.timchat.ui.qcchat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
-import com.tencent.TIMManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
-import com.tencent.qcloud.timchat.Common.Configs;
-import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
+import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;

@@ -2,6 +2,7 @@ package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
 import android.media.Image;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     private int resourceId;
     private View view;
     private ViewHolder viewHolder;
+    private String avatar;
 
     /**
      * Constructor
@@ -42,6 +44,13 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     public ChatAdapter(Context context, int resource, List<Message> objects) {
         super(context, resource, objects);
         resourceId = resource;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+        if (!TextUtils.isEmpty(avatar)){
+            notifyDataSetChanged();
+        }
     }
 
     @Override

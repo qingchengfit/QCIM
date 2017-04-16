@@ -80,9 +80,15 @@ public class LoginProcessor implements TIMCallBack {
             return;
         }
         init();
-        if (TextUtils.isEmpty(AppData.getUSerSig(context))) {
+        if (TextUtils.isEmpty(AppData.getUSerSig(context)) && !AppData.getIdentify(context).equals(username)) {
+            AppData.putIdentify(context, username);
             navToHome();
         }
+    }
+
+    //清除登录信息
+    public void logOut(Context context){
+        AppData.clear(context);
     }
 
     public void checkPermission(WeakReference<Activity> weakReference){

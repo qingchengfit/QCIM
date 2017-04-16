@@ -335,7 +335,8 @@ public class ConversationFragment extends Fragment implements ConversationView,
 
     @Override
     public boolean onItemClick(int position) {
-        flexItemList.get(position).getConversation().navToDetail(getActivity());
+        Conversation conversation = flexItemList.get(position).getConversation();
+        conversation.navToDetail(getActivity(), conversation.getAvatar(),conversation.getName());
         if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
             groupManagerPresenter.getGroupManageLastMessage();
         }

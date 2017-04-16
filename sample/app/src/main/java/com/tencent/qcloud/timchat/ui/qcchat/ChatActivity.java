@@ -20,9 +20,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tencent.TIMConversationType;
+import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 import com.tencent.TIMMessageStatus;
+import com.tencent.TIMUserProfile;
+import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
@@ -53,7 +56,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatActivity extends FragmentActivity implements ChatView {
+public class ChatActivity extends FragmentActivity implements ChatView, TIMValueCallBack<List<TIMUserProfile>> {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -78,6 +81,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     private TIMConversationType type;
     private String titleStr;
     private Handler handler = new Handler();
+    private TemplateTitle title;
 
 
     public static void navToChat(Context context, String identify, TIMConversationType type){
@@ -93,7 +97,11 @@ public class ChatActivity extends FragmentActivity implements ChatView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        title = (TemplateTitle) findViewById(R.id.chat_title);
         identify = getIntent().getStringExtra(Configs.IDENTIFY);
+        List<String> list = new ArrayList<>();
+        list.add(identify);
+        TIMFriendshipManager.getInstance().getFriendsProfile(list, this);
         type = (TIMConversationType) getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE);
         presenter = new ChatPresenter(this, identify, type);
         input = (ChatInput) findViewById(R.id.input_panel);
@@ -131,7 +139,6 @@ public class ChatActivity extends FragmentActivity implements ChatView {
             }
         });
         registerForContextMenu(listView);
-        TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
         switch (type) {
             case C2C:
 //                title.setMoreImg(R.drawable.ic_group_detail);
@@ -529,11 +536,23 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     private Runnable resetTitle = new Runnable() {
         @Override
         public void run() {
-            TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
             title.setTitleText(titleStr);
         }
     };
 
 
+    @Override
+    public void onError(int i, String s) {
+
+    }
+
+    @Override
+    public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+        for (TIMUserProfile userProfile : timUserProfiles){
+            adapter.setAvatar(userProfile.getFaceUrl());
+            titleStr = userProfile.getNickName();
+        }
+        title.setTitleText(titleStr);
+    }
 
 }

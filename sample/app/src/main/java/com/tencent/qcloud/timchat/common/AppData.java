@@ -14,29 +14,39 @@ public class AppData {
 
     private static SharedPreferences sharedPreferences;
 
-    public AppData(Context context) {
-        sharedPreferences =context.getSharedPreferences(Configs.PREFRENCE_USERSIG, 0);
+    public static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(Configs.PREFRENCE_USERSIG, 0);
     }
 
     public static String getUSerSig(Context context){
-        return sharedPreferences.getString(Configs.VALUE_USERSIG, "");
+        return getSharedPreferences(context).getString(Configs.VALUE_USERSIG, "");
     }
 
-    public static void putUserSig(Context context, String userSig) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+    public static void putUserSig(Context context , String userSig) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(Configs.VALUE_USERSIG, userSig);
         applyCompat(editor);
     }
 
     public static void putUserAvatar(Context context, String avatar){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(Configs.PREFRENCE_AVATAR, avatar);
         applyCompat(editor);
     }
 
     //TODO 返回默认头像
     public static String getAvatar(Context context){
-        return sharedPreferences.getString(Configs.VALUE_AVATAR, "");
+        return getSharedPreferences(context).getString(Configs.VALUE_AVATAR, "");
+    }
+
+    public static void putIdentify(Context context, String identify){
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(Configs.PREFRENCE_AVATAR, identify);
+        applyCompat(editor);
+    }
+
+    public static String getIdentify(Context context){
+        return getSharedPreferences(context).getString(Configs.VALUE_IDENTIFY, "");
     }
 
     private static void applyCompat(SharedPreferences.Editor editor) {
@@ -45,6 +55,10 @@ public class AppData {
         } else {
             editor.commit();
         }
+    }
+
+    public static void clear(Context context){
+        getSharedPreferences(context).edit().clear();
     }
 
 }

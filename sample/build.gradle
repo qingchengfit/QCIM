@@ -5,11 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-<<<<<<< HEAD
-        classpath 'com.android.tools.build:gradle:2.2.1'
-=======
         classpath 'com.android.tools.build:gradle:2.3.0'
->>>>>>> f76623d0d6ce4b109659069e6ad66f5e48a61486
 //        classpath 'com.google.gms:google-services:3.0.0'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
@@ -32,7 +28,7 @@ ext {
 //                 glide           : "3.6.0",
 //                 circleimageview : "1.3.0"
     ]
-    chat_version = "1.0.1"
+    chat_version = "1.0.2"
 }
 
 allprojects {

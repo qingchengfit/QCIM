@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true">
+    <TextView
+        android:id="@+id/systemMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:visibility="visible"
+        android:textColor="@color/text_gray2"
+        android:textSize="12sp" />
+    <RelativeLayout
+        android:id="@+id/rl_whole_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+        <RelativeLayout
+            android:id="@+id/leftPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            >
+            <com.tencent.qcloud.timchat.widget.CircleImageView
+                android:id="@+id/leftAvatar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/head_other"
+                android:layout_alignParentLeft="true"/>
+            <LinearLayout
+                android:id="@+id/ll_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/leftAvatar"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/sender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_gray1"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginBottom="3dp"
+                    android:textSize="11sp"
+                    android:text="name"
+                    android:visibility="gone"/>
+                <RelativeLayout
+                    android:id="@+id/leftMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:longClickable="true"
+                    android:background="@drawable/chat_bubble_grey"
+                    android:clipToPadding="true"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_voice_time_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:text="23'"
+                android:textSize="15sp"
+                android:textColor="@color/qc_text_grey"
+                android:layout_toRightOf="@id/ll_left"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rightPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <com.tencent.qcloud.timchat.widget.CircleImageView
+                android:id="@+id/rightAvatar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/head_me"
+                android:layout_alignParentRight="true"/>
+            <RelativeLayout
+                android:id="@+id/rightMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:longClickable="true"
+                android:layout_toLeftOf="@id/rightAvatar"
+                android:background="@drawable/chat_bubble_green"/>
+
+            <TextView
+                android:id="@+id/rightDesc"
+                android:layout_alignRight="@id/rightMessage"
+                android:layout_below="@id/rightMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:textSize="11sp"
+                android:textColor="@color/text_gray1"
+                android:visibility="gone"/>
+            <RelativeLayout
+                android:id="@+id/sendStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/rightMessage">
+                <ProgressBar
+                    android:id="@+id/sending"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"/>
+                <ImageView
+                    android:id="@+id/sendError"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_error"/>
+                <TextView
+                    android:id="@+id/text_voice_time_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:text="23'"
+                    android:textSize="15sp"
+                    android:textColor="@color/qc_text_grey"
+                    android:layout_marginRight="8dp"
+                    />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

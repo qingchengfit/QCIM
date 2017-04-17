@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.tencent.qcloud.timchat.widget.TemplateTitle
+        android:id="@+id/group_mem_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="群聊名称"
+        app:canBack="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/edit_group_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/white"
+            android:hint="群聊名称"
+            android:textColor="@color/qc_text_grey"
+            android:textSize="15sp"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/image_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_et_clear"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+    </LinearLayout>
+
+</LinearLayout>

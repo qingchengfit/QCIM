@@ -8,17 +8,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
-
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMLogLevel;
-import com.tencent.TIMManager;
 import com.tencent.qcloud.timchat.business.InitBusiness;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
@@ -30,19 +25,13 @@ import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.event.RefreshEvent;
 import com.tencent.qcloud.tlslibrary.helper.Util;
-import com.tencent.qcloud.tlslibrary.service.AccountRegisterService;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-
 import tencent.tls.platform.TLSErrInfo;
-import tencent.tls.platform.TLSPwdLoginListener;
-import tencent.tls.platform.TLSStrAccRegListener;
-import tencent.tls.platform.TLSUserInfo;
 
 /**
  * Created by fb on 2017/3/15.
@@ -62,10 +51,10 @@ public class LoginProcessor implements TIMCallBack {
         this.username = username;
         this.password = password;
         this.host = host;
-
+        AppData appData = new AppData(context);
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
-        sientInstall();
+        //sientInstall();
     }
 
     public void setOnLoginListener(OnLoginListener onLoginListener) {
@@ -82,6 +71,8 @@ public class LoginProcessor implements TIMCallBack {
         init();
         if (TextUtils.isEmpty(AppData.getUSerSig(context))) {
             navToHome();
+        }else {
+            LoginBusiness.loginIm(username, AppData.getUSerSig(context), LoginProcessor.this);
         }
     }
 

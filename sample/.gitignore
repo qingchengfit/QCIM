@@ -22,7 +22,7 @@
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
-.idea/
+.idea/workspace.xml
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
 

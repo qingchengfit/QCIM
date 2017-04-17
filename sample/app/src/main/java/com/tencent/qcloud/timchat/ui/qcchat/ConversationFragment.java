@@ -17,6 +17,7 @@ import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendFutureItem;
 import com.tencent.TIMGroupCacheInfo;
 import com.tencent.TIMGroupPendencyItem;
+import com.tencent.TIMManager;
 import com.tencent.TIMMessage;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Conversation;
@@ -83,7 +84,9 @@ public class ConversationFragment extends Fragment implements ConversationView,
             listView.setLayoutManager(new LinearLayoutManager(getContext()));
             listView.setNestedScrollingEnabled(false);
             flexibleAdapter = new FlexibleAdapter(flexItemList, this);
+            flexibleAdapter.addListener(this);
             listView.setAdapter(flexibleAdapter);
+
             registerForContextMenu(listView);
         }
         flexibleAdapter.notifyDataSetChanged();
@@ -313,12 +316,35 @@ public class ConversationFragment extends Fragment implements ConversationView,
 //        return super.onContextItemSelected(item);
 //    }
 
+    /**
+     * @return 返回未读消息的总数
+     */
     public long getTotalUnreadNum(){
         long num = 0;
         for (ConversationFlexItem item : flexItemList){
             num += item.getConversation().getUnreadNum();
         }
         return num;
+    }
+
+    /**
+     * 设置全部已读
+     */
+    public void setAllMessageRead(){
+        NomalConversation conversation;
+        for(ConversationFlexItem item : flexItemList){
+            conversation = (NomalConversation) item.getConversation();
+            TIMManager.getInstance().getConversation(conversation.getType(),
+                    conversation.getIdentify()).setReadMessage();
+        }
+    }
+
+    /**
+     *
+     * @return  返回会话item的数量
+     */
+    public int getTotalItemCount(){
+        return flexItemList.size();
     }
 
     @Override
@@ -335,39 +361,38 @@ public class ConversationFragment extends Fragment implements ConversationView,
 
     @Override
     public boolean onItemClick(int position) {
-        flexItemList.get(position).getConversation().navToDetail(getActivity());
+        Conversation conversation = flexItemList.get(position).getConversation();
+        conversation.navToDetail(getActivity());
         if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
             groupManagerPresenter.getGroupManageLastMessage();
         }
         return false;
     }
 
+    public void deleteConversationItem(int position){
+        ConversationFlexItem selectItem = flexItemList.get(position);
+        NomalConversation conversation = null;
+        if (selectItem != null) {
+            conversation = ((NomalConversation) selectItem.getConversation());
+        }
+        if (conversation != null) {
+            if (presenter.delConversation((conversation).getType(),
+                    conversation.getIdentify())) {
+                flexItemList.remove(selectItem);
+                flexibleAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     @Override
     public void onItemLongClick(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("提示")
-                .setMessage("确定删除会话")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ConversationFlexItem selectItem = flexItemList.get(position);
-                        NomalConversation conversation = null;
-                        if (selectItem != null) {
-                            conversation = ((NomalConversation) selectItem.getConversation());
-                        }
-                        if (conversation != null) {
-                            if (presenter.delConversation((conversation).getType(),
-                                    conversation.getIdentify())) {
-                                flexItemList.remove(selectItem);
-                                flexibleAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }).setNegativeButton("取消", null);
+        onUnReadMessageListener.onLongClickListener(position);
     }
 
     public interface OnUnReadMessageListener{
         void onUnReadMessage(long count);
+
+        void onLongClickListener(int position);
     }
 
 }

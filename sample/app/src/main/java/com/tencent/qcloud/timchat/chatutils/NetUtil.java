@@ -1,5 +1,7 @@
 package com.tencent.qcloud.timchat.chatutils;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,13 +21,14 @@ public class NetUtil {
     private String host;
 
     public NetUtil(String identifier, String host){
+        this.host = host;
         getUsersig(identifier);
     }
 
 
 
     public void getUsersig(String identifier){
-        String urlPrefix = "http://c1.qingchengfit.cn/api/im/usersig/?identifier=";
+        String urlPrefix = "http://" + host + "/api/im/usersig/?identifier=";
         final String urlWhole = urlPrefix + identifier;
         new Thread(new Runnable() {
             @Override

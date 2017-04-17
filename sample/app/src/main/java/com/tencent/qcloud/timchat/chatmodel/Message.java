@@ -52,15 +52,6 @@ public abstract class Message {
     public RelativeLayout getBubbleView(ChatAdapter.ViewHolder viewHolder){
         viewHolder.systemMessage.setVisibility(hasTime?View.VISIBLE:View.GONE);
         viewHolder.systemMessage.setText(TimeUtil.getChatTimeStr(message.timestamp()));
-        Glide.with(viewHolder.leftAvatar.getContext())
-                .load(PhotoUtils.getSmall(new NomalConversation(message.getConversation()).getAvatar()))
-                .asBitmap()
-                .into(viewHolder.leftAvatar);
-
-        Glide.with(viewHolder.rightAvatar.getContext())
-                .load(PhotoUtils.getSmall(AppData.getAvatar(viewHolder.rightAvatar.getContext())))
-                .asBitmap()
-                .into(viewHolder.rightAvatar);
         showDesc(viewHolder);
 
         if (message.isSelf()){

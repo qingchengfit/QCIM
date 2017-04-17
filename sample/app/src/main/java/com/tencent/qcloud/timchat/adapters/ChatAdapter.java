@@ -1,21 +1,22 @@
 package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
-import android.media.Image;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.tencent.TIMElemType;
+import com.bumptech.glide.Glide;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Message;
+import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.widget.CircleImageView;
+import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     private int resourceId;
     private View view;
     private ViewHolder viewHolder;
+    private String avatar;
 
     /**
      * Constructor
@@ -42,6 +44,13 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     public ChatAdapter(Context context, int resource, List<Message> objects) {
         super(context, resource, objects);
         resourceId = resource;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+        if (!TextUtils.isEmpty(avatar)){
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -72,10 +81,21 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             viewHolder.rightAvatar = (CircleImageView) view.findViewById(R.id.rightAvatar);
             view.setTag(viewHolder);
         }
+
+        Glide.with(viewHolder.rightAvatar.getContext())
+                .load(PhotoUtils.getSmall(AppData.getAvatar(viewHolder.rightAvatar.getContext())))
+                .asBitmap()
+                .into(viewHolder.rightAvatar);
+        Glide.with(viewHolder.leftAvatar.getContext())
+                .load(PhotoUtils.getSmall(TextUtils.isEmpty(avatar) ? AppData.getAvatar(viewHolder.rightAvatar.getContext()) : avatar))
+                .asBitmap()
+                .into(viewHolder.leftAvatar);
+
         if (position < getCount()){
             final Message data = getItem(position);
             data.showMessage(viewHolder, getContext());
         }
+
         return view;
     }
 

@@ -1,28 +1,58 @@
-# QCIM
-使用说明
+## 使用说明
 
-登录
+- 登录
 
-第一步
-new LoginProcessor(Context context, String username, String password);
+```java
+new LoginProcessor(Context context, String username, String host, OnLoginListener listener);
 
-第二步： 
-实现OnLoginListener
+loginProcessor.sientInstall();
+```
 
+*参数说明* : 
 
-设置昵称 
+**username:** userId, 一般为  **自定义字段 + userID**;
+
+**host:** 当前服务端环境的host地址，如：c1.qingchengfit.cn。
+
+**listener**: 登录的回调 *OnLoginListener*。
+
+- 清除用户信息
+
+```java
+loginProcessor.logOut();
+```
+
+- 设置用户信息
+
+```·
 loginProcessor.setUserInfo(String username, String avatarUrl);
+```
 
+- 添加会话（单聊／群聊）
 
-添加会话
-AddConversationProcessor ac = new AddConversationProcessor(context);
-ac.createGroupWithArg(List<String> datas, final String avatarUrl);
-回调：OnCreateConversation
+```Java
+AddConversationProcessor ac = new AddConversationProcessor(context); ac.createGroupWithArg(List datas, final String avatarUrl);
+```
 
+*添加成功的回调*： OnCreateConversation
 
-获取未读消息数量
+- 会话消息与会话总数：
+
+```java
+//当有新消息时返回会话总数
 OnUnReadMessageListener.onUnReadMessage(long count);
-=======
-1# QCIM
-qingchengIm
->>>>>>> Stashed changes
+//设置当前所有会话消息为已读
+ConversationFragment.setAllMessageRead();
+//获取当前会话未读消息总数
+ConversationFragment.getTotalUnreadNum();
+//获取会话列表item总数
+ConversationFragment.getTotalItemCount
+```
+- 会话列表item长按选项
+
+```java
+OnUnReadMessageListener.onLongClickListener(int position);
+
+//删除某个位置的item的方法
+conversationFragment.deleteConversationItem(int position)
+```

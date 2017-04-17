@@ -52,7 +52,7 @@ public class NomalConversation extends Conversation {
      * @param context 跳转上下文
      */
     @Override
-    public void navToDetail(Context context, String avatar, String name) {
+    public void navToDetail(Context context) {
         ChatActivity.navToChat(context,identify,type);
     }
 

@@ -43,36 +43,30 @@ public class LoginProcessor implements TIMCallBack {
     private TLSService tlsService;
     private OnLoginListener onLoginListener;
     private String username;
-    private String password;
     private String host;
 
-    public LoginProcessor(Context context, String username, String password, String host) throws Exception {
+    public LoginProcessor(Context context, String username, String host, OnLoginListener onLoginListener) throws Exception {
         this.context = context;
         this.username = username;
-        this.password = password;
         this.host = host;
+        this.onLoginListener = onLoginListener;
         AppData appData = new AppData(context);
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
         //sientInstall();
     }
 
-    public void setOnLoginListener(OnLoginListener onLoginListener) {
-        this.onLoginListener = onLoginListener;
-    }
-
     public void sientInstall(){
-
+        init();
         // 验证用户名和密码的有效性
         if (username.length() == 0) {
-            Util.showToast(context, "用户名密码不能为空");
+            Util.showToast(context, "用户名错误");
             return;
         }
-        init();
-        if (TextUtils.isEmpty(AppData.getUSerSig(context)) && !AppData.getIdentify(context).equals(username)) {
+        if (!AppData.getIdentify(context).equals(username) || TextUtils.isEmpty(AppData.getUSerSig(context))) {
             AppData.putIdentify(context, username);
             navToHome();
-        }else {
+        }else{
             LoginBusiness.loginIm(username, AppData.getUSerSig(context), LoginProcessor.this);
         }
     }
@@ -144,13 +138,13 @@ public class LoginProcessor implements TIMCallBack {
         RefreshEvent.getInstance();
 //        String id =  TLSService.getInstance().getLastUserIdentifier();
         UserInfo.getInstance().setId(username);
-    }
 
-    private void navToHome(){
         //登录之前要初始化群和好友关系链缓存
         FriendshipEvent.getInstance().init();
         GroupEvent.getInstance().init();
-//        LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);;
+    }
+
+    private void navToHome(){
         NetUtil netUtil = new NetUtil(username,  host);
         netUtil.setOnUserSigListener(new NetUtil.OnUserSigListener() {
             @Override

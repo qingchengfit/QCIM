@@ -30,7 +30,7 @@ public class AppData {
 
     public static void putUserAvatar(Context context, String avatar){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(Configs.PREFRENCE_AVATAR, avatar);
+        editor.putString(Configs.VALUE_AVATAR, avatar);
         applyCompat(editor);
     }
 
@@ -41,7 +41,7 @@ public class AppData {
 
     public static void putIdentify(Context context, String identify){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(Configs.PREFRENCE_AVATAR, identify);
+        editor.putString(Configs.VALUE_IDENTIFY, identify);
         applyCompat(editor);
     }
 

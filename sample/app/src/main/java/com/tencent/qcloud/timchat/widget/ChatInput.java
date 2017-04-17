@@ -335,7 +335,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         dialog.show();//显示对话框
         //设置Dialog从窗体底部弹出
         dialogWindow.setGravity( Gravity.BOTTOM);
-        dialogWindow.setBackgroundDrawableResource(android.R.color.transparent);
+        dialogWindow.setBackgroundDrawableResource(android.R.color.white);
         //获得窗体的属性
     }
 
@@ -359,11 +359,13 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
         if (id == R.id.open_camera){
             if(activity!=null && requestCamera(activity)){
+                dialog.dismiss();
                 chatView.sendPhoto();
             }
         }
         if (id == R.id.select_from_album){
             if(activity!=null && requestStorage(activity)){
+                dialog.dismiss();
                 chatView.sendImage();
             }
         }

@@ -81,31 +81,17 @@ public class VoiceMessage extends Message {
         voiceIcon.setBackgroundResource(message.isSelf()?R.drawable.right_voice: R.drawable.left_voice);
         final AnimationDrawable frameAnimatio = (AnimationDrawable) voiceIcon.getBackground();
 
-//        TextView tv = new TextView(MyApplication.getContext());
-//        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-//        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
-//        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
-        int height = Util.dpTopx(22f, context.getResources());
-        int width = Util.dpTopx(16f, context.getResources());
-//        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics());
+        int height = Util.dpTopx(20f, context.getResources());
+        int width = Util.dpTopx(14f, context.getResources());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-        LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(width, height);
-        lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
         if (message.isSelf()){
-//            linearLayout.addView(tv);
-//            voiceIcon.setLayoutParams(imageLp);
-//            linearLayout.addView(voiceIcon);
-            getBubbleView(viewHolder).setGravity(Gravity.RIGHT);
         }else{
-//            voiceIcon.setLayoutParams(imageLp);
-//            linearLayout.addView(voiceIcon);
             lp.setMargins(10, 0, 0, 0);
-//            linearLayout.addView(tv);
-            getBubbleView(viewHolder).setGravity(Gravity.LEFT);
         }
 
         clearView(viewHolder);
-//        getBubbleView(viewHolder).setPadding(12, 16, 25, 16);
         getBubbleView(viewHolder).addView(voiceIcon, lp);
 
         if (message.isSelf()){

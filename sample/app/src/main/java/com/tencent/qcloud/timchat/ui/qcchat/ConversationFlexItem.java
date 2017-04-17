@@ -11,12 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.tencent.TIMFriendshipManager;
+import com.tencent.TIMUserProfile;
+import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Conversation;
 import com.tencent.qcloud.timchat.chatutils.TimeUtil;
 import com.tencent.qcloud.timchat.widget.CircleImageView;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -49,18 +53,34 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
     }
 
     @Override
-    public void bindViewHolder(FlexibleAdapter adapter, ConversationViewHolder holder, int position, List payloads) {
-        holder.tvName.setText(conversation.getName());
-        Glide.with(context)
-                .load(PhotoUtils.getSmall(conversation.getAvatar()))
-                .asBitmap()
-                .into(holder.avator);
+    public void bindViewHolder(FlexibleAdapter adapter, final ConversationViewHolder holder, int position, final List payloads) {
+        List<String> list = new ArrayList<>();
+        list.add(conversation.getIdentify());
+        TIMFriendshipManager.getInstance().getUsersProfile(list, new TIMValueCallBack<List<TIMUserProfile>>() {
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                for (TIMUserProfile profile : timUserProfiles) {
+                    Glide.with(context)
+                            .load(PhotoUtils.getSmall(profile.getFaceUrl()))
+                            .asBitmap()
+                            .into(holder.avator);
+                    holder.tvName.setText(profile.getNickName());
+
+                }
+
+            }
+        });
         holder.lastMessage.setText(conversation.getLastMessageSummary());
         holder.time.setText(TimeUtil.getTimeStr(conversation.getLastMessageTime()));
         long unRead = conversation.getUnreadNum();
-        if (unRead <= 0){
+        if (unRead <= 0) {
             holder.imageDot.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.imageDot.setVisibility(View.VISIBLE);
             String unReadStr = String.valueOf(unRead);
 //            if (unRead < 10){

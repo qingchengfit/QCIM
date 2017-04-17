@@ -14,6 +14,7 @@ import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMLogLevel;
+import com.tencent.TIMManager;
 import com.tencent.qcloud.timchat.business.InitBusiness;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
@@ -52,7 +53,6 @@ public class LoginProcessor implements TIMCallBack {
         this.onLoginListener = onLoginListener;
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
-        //sientInstall();
     }
 
     public void sientInstall(){
@@ -68,6 +68,16 @@ public class LoginProcessor implements TIMCallBack {
         }else{
             LoginBusiness.loginIm(username, AppData.getUSerSig(context), LoginProcessor.this);
         }
+    }
+
+
+    public boolean isLogin(){
+        if (TIMManager.getInstance().getLoginUser() != null){
+            if (TextUtils.equals(username, TIMManager.getInstance().getLoginUser())){
+                return true;
+            }
+        }
+        return false;
     }
 
     //清除登录信息

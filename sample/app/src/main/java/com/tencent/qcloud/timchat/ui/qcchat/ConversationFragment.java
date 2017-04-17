@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -82,6 +83,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
             presenter = new ConversationPresenter(this);
             presenter.getConversation();
             listView.setLayoutManager(new LinearLayoutManager(getContext()));
+            listView.setItemAnimator(new DefaultItemAnimator());
             listView.setNestedScrollingEnabled(false);
             flexibleAdapter = new FlexibleAdapter(flexItemList, this);
             flexibleAdapter.addListener(this);
@@ -379,6 +381,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
             if (presenter.delConversation((conversation).getType(),
                     conversation.getIdentify())) {
                 flexItemList.remove(selectItem);
+                flexibleAdapter.removeItem(position);
                 flexibleAdapter.notifyDataSetChanged();
             }
         }

@@ -50,7 +50,6 @@ public class LoginProcessor implements TIMCallBack {
         this.username = username;
         this.host = host;
         this.onLoginListener = onLoginListener;
-        AppData appData = new AppData(context);
         tlsService = TLSService.getInstance();
         tlsService.initTlsSdk(context);
         //sientInstall();

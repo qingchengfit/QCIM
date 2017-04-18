@@ -106,8 +106,8 @@
     <orderEntry type="library" exported="" name="HwPush_SDK_V2705" level="project" />
     <orderEntry type="library" exported="" name="imsdk" level="project" />
     <orderEntry type="library" exported="" name="soload" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" name="open_sdk" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="library" exported="" name="mobilepb" level="project" />
     <orderEntry type="library" exported="" name="wup-1.0.0-SNAPSHOT" level="project" />

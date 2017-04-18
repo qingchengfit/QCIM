@@ -20,14 +20,14 @@
             android:paddingRight="15dp">
 
             <com.tencent.qcloud.timchat.widget.CircleImageView
-                android:id="@+id/avatar"
+                android:id="@+id/group_member_avatar"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
                 tools:background="@drawable/head" />
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/group_member_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

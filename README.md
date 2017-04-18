@@ -1,5 +1,18 @@
 ## 使用说明
 
+- 初始化设置 **（一定要先设置）**
+
+```
+//设置AccountType
+Constant.setAccountType(int AccountType);  
+
+//设置SDKAppID
+COnstant.setAppId(int SDKAppId);
+
+//设置全局Context
+MyApplication myApplication = new MyApplication(getApplication());
+```
+
 - 登录
 
 ```java
@@ -19,7 +32,7 @@ loginProcessor.sientInstall();
 - 清除用户信息
 
 ```java
-loginProcessor.logOut();
+AppData.clear(Context context);
 ```
 
 - 设置用户信息
@@ -31,7 +44,7 @@ loginProcessor.setUserInfo(String username, String avatarUrl);
 - 添加会话（单聊／群聊）
 
 ```Java
-AddConversationProcessor ac = new AddConversationProcessor(context); ac.createGroupWithArg(List datas, final String avatarUrl);
+AddConversationProcessor ac = new AddConversationProcessor(context); ac.createGroupWithName(List datas, final String avatarUrl);
 ```
 
 *添加成功的回调*： OnCreateConversation
@@ -55,4 +68,9 @@ OnUnReadMessageListener.onLongClickListener(int position);
 
 //删除某个位置的item的方法
 conversationFragment.deleteConversationItem(int position)
+```
+- 判断登录状态
+
+```java
+LoginProcessor.isLogin();	 //return type boolean
 ```

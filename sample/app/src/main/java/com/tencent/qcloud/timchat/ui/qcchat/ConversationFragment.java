@@ -4,6 +4,7 @@ package com.tencent.qcloud.timchat.ui.qcchat;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.common.DividerItemDecoration;
 
 /**
  * 会话列表界面
@@ -84,6 +86,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
             presenter.getConversation();
             listView.setLayoutManager(new LinearLayoutManager(getContext()));
             listView.setItemAnimator(new DefaultItemAnimator());
+            listView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.divider_card_list));
             listView.setNestedScrollingEnabled(false);
             flexibleAdapter = new FlexibleAdapter(flexItemList, this);
             flexibleAdapter.addListener(this);
@@ -219,7 +222,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
 
     @Override
     public void createGroup(List<String> datas, List<String> memberList) {
-        addConversationProcessor.createGroupWithArg(datas, "");
+        addConversationProcessor.createGroupWithArg(datas, "", "");
 
     }
 
@@ -380,7 +383,6 @@ public class ConversationFragment extends Fragment implements ConversationView,
         if (conversation != null) {
             if (presenter.delConversation((conversation).getType(),
                     conversation.getIdentify())) {
-                flexItemList.remove(selectItem);
                 flexibleAdapter.removeItem(position);
                 flexibleAdapter.notifyDataSetChanged();
             }

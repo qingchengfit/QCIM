@@ -57,7 +57,6 @@ public abstract class Message {
         if (message.isSelf()){
             viewHolder.leftPanel.setVisibility(View.GONE);
             viewHolder.rightPanel.setVisibility(View.VISIBLE);
-            viewHolder.rightMessage.setGravity(Gravity.NO_GRAVITY);
             return viewHolder.rightMessage;
         }else{
             viewHolder.leftPanel.setVisibility(View.VISIBLE);

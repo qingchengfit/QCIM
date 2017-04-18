@@ -105,7 +105,7 @@ public class LoginProcessor implements TIMCallBack {
      * @param username       用户名
      * @param avatarUrl     头像
      */
-    public void setUserInfo(String username, String avatarUrl){
+    public void setUserInfo(String username, final String avatarUrl){
         if(!TextUtils.isEmpty(avatarUrl)){
             AppData.putUserAvatar(context, avatarUrl);
         }
@@ -130,6 +130,7 @@ public class LoginProcessor implements TIMCallBack {
             @Override
             public void onSuccess() {
                 Toast.makeText(context, "设置用户头像：成功", Toast.LENGTH_SHORT).show();
+                AppData.putUserAvatar(context, avatarUrl);
             }
         });
 

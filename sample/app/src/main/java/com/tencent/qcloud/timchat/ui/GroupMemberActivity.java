@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -37,7 +39,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 public class GroupMemberActivity extends Activity implements TIMValueCallBack<List<TIMGroupMemberInfo>>, FlexibleAdapter.OnItemClickListener {
 
-    List<ProfileSummary> list = new ArrayList<>();
+    List<GroupMemberProfile> list = new ArrayList<>();
     RecyclerView listView;
     TemplateTitle title;
     String groupId,type;
@@ -99,6 +101,8 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         });
 
         listView = (RecyclerView) findViewById(R.id.gridView_group_member);
+        listView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 5));
+        listView.setItemAnimator(new DefaultItemAnimator());
         flexibleAdapter = new FlexibleAdapter(itemList, this);
         listView.setAdapter(flexibleAdapter);
 
@@ -135,13 +139,15 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
             @Override
             public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                itemList.clear();
                 int index = 0;
                 for (TIMUserProfile profile : timUserProfiles) {
-                    infos.get(index).setCustomInfo("iconUrl", profile.getFaceUrl().getBytes());
-                    list.add(new GroupMemberProfile(infos.get(index)));
-                    itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(infos.get(index))));
+                    list.add(new GroupMemberProfile(profile));
+                    itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(profile)));
                     index++;
                 }
+                itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(GroupMemberProfile.ADD)));
+                itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(GroupMemberProfile.REMOVE)));
                 flexibleAdapter.notifyDataSetChanged();
                 tvTitle.setText(getApplicationContext().getString(R.string.title_group_member_count, list.size()));
             }
@@ -196,7 +202,8 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
     @Override
     public boolean onItemClick(int position) {
-        if (position < list.size()) {
+        GroupMemberProfile groupMemberProfile = itemList.get(position).getData();
+        if (groupMemberProfile.getType() == GroupMemberProfile.NORMAL) {
             memIndex = position;
             Intent intent = new Intent(GroupMemberActivity.this, GroupMemberProfileActivity.class);
             GroupMemberProfile profile = (GroupMemberProfile) list.get(position);
@@ -204,7 +211,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             intent.putExtra("groupId", groupId);
             intent.putExtra("type", type);
             startActivityForResult(intent, MEM_REQ);
-        }else if (position == list.size() + 1){
+        }else if (groupMemberProfile.getType() == GroupMemberProfile.REMOVE){
             Intent intent = new Intent(GroupMemberActivity.this, DeleteMemberActivity.class);
             Bundle b = new Bundle();
             b.putSerializable("member", (Serializable) list);

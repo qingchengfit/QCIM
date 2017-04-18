@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -82,18 +83,19 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         voicePanel.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                float y = event.getRawY();
+                float y = 0;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        y = event.getY();
                         isHoldVoiceBtn = true;
                         updateVoiceView();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if ((event.getRawY() - y) < -50 ){
+                        if ((event.getY() - y) < -40 ){
                             Toast.makeText(getContext(), "已取消", Toast.LENGTH_SHORT).show();
+                            return true;
                         }
-                        return true;
-//                        break;
+                        break;
                     case MotionEvent.ACTION_UP:
                         isHoldVoiceBtn = false;
                         updateVoiceView();
@@ -332,11 +334,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         dialog.setContentView(inflate);
         //获取当前Activity所在的窗体
         Window dialogWindow = dialog.getWindow();
-        dialog.show();//显示对话框
         //设置Dialog从窗体底部弹出
         dialogWindow.setGravity( Gravity.BOTTOM);
         dialogWindow.setBackgroundDrawableResource(android.R.color.white);
-        //获得窗体的属性
+        //dialog平铺屏幕的关键语句
+        dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.show();//显示对话框
     }
 
     /**

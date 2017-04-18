@@ -45,7 +45,7 @@ public class GroupListActivity extends Activity implements Observer, FlexibleAda
         listView =(RecyclerView) findViewById(R.id.recycler_member_list);
         list = GroupInfo.getInstance().getGroupListByType(type);
         for (ProfileSummary profileSummary : list){
-            itemList.add(new ProfileSummaryItem(getApplicationContext(), profileSummary));
+//            itemList.add(new ProfileSummaryItem(getApplicationContext(), profileSummary));
         }
         flexibleAdapter = new FlexibleAdapter(itemList, this);
         listView.setLayoutManager(new GridLayoutManager(this, 5));

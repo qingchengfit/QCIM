@@ -87,7 +87,7 @@ public class ChatAdapter extends ArrayAdapter<Message> {
                 .asBitmap()
                 .into(viewHolder.rightAvatar);
         Glide.with(viewHolder.leftAvatar.getContext())
-                .load(PhotoUtils.getSmall(TextUtils.isEmpty(avatar) ? AppData.getAvatar(viewHolder.rightAvatar.getContext()) : avatar))
+                .load(PhotoUtils.getSmall(TextUtils.isEmpty(avatar) ? AppData.defaultAvatar : avatar))
                 .asBitmap()
                 .into(viewHolder.leftAvatar);
 

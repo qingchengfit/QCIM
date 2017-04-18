@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMGroupMemberRoleType;
+import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.timchat.R;
 
 import java.io.Serializable;
@@ -20,15 +21,25 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
     private String id;
     private long quietTime;
     private TIMGroupMemberRoleType roleType;
-    private byte[] headUrl;
+    private String headUrl;
     private int type = NORMAL;
 
-    public GroupMemberProfile(TIMGroupMemberInfo info){
-        name = info.getNameCard();
-        id = info.getUser();
-        quietTime = info.getSilenceSeconds();
-        roleType = info.getRole();
-        headUrl = info.getCustomInfo().get("iconUrl");
+    public GroupMemberProfile(TIMUserProfile info){
+        name = info.getNickName();
+        id = info.getIdentifier();
+        headUrl = info.getFaceUrl();
+    }
+
+    public GroupMemberProfile(int type) {
+        this.type = type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType(){
+        return type;
     }
 
     /**
@@ -37,10 +48,9 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
     @Override
     public int getAvatarRes() {
         if (type == ADD){
-
-        }
-        if (type == REMOVE){
-
+            return R.drawable.btn_add;
+        }else if(type == REMOVE){
+            return R.drawable.btn_minus;
         }
         return R.drawable.head;
     }
@@ -50,7 +60,7 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
      */
     @Override
     public String getAvatarUrl() {
-        return headUrl.toString();
+        return headUrl == null ? null : headUrl;
     }
 
     /**
@@ -58,7 +68,7 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
      */
     @Override
     public String getName() {
-        if (!name.equals("")){
+        if (name != null && !name.equals("")){
             return name;
         }
         return id;

@@ -13,6 +13,8 @@ public class AppData {
 
 
     private static SharedPreferences sharedPreferences;
+    public static final String defaultAvatar = "http://zoneke-img.b0.upaiyun.com/75656eb980b79e7748041f830332cc62.png!120x120";
+    public static final String defaultGroupAvatar = "http://qcresource.b0.upaiyun.com/default_chat_avatar_group.png";
 
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(Configs.PREFRENCE_USERSIG, 0);

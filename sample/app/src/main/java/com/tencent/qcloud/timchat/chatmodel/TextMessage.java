@@ -119,15 +119,19 @@ public class TextMessage extends Message {
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
-        getBubbleView(viewHolder).setGravity(Gravity.NO_GRAVITY);
-        getBubbleView(viewHolder).setPadding(Util.dpTopx(20f, context.getResources()),
-                Util.dpTopx(10f, context.getResources()), Util.dpTopx(12f, context.getResources()),
-                Util.dpTopx(10f, context.getResources()));
-        getBubbleView(viewHolder).setClipToPadding(true);
+            getBubbleView(viewHolder).setGravity(Gravity.NO_GRAVITY);
         clearView(viewHolder);
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
-        tv.setPadding(10, 12, 10, 12);
+        if (!isSelf()) {
+            tv.setPadding(Util.dpTopx(20f, context.getResources()),
+                    Util.dpTopx(10f, context.getResources()), Util.dpTopx(10f, context.getResources()),
+                    Util.dpTopx(10f, context.getResources()));
+        }else{
+            tv.setPadding(Util.dpTopx(10f, context.getResources()),
+                    Util.dpTopx(10f, context.getResources()), Util.dpTopx(20f, context.getResources()),
+                    Util.dpTopx(10f, context.getResources()));
+        }
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();

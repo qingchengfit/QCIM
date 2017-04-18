@@ -8,8 +8,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.tencent.qcloud.timchat.R;
+import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
+import com.tencent.qcloud.timchat.common.AppData;
+import com.tencent.qcloud.timchat.widget.PhotoUtils;
 
 import java.util.List;
 
@@ -24,7 +28,7 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
 
 
     private View view;
-    private ProfileSummary profileSummary;
+    private GroupMemberProfile profileSummary;
     private boolean isDelete;
     private OnDeleteMemberListener onDeleteMemberListener;
 
@@ -34,7 +38,7 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
      * @param context  The current context.
      * @param objects  The objects to represent in the ListView.
      */
-    public ProfileSummaryItem(Context context, ProfileSummary objects) {
+    public ProfileSummaryItem(Context context, GroupMemberProfile objects) {
         this.profileSummary = objects;
     }
 
@@ -48,6 +52,10 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
 
     public void setOnDeleteMemberListener(OnDeleteMemberListener onDeleteMemberListener) {
         this.onDeleteMemberListener = onDeleteMemberListener;
+    }
+
+    public GroupMemberProfile getData(){
+        return profileSummary;
     }
 
     @Override
@@ -72,14 +80,17 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
             holder.imgDelete.setVisibility(View.GONE);
         }
 
-        if (position == adapter.getItemCount() + 1 && !isDelete){
-            holder.avatar.setImageResource(R.drawable.btn_minus);
-        }
-        if (position == adapter.getItemCount() && !isDelete){
-            holder.avatar.setImageResource(R.drawable.btn_add);
-        }
-        if (position < adapter.getItemCount()) {
+        if (profileSummary.getType() == GroupMemberProfile.ADD && !isDelete){
             holder.avatar.setImageResource(profileSummary.getAvatarRes());
+        }
+        if (profileSummary.getType() == GroupMemberProfile.REMOVE && !isDelete){
+            holder.avatar.setImageResource(profileSummary.getAvatarRes());
+        }
+        if (profileSummary.getType() == GroupMemberProfile.NORMAL) {
+            Glide.with(holder.avatar.getContext())
+                    .load(PhotoUtils.getSmall(profileSummary.getAvatarUrl()))
+                    .asBitmap()
+                    .into(holder.avatar);
             holder.name.setText(profileSummary.getName());
         }
         holder.imgDelete.setTag(position);
@@ -88,7 +99,7 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
     @Override
     public void onClick(View view) {
         if (onDeleteMemberListener != null){
-            onDeleteMemberListener.onDelete(String.valueOf(view.getTag()));
+            onDeleteMemberListener.onDelete((int)view.getTag());
         }
     }
 
@@ -96,14 +107,16 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
         public ImageView avatar;
         public TextView name;
         public ImageView imgDelete;
-        public RelativeLayout rlMemberItem;
 
         public ProfileVh(View view, FlexibleAdapter adapter) {
             super(view, adapter);
+            avatar = (ImageView) view.findViewById(R.id.group_member_avatar);
+            name = (TextView) view.findViewById(R.id.group_member_name);
+            imgDelete = (ImageView) view.findViewById(R.id.image_delete_member);
         }
     }
 
     public interface OnDeleteMemberListener{
-        void onDelete(String position);
+        void onDelete(int position);
     }
 }

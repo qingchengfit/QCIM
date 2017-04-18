@@ -13,6 +13,7 @@ import com.tencent.TIMGroupMemberResult;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
+import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.tlslibrary.helper.Util;
@@ -27,7 +28,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
  */
 
 public class DeleteMemberActivity extends Activity implements ProfileSummaryItem.OnDeleteMemberListener {
-    private List<ProfileSummary> dataList = new ArrayList<>();
+    private List<GroupMemberProfile> dataList = new ArrayList<>();
     private List<ProfileSummaryItem> itemList = new ArrayList<>();
     private RecyclerView gridView;
     private TemplateTitle title;
@@ -46,11 +47,11 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryItem
         setToolbar();
 
         if(getIntent() != null && getIntent().getBundleExtra("datas") != null){
-            dataList = (List<ProfileSummary>) getIntent().getBundleExtra("datas").getSerializable("member");
+            dataList = (List<GroupMemberProfile>) getIntent().getBundleExtra("datas").getSerializable("member");
             groupId = getIntent().getStringExtra("group");
         }
 
-        for (ProfileSummary profileSummary : dataList){
+        for (GroupMemberProfile profileSummary : dataList){
             ProfileSummaryItem item = new ProfileSummaryItem(getApplicationContext(), profileSummary);
             item.setOnDeleteMemberListener(this);
             item.setDelete(true);
@@ -92,8 +93,8 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryItem
     }
 
     @Override
-    public void onDelete(String position) {
-        adapter.removeItem(Integer.valueOf(position));
-        deleteList.add(position);
+    public void onDelete(int position) {
+        deleteList.add(itemList.get(position).getData().getIdentify());
+        adapter.removeItem(position);
     }
 }

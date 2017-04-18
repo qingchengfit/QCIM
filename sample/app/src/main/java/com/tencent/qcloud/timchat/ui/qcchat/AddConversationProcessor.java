@@ -9,6 +9,7 @@ import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
+import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
@@ -39,62 +40,71 @@ public class AddConversationProcessor {
     /**
      * @param datas    id列表
      */
-    public void createGroupWithArg(List<String> datas, final String avatarUrl){
-        if (datas.size() == 1){
-            ChatActivity.navToChat(context, datas.get(0), TIMConversationType.C2C);
-        }else {
-            GroupManagerPresenter.createGroup(getDefaultGroupName(datas),
-                    GroupInfo.privateGroup,
-                    datas,
-                    new TIMValueCallBack<String>() {
-                        @Override
-                        public void onError(int i, String s) {
-                            onCreateConversation.onCreateFailed(i, s);
-                        }
+    public void createGroupWithArg(final List<String> datas, final String name) {
 
-                        @Override
-                        public void onSuccess(String s) {
-                            Intent intent = new Intent(context, ChatActivity.class);
-                            intent.putExtra(Configs.IDENTIFY, s);
-                            intent.putExtra(Configs.CONVERSATION_TYPE, TIMConversationType.Group);
-                            context.startActivity(intent);
-                            TIMGroupManager.getInstance().modifyGroupFaceUrl(s, avatarUrl, new TIMCallBack() {
-                                @Override
-                                public void onError(int i, String s) {
-                                    onCreateConversation.onCreateFailed(i, s);
-                                }
-
-                                @Override
-                                public void onSuccess() {
-                                    Util.showToast(context, "创建群成功");
-                                }
-                            });
-                        }
+        TIMGroupManager.getInstance().createGroup(GroupInfo.privateGroup,
+                datas,
+                name,
+                new TIMValueCallBack<String>() {
+                    @Override
+                    public void onError(int i, String s) {
+                        onCreateConversation.onCreateFailed(i, s);
                     }
-            );
-        }
+
+                    @Override
+                    public void onSuccess(final String s) {
+                        setGroupAvatar(s, AppData.defaultGroupAvatar);
+                    }
+                }
+        );
     }
 
-    //
-    private String getDefaultGroupName(List<String> datas){
-
-        final StringBuilder s = new StringBuilder();
-
-        TIMFriendshipManager.getInstance().getFriendsProfile(datas, new TIMValueCallBack<List<TIMUserProfile>>() {
+    public void setGroupAvatar(final String groupId, String avatarUrl){
+        TIMGroupManager.getInstance().modifyGroupFaceUrl(groupId, avatarUrl, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
                 onCreateConversation.onCreateFailed(i, s);
             }
 
             @Override
-            public void onSuccess(List<TIMUserProfile> timUserProfiles) {
-                for (TIMUserProfile profile : timUserProfiles){
-                    s.append(profile.getIdentifier());
-                }
+            public void onSuccess() {
+                Util.showToast(context, "创建群成功");
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra(Configs.IDENTIFY, groupId);
+                intent.putExtra(Configs.CONVERSATION_TYPE, TIMConversationType.Group);
+                context.startActivity(intent);
             }
         });
+    }
 
-        return s.toString();
+    //
+    public void creaetGroupWithName(final List<String> datas){
+
+        if (datas.size() == 1) {
+            ChatActivity.navToChat(context, datas.get(0), TIMConversationType.C2C);
+        } else {
+            final StringBuilder s = new StringBuilder();
+            TIMFriendshipManager.getInstance().getUsersProfile(datas, new TIMValueCallBack<List<TIMUserProfile>>() {
+                @Override
+                public void onError(int i, String s) {
+                    onCreateConversation.onCreateFailed(i, s);
+                }
+
+                @Override
+                public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                    int index = 0;
+                    for (TIMUserProfile profile : timUserProfiles) {
+                        if (index > 2) {
+                            break;
+                        }
+                        s.append(profile.getNickName()).append("(").append(timUserProfiles.size()).append(")人");
+                        index++;
+                    }
+                    createGroupWithArg(datas, s.toString());
+                }
+            });
+        }
+
     }
 
     public interface OnCreateConversation{

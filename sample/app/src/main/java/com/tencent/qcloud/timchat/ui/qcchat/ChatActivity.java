@@ -92,6 +92,11 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
         context.startActivity(intent);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +104,8 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
         setContentView(R.layout.activity_chat);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         title = (TemplateTitle) findViewById(R.id.chat_title);
-        identify = getIntent().getStringExtra(Configs.IDENTIFY);
 
+        identify = getIntent().getStringExtra(Configs.IDENTIFY);
         type = (TIMConversationType) getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE);
         presenter = new ChatPresenter(this, identify, type);
         input = (ChatInput) findViewById(R.id.input_panel);

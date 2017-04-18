@@ -6,6 +6,7 @@ import com.tencent.qcloud.timchat.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -13,6 +14,12 @@ import java.util.Date;
  */
 public class TimeUtil {
 
+
+    public static final Long MONTH_TIME = 2678400000L;
+    public static final Long DAY_TIME = 86400000L;
+    public static final Long HOUR_TIME = 3600000L;
+    public static final Long MINITE_TIME = 60000L;
+    public static final Long SECOND_TIME = Long.valueOf(1000L);
 
     private TimeUtil(){}
 
@@ -103,4 +110,30 @@ public class TimeUtil {
         }
 
     }
+
+    public static String getNotifacationTimeStr(Date d) {
+        long intelnal = (new Date()).getTime() - d.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        long lastDayInternal = d.getTime() - calendar.getTime().getTime();
+        if(lastDayInternal < 4L * HOUR_TIME.longValue()) {
+            lastDayInternal = 4L * HOUR_TIME.longValue();
+        }
+
+        return intelnal < MINITE_TIME.longValue()?"刚刚":(intelnal < HOUR_TIME.longValue()?intelnal / MINITE_TIME.longValue() + "分钟前":(intelnal < HOUR_TIME.longValue() * 4L?intelnal / HOUR_TIME.longValue() + "小时前":(intelnal < lastDayInternal?"今天" + getTimeHHMM(d):(intelnal < lastDayInternal + DAY_TIME.longValue()?"昨天":Date2MMDD(d)))));
+    }
+
+    public static String Date2MMDD(Date d) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd", Locale.CHINA);
+        return formatter.format(d);
+    }
+
+    public static String getTimeHHMM(Date d) {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.CHINA);
+        return formatter.format(d);
+    }
+
 }

@@ -15,6 +15,7 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
+import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.ui.HomeActivity;
 import com.tencent.qcloud.timchat.ui.qcchat.ChatActivity;
@@ -63,10 +64,15 @@ public class PushUtil implements Observer {
         NotificationManager mNotificationManager = (NotificationManager) MyApplication.getContext().getSystemService(MyApplication.getContext().NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApplication.getContext());
         Intent notificationIntent = new Intent(MyApplication.getContext(), ChatActivity.class);
+
+        notificationIntent.putExtra(Configs.CONVERSATION_TYPE, msg.getConversation().getType());
+        notificationIntent.putExtra(Configs.IDENTIFY, senderStr);
+
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         PendingIntent intent = PendingIntent.getActivity(MyApplication.getContext(), 0,
-                notificationIntent, 0);
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentTitle(senderStr)//设置通知栏标题
                 .setContentText(contentStr)
                 .setContentIntent(intent) //设置通知栏点击意图

@@ -78,21 +78,31 @@ public class VoiceMessage extends Message {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setGravity(Gravity.CENTER|Gravity.RIGHT);
         ImageView voiceIcon = new ImageView(MyApplication.getContext());
+        voiceIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         voiceIcon.setBackgroundResource(message.isSelf()?R.drawable.right_voice: R.drawable.left_voice);
         final AnimationDrawable frameAnimatio = (AnimationDrawable) voiceIcon.getBackground();
 
-        int height = Util.dpTopx(20f, context.getResources());
+        int height = Util.dpTopx(18f, context.getResources());
         int width = Util.dpTopx(14f, context.getResources());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-
-        if (message.isSelf()){
+        lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+        RelativeLayout layout = getBubbleView(viewHolder);
+        if (!message.isSelf()){
+            viewHolder.leftMessage.setGravity(Gravity.LEFT);
+            clearView(viewHolder);
+            viewHolder.leftMessage.setClipToPadding(false);
+            viewHolder.leftMessage.removeAllViews();
+            viewHolder.leftMessage.addView(voiceIcon, lp);
         }else{
-            lp.setMargins(10, 0, 0, 0);
+            layout.setPadding(0, layout.getPaddingTop(), layout.getPaddingRight(), layout.getPaddingBottom());
+            viewHolder.rightMessage.setGravity(Gravity.RIGHT);
+            clearView(viewHolder);
+            getBubbleView(viewHolder).setClipToPadding(false);
+            getBubbleView(viewHolder).addView(voiceIcon, lp);
         }
 
-        clearView(viewHolder);
-        getBubbleView(viewHolder).addView(voiceIcon, lp);
+//        clearView(viewHolder);
+//        getBubbleView(viewHolder).addView(voiceIcon, lp);
 
         if (message.isSelf()){
             viewHolder.leftVoice.setVisibility(View.GONE);

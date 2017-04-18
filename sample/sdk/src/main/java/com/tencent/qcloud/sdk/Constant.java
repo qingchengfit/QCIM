@@ -7,9 +7,9 @@ public class Constant {
 
     //TODO 自由账号的type 与 AppID
 
-    public static int ACCOUNT_TYPE = 10466;
+    public static int ACCOUNT_TYPE;
     //sdk appid 由腾讯分配
-    public static int SDK_APPID = 1400024389;
+    public static int SDK_APPID;
 
     public static void setAccountType(int accountType) {
         ACCOUNT_TYPE = accountType;

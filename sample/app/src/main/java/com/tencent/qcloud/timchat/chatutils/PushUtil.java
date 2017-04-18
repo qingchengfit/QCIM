@@ -70,6 +70,7 @@ public class PushUtil implements Observer {
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         PendingIntent intent = PendingIntent.getActivity(MyApplication.getContext(), 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentTitle(senderStr)//设置通知栏标题

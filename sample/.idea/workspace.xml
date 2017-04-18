@@ -16,8 +16,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57fbf908-dadd-43f6-a0cb-665cccc8abfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatutils/PushUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatutils/PushUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java" afterPath="$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java" />
     </list>
     <ignored path="sample.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -83,6 +82,18 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="LoginProcessor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/LoginProcessor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="763">
+              <caret line="132" column="58" selection-start-line="132" selection-start-column="58" selection-end-line="132" selection-end-column="58" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ChatActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ChatActivity.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -103,11 +114,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Constant.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AddConversationProcessor.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="278">
+              <caret line="55" column="68" selection-start-line="55" selection-start-column="68" selection-end-line="55" selection-end-column="68" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Constant.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+            <state relative-caret-position="306">
+              <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -118,6 +139,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="176">
               <caret line="34" column="56" selection-start-line="34" selection-start-column="56" selection-end-line="34" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConversationFlexItem.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -3701,7 +3732,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/widget/ChatInput.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/adapters/ChatAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/LoginProcessor.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_group_detail_grid.xml" />
@@ -3712,12 +3742,13 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/VoiceMessage.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/GroupMemberActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/DeleteMemberActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/common/AppData.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/title.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ChatActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatutils/PushUtil.java" />
         <option value="$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java" />
       </list>
     </option>
   </component>
@@ -4447,7 +4478,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java</url>
-          <line>41</line>
+          <line>42</line>
           <properties class="com.tencent.qcloud.timchat.ui.qcchat.AddConversationProcessor" method="createGroupWithArg" />
           <option name="timeStamp" value="41" />
         </line-breakpoint>
@@ -4629,19 +4660,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="98" column="24" selection-start-line="98" selection-start-column="24" selection-end-line="98" selection-end-column="24" />
-          <folding>
-            <element signature="e#1717#1718#0" expanded="true" />
-            <element signature="e#1793#1794#0" expanded="true" />
-            <element signature="e#2071#2072#0" expanded="true" />
-            <element signature="e#2144#2145#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/TextMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="142">
@@ -4655,16 +4673,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/LoginProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="132" column="58" selection-start-line="132" selection-start-column="58" selection-end-line="132" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -4810,14 +4818,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="94" column="62" selection-start-line="94" selection-start-column="62" selection-end-line="94" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/chatmodel/GroupMemberProfile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="918">
@@ -4887,8 +4887,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sdk/src/main/java/com/tencent/qcloud/sdk/Constant.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+        <state relative-caret-position="306">
+          <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/ConversationFlexItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/LoginProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="763">
+          <caret line="132" column="58" selection-start-line="132" selection-start-column="58" selection-end-line="132" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tencent/qcloud/timchat/ui/qcchat/AddConversationProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="55" column="68" selection-start-line="55" selection-start-column="68" selection-end-line="55" selection-end-column="68" />
           <folding />
         </state>
       </provider>

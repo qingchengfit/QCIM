@@ -44,7 +44,7 @@ loginProcessor.setUserInfo(String username, String avatarUrl);
 - 添加会话（单聊／群聊）
 
 ```Java
-AddConversationProcessor ac = new AddConversationProcessor(context); ac.createGroupWithName(List datas, final String avatarUrl);
+AddConversationProcessor ac = new AddConversationProcessor(context); ac.createGroupWithName(List datas);
 ```
 
 *添加成功的回调*： OnCreateConversation

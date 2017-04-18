@@ -9,6 +9,7 @@ import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
+import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
@@ -39,7 +40,7 @@ public class AddConversationProcessor {
     /**
      * @param datas    id列表
      */
-    public void createGroupWithArg(final List<String> datas, final String name, final String avatarUrl) {
+    public void createGroupWithArg(final List<String> datas, final String name) {
 
         TIMGroupManager.getInstance().createGroup(GroupInfo.privateGroup,
                 datas,
@@ -52,7 +53,7 @@ public class AddConversationProcessor {
 
                     @Override
                     public void onSuccess(final String s) {
-                        setGroupAvatar(s, avatarUrl);
+                        setGroupAvatar(s, AppData.defaultGroupAvatar);
                     }
                 }
         );
@@ -77,7 +78,7 @@ public class AddConversationProcessor {
     }
 
     //
-    public void creaetGroupWithName(final List<String> datas, final String avatarUrl){
+    public void creaetGroupWithName(final List<String> datas){
 
         if (datas.size() == 1) {
             ChatActivity.navToChat(context, datas.get(0), TIMConversationType.C2C);
@@ -99,7 +100,7 @@ public class AddConversationProcessor {
                         s.append(profile.getNickName()).append("(").append(timUserProfiles.size()).append(")人");
                         index++;
                     }
-                    createGroupWithArg(datas, s.toString(), avatarUrl);
+                    createGroupWithArg(datas, s.toString());
                 }
             });
         }

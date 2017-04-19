@@ -248,15 +248,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     @Override
     public boolean onItemClick(int position) {
         GroupMemberProfile groupMemberProfile = itemList.get(position).getData();
-        if (groupMemberProfile.getType() == GroupMemberProfile.NORMAL) {
-            memIndex = position;
-            Intent intent = new Intent(GroupMemberActivity.this, GroupMemberProfileActivity.class);
-            GroupMemberProfile profile = (GroupMemberProfile) list.get(position);
-            intent.putExtra("data", profile);
-            intent.putExtra("groupId", groupId);
-            intent.putExtra("type", type);
-            startActivityForResult(intent, MEM_REQ);
-        }else if (groupMemberProfile.getType() == GroupMemberProfile.REMOVE){
+        if (groupMemberProfile.getType() == GroupMemberProfile.REMOVE){
             Intent intent = new Intent(GroupMemberActivity.this, DeleteMemberActivity.class);
             Bundle b = new Bundle();
             b.putSerializable("member", (Serializable) list);

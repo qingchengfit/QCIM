@@ -34,8 +34,8 @@ public class GroupTipMessage extends Message {
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
         viewHolder.leftPanel.setVisibility(View.GONE);
         viewHolder.rightPanel.setVisibility(View.GONE);
-        viewHolder.systemMessage.setVisibility(View.VISIBLE);
-        viewHolder.systemMessage.setText(getSummary());
+        viewHolder.systemMessage.setVisibility(View.GONE);
+//        viewHolder.systemMessage.setText(getSummary());
     }
 
     /**

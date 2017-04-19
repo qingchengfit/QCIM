@@ -88,7 +88,7 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
         }
         if (profileSummary.getType() == GroupMemberProfile.NORMAL) {
             Glide.with(holder.avatar.getContext())
-                    .load(PhotoUtils.getSmall(profileSummary.getAvatarUrl()))
+                    .load(PhotoUtils.getSmall(profileSummary.getAvatarUrl() == null ? AppData.defaultAvatar : profileSummary.getAvatarUrl()))
                     .asBitmap()
                     .into(holder.avatar);
             holder.name.setText(profileSummary.getName());

@@ -374,13 +374,15 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
      * 结束发送语音消息
      */
     @Override
-    public void endSendVoice() {
+    public void endSendVoice(boolean isCancel) {
         voiceSendingView.release();
         voiceSendingView.setVisibility(View.GONE);
         recorder.stopRecording();
         if (recorder.getTimeInterval() < 1) {
             Toast.makeText(this, getResources().getString(R.string.chat_audio_too_short), Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (isCancel) {
+            Toast.makeText(this, "已取消", Toast.LENGTH_SHORT).show();
+        }else{
             Message message = new VoiceMessage(recorder.getTimeInterval(), recorder.getFilePath());
             presenter.sendMessage(message.getMessage());
         }

@@ -11,6 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
         app:canBack="true" />
+
     <com.tencent.qcloud.timchat.widget.ChatInput
         android:id="@+id/input_panel"
         android:layout_width="match_parent"

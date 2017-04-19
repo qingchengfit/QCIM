@@ -102,6 +102,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="hugo-annotations-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="design-25.1.0" level="project" />
+    <orderEntry type="library" exported="" name="java-sdk-3.1" level="project" />
     <orderEntry type="library" exported="" name="transition-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-25.2.0" level="project" />
     <orderEntry type="library" exported="" name="flexible-adapter-5.0.0-rc1" level="project" />

@@ -113,7 +113,7 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
         }
 
         holder.lastMessage.setText(conversation.getLastMessageSummary());
-        holder.time.setText(TimeUtil.getTimeStr(conversation.getLastMessageTime()));
+        holder.time.setText(TimeUtil.getNotifacationTimeStr(conversation.getLastMessageTime()));
         long unRead = conversation.getUnreadNum();
         if (unRead <= 0) {
             holder.imageDot.setVisibility(View.GONE);

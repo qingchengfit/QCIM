@@ -91,14 +91,13 @@ public class VoiceMessage extends Message {
             viewHolder.leftMessage.setGravity(Gravity.LEFT);
             clearView(viewHolder);
             viewHolder.leftMessage.setClipToPadding(false);
-            viewHolder.leftMessage.removeAllViews();
             viewHolder.leftMessage.addView(voiceIcon, lp);
         }else{
             layout.setPadding(0, layout.getPaddingTop(), layout.getPaddingRight(), layout.getPaddingBottom());
             viewHolder.rightMessage.setGravity(Gravity.RIGHT);
             clearView(viewHolder);
-            getBubbleView(viewHolder).setClipToPadding(false);
-            getBubbleView(viewHolder).addView(voiceIcon, lp);
+            layout.setClipToPadding(false);
+            layout.addView(voiceIcon, lp);
         }
 
 //        clearView(viewHolder);

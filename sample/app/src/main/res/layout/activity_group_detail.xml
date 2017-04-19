@@ -14,6 +14,41 @@
         app:titleText="@string/chat_setting_group_member"
         app:canBack="true" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="群聊头像"/>
+
+
+        <com.tencent.qcloud.timchat.widget.CircleImageView
+            android:id="@+id/image_group_head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            tools:src="@drawable/head2"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/ic_arrow_right"/>
+
+    </LinearLayout>
+    
     <RelativeLayout
         android:id="@+id/set_group_name"
         android:layout_width="match_parent"
@@ -51,6 +86,8 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
+
+
 
 
     <TextView

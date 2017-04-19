@@ -2,6 +2,7 @@ package com.tencent.qcloud.timchat.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +12,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
+import com.tencent.TIMGroupDetailInfo;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMGroupMemberResult;
@@ -26,11 +30,16 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
+import com.tencent.qcloud.timchat.chatutils.FileUtil;
+import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.timchat.ui.qcchat.DeleteMemberActivity;
+import com.tencent.qcloud.timchat.ui.qcchat.UpYunClient;
+import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.tlslibrary.helper.Util;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +48,9 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 public class GroupMemberActivity extends Activity implements TIMValueCallBack<List<TIMGroupMemberInfo>>, FlexibleAdapter.OnItemClickListener {
 
+    public static final int IMAGE_STORE = 101;
+    public static final int IMAGE_PREVIEW = 102;
+
     List<GroupMemberProfile> list = new ArrayList<>();
     RecyclerView listView;
     TemplateTitle title;
@@ -46,6 +58,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     private TextView tvTitle;
     private TextView btnExit;
     private RelativeLayout rlGroupName;
+    private ImageView imgGroupHead;
     private final int MEM_REQ = 100;
     private final int CHOOSE_MEM_CODE = 200;
     private int memIndex;
@@ -66,6 +79,15 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         rlGroupName = (RelativeLayout) findViewById(R.id.set_group_name);
         tvTitle = (TextView) findViewById(R.id.tv_member_count);
         btnExit = (TextView) findViewById(R.id.btn_exit_group);
+        imgGroupHead = (ImageView) findViewById(R.id.image_group_head);
+        imgGroupHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_album = new Intent("android.intent.action.GET_CONTENT");
+                intent_album.setType("image/*");
+                startActivityForResult(intent_album, IMAGE_STORE);
+            }
+        });
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +129,24 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         listView.setAdapter(flexibleAdapter);
 
         TIMGroupManager.getInstance().getGroupMembers(groupId, this);
+        List<String> list = new ArrayList<>();
+        list.add(groupId);
+        TIMGroupManager.getInstance().getGroupDetailInfo(list, new TIMValueCallBack<List<TIMGroupDetailInfo>>() {
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onSuccess(List<TIMGroupDetailInfo> timGroupDetailInfos) {
+                for (TIMGroupDetailInfo groupDetailInfo : timGroupDetailInfos){
+                    Glide.with(getApplicationContext())
+                            .load(PhotoUtils.getMiddle(groupDetailInfo.getFaceUrl()))
+                            .asBitmap()
+                            .into(imgGroupHead);
+                }
+            }
+        });
 
         rlGroupName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,44 +199,49 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (MEM_REQ == requestCode) {
-            if (resultCode == RESULT_OK){
-                boolean isKick = data.getBooleanExtra("isKick", false);
-                if (isKick){
-                    list.remove(memIndex);
-                    flexibleAdapter.notifyDataSetChanged();
-                }else{
-                    GroupMemberProfile profile = (GroupMemberProfile) data.getSerializableExtra("data");
-                    if (memIndex < list.size() && list.get(memIndex).getIdentify().equals(profile.getIdentify())){
-                        GroupMemberProfile mMemberProfile = (GroupMemberProfile) list.get(memIndex);
-                        mMemberProfile.setRoleType(profile.getRole());
-                        mMemberProfile.setQuietTime(profile.getQuietTime());
-                        mMemberProfile.setName(profile.getNameCard());
-                        flexibleAdapter.notifyDataSetChanged();
-                    }
-                }
+        if (requestCode == IMAGE_STORE){                    //打开系统相册
+            if (resultCode == RESULT_OK && data != null) {
+                showImagePreview(FileUtil.getFilePath(this, data.getData()), true);
             }
-        }else if (CHOOSE_MEM_CODE == requestCode){
-            if (resultCode == RESULT_OK){
-                GroupManagerPresenter.inviteGroup(groupId, data.getStringArrayListExtra("select"),
-                        new TIMValueCallBack<List<TIMGroupMemberResult>>() {
+        }else if(requestCode == IMAGE_PREVIEW){            //选择头像
+            if (resultCode == RESULT_OK && data != null) {
+                String path = data.getStringExtra("path");
+                UpYunClient.startLoadImg("/chat/", new File(path), new UpYunClient.OnLoadImgListener() {
+                    @Override
+                    public void onLoadSuccessed(final String avatarUrl) {
+                        TIMGroupManager.getInstance().modifyGroupFaceUrl(groupId, avatarUrl, new TIMCallBack() {
                             @Override
                             public void onError(int i, String s) {
-                                Toast.makeText(GroupMemberActivity.this, getString(R.string.chat_setting_invite_error), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
-                            public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
-                                TIMGroupManager.getInstance().getGroupMembers(groupId, GroupMemberActivity.this);
+                            public void onSuccess() {
+                                Toast.makeText(getApplicationContext(), "修改群头像成功", Toast.LENGTH_SHORT).show();
+                                Glide.with(getApplicationContext())
+                                        .load(PhotoUtils.getMiddle(avatarUrl))
+                                        .asBitmap()
+                                        .into(imgGroupHead);
                             }
                         });
 
+                    }
+                });
+
             }
-        }else if (requestCode == 0){
+        } else if (requestCode == 0){           //删除群成员
             if (resultCode == RESULT_OK){
                 TIMGroupManager.getInstance().getGroupMembers(groupId, this);
             }
         }
+    }
+
+    private void showImagePreview(String filePath, boolean isSetHead){
+        if (filePath == null) return;
+        Intent intent = new Intent(this, ImagePreviewActivity.class);
+        intent.putExtra("path", filePath);
+        intent.putExtra("head", isSetHead);
+        startActivityForResult(intent, IMAGE_PREVIEW);
     }
 
 

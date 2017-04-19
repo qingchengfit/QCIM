@@ -80,7 +80,7 @@ public interface ChatView extends MvpView {
      * 结束发送语音消息
      *
      */
-    void endSendVoice();
+    void endSendVoice(boolean isCancel);
 
 
     /**

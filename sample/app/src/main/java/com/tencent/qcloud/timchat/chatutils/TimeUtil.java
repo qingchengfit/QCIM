@@ -111,19 +111,29 @@ public class TimeUtil {
 
     }
 
-    public static String getNotifacationTimeStr(Date d) {
-        long intelnal = (new Date()).getTime() - d.getTime();
+    public static String getNotifacationTimeStr(long timeStamp) {
+        if (timeStamp==0) return "";
+        Calendar inputTime = Calendar.getInstance();
+        inputTime.setTimeInMillis(timeStamp*1000);
+        Date currenTimeZone = inputTime.getTime();
+        long intelnal = (new Date()).getTime() - currenTimeZone.getTime();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(d);
+        calendar.setTime(currenTimeZone);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        long lastDayInternal = d.getTime() - calendar.getTime().getTime();
+        long lastDayInternal = currenTimeZone.getTime() - calendar.getTime().getTime();
         if(lastDayInternal < 4L * HOUR_TIME.longValue()) {
             lastDayInternal = 4L * HOUR_TIME.longValue();
         }
 
-        return intelnal < MINITE_TIME.longValue()?"刚刚":(intelnal < HOUR_TIME.longValue()?intelnal / MINITE_TIME.longValue() + "分钟前":(intelnal < HOUR_TIME.longValue() * 4L?intelnal / HOUR_TIME.longValue() + "小时前":(intelnal < lastDayInternal?"今天" + getTimeHHMM(d):(intelnal < lastDayInternal + DAY_TIME.longValue()?"昨天":Date2MMDD(d)))));
+        return intelnal < MINITE_TIME.longValue()?"刚刚":(intelnal < HOUR_TIME.longValue()?
+                intelnal / MINITE_TIME.longValue() + "分钟前"
+                :(intelnal < HOUR_TIME.longValue() * 4L?
+                intelnal / HOUR_TIME.longValue() + "小时前"
+                :(intelnal < lastDayInternal?
+                "今天" + getTimeHHMM(currenTimeZone)
+                :(intelnal < lastDayInternal + DAY_TIME.longValue()?"昨天":Date2MMDD(currenTimeZone)))));
     }
 
     public static String Date2MMDD(Date d) {

@@ -25,7 +25,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
-                tools:background="@drawable/head" />
+                tools:background="@drawable/head"
+                android:scaleType="fitXY"/>
 
             <TextView
                 android:id="@+id/group_member_name"

@@ -96,17 +96,19 @@ public class AddConversationProcessor {
                     int index = 0;
                     StringBuilder temp = new StringBuilder();
                     for (TIMUserProfile profile : timUserProfiles) {
-                        if (index >= 2) {
-                            break;
-                        }
-                        temp.append(profile.getNickName()).append(",");
+
+                        temp.append(profile.getNickName()).append("、");
                         if (temp.toString().getBytes().length > 21){
                             break;
                         }
-                        sb.append(profile.getNickName()).append(",");
+                        if (index == 0){
+                            sb.append(profile.getNickName());
+                        }else {
+                            sb.append("、").append(profile.getNickName());
+                        }
                         index++;
                     }
-                    sb.append("...(").append(timUserProfiles.size()).append(")人");
+                    sb.append("...(").append(timUserProfiles.size()).append(")");
                     createGroupWithArg(datas, sb.toString());
                 }
             });

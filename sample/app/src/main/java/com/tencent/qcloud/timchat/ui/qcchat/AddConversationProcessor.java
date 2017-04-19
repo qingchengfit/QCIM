@@ -98,7 +98,7 @@ public class AddConversationProcessor {
                     for (TIMUserProfile profile : timUserProfiles) {
 
                         temp.append(profile.getNickName()).append("、");
-                        if (temp.toString().getBytes().length > 21){
+                        if (temp.toString().getBytes().length > 22){
                             break;
                         }
                         if (index == 0){

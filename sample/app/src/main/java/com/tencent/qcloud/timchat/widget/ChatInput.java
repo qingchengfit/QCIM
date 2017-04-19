@@ -53,6 +53,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     private TextView textSendPicture, textOpenCarmera, textSelectAlbum, textCancel;
     private AppCompatDialog dialog;
     private View inflate;
+    private boolean isCancel;
 
     public ChatInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -92,8 +93,10 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if ((event.getY() - y) < -40 ){
-                            Toast.makeText(getContext(), "已取消", Toast.LENGTH_SHORT).show();
-                            return true;
+                            isCancel = true;
+//                            return true;
+                        }else{
+                            isCancel = false;
                         }
                         break;
                     case MotionEvent.ACTION_UP:
@@ -194,7 +197,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         }else{
             voicePanel.setText(getResources().getString(R.string.chat_press_talk));
             voicePanel.setBackground(getResources().getDrawable(R.drawable.btn_voice_normal));
-            chatView.endSendVoice();
+            chatView.endSendVoice(isCancel);
         }
     }
 

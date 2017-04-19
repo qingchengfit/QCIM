@@ -15,7 +15,9 @@
             android:id="@+id/img_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_chat_titlebar_back"/>
+            android:padding="11dp"
+            android:scaleType="center"
+            android:layout_marginLeft="1dp"/>
         <TextView
             android:id="@+id/txt_back"
             android:layout_width="wrap_content"

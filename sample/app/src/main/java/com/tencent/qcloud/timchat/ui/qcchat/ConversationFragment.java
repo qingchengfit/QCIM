@@ -222,7 +222,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
 
     @Override
     public void createGroup(List<String> datas, List<String> memberList) {
-        addConversationProcessor.createGroupWithArg(datas, "", "");
+        addConversationProcessor.createGroupWithArg(datas, "");
 
     }
 

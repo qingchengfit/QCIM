@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.tencent.qcloud.timchat.R;
@@ -22,13 +23,22 @@ public class ImagePreviewActivity extends Activity {
 
     private String path;
     private CheckBox isOri;
+    private boolean isSetHead;
+    private LinearLayout buttonLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_preview);
         path = getIntent().getStringExtra("path");
+        isSetHead = getIntent().getBooleanExtra("head", false);
         isOri = (CheckBox) findViewById(R.id.isOri);
+        buttonLayout = (LinearLayout) findViewById(R.id.buttonPanel);
+        if (isSetHead){
+            buttonLayout.setVisibility(View.GONE);
+        }else{
+            buttonLayout.setVisibility(View.VISIBLE);
+        }
         TemplateTitle title = (TemplateTitle) findViewById(R.id.imagePreviewTitle);
         title.setMoreTextAction(new View.OnClickListener() {
             @Override

@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         app:titleText="@string/chat_image_preview_title"
-        app:moreText="@string/chat_image_preview_send"
+        app:moreText="确定"
         app:canBack="true" />
     <LinearLayout
         android:id="@+id/buttonPanel"

@@ -51,7 +51,7 @@ public abstract class Message {
      */
     public RelativeLayout getBubbleView(ChatAdapter.ViewHolder viewHolder){
         viewHolder.systemMessage.setVisibility(hasTime?View.VISIBLE:View.GONE);
-        viewHolder.systemMessage.setText(TimeUtil.getChatTimeStr(message.timestamp()));
+        viewHolder.systemMessage.setText(TimeUtil.getNotifacationTimeStr(message.timestamp()));
         showDesc(viewHolder);
 
         if (message.isSelf()){

@@ -9,6 +9,7 @@ import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
+import com.tencent.imcore.BytesMap;
 import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
@@ -83,7 +84,7 @@ public class AddConversationProcessor {
         if (datas.size() == 1) {
             ChatActivity.navToChat(context, datas.get(0), TIMConversationType.C2C);
         } else {
-            final StringBuilder s = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             TIMFriendshipManager.getInstance().getUsersProfile(datas, new TIMValueCallBack<List<TIMUserProfile>>() {
                 @Override
                 public void onError(int i, String s) {
@@ -93,14 +94,20 @@ public class AddConversationProcessor {
                 @Override
                 public void onSuccess(List<TIMUserProfile> timUserProfiles) {
                     int index = 0;
+                    StringBuilder temp = new StringBuilder();
                     for (TIMUserProfile profile : timUserProfiles) {
-                        if (index > 2) {
+                        if (index >= 2) {
                             break;
                         }
-                        s.append(profile.getNickName()).append("(").append(timUserProfiles.size()).append(")人");
+                        temp.append(profile.getNickName()).append(",");
+                        if (temp.toString().getBytes().length > 21){
+                            break;
+                        }
+                        sb.append(profile.getNickName()).append(",");
                         index++;
                     }
-                    createGroupWithArg(datas, s.toString());
+                    sb.append("...(").append(timUserProfiles.size()).append(")人");
+                    createGroupWithArg(datas, sb.toString());
                 }
             });
         }

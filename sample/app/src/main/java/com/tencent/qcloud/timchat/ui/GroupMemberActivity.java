@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,6 +30,7 @@ import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
@@ -44,6 +46,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
@@ -69,6 +73,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     private List<TIMGroupMemberInfo> infos = new ArrayList<>();
     private FlexibleAdapter flexibleAdapter;
     private List<ProfileSummaryItem> itemList = new ArrayList<>();
+    private boolean isChangeName;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -169,6 +174,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
     @Override
     public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
+        list.clear();
         itemList.clear();
         if (timGroupMemberInfos == null) return;
         for (TIMGroupMemberInfo item : timGroupMemberInfos){
@@ -182,6 +188,8 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
             @Override
             public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+
+                list.clear();
                 itemList.clear();
                 int index = 0;
                 for (TIMUserProfile profile : timUserProfiles) {
@@ -189,16 +197,23 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                     itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(profile)));
                     index++;
                 }
-                itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(GroupMemberProfile.ADD)));
-                itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(GroupMemberProfile.REMOVE)));
-                flexibleAdapter.notifyDataSetChanged();
-                tvTitle.setText(getApplicationContext().getString(R.string.title_group_member_count, list.size()));
+                resetView();
             }
         });
 
     }
 
 
+    //加载最后的添加与删除成员
+    private void resetView(){
+        itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(GroupMemberProfile.ADD)));
+        itemList.add(new ProfileSummaryItem(getApplicationContext(), new GroupMemberProfile(GroupMemberProfile.REMOVE)));
+        flexibleAdapter.notifyDataSetChanged();
+        tvTitle.setText(getApplicationContext().getString(R.string.title_group_member_count, list.size()));
+        if (isChangeName) {
+            resetGroupName(list.size());
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -232,7 +247,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                 });
 
             }
-        } else if (requestCode == ADD_MEMBER){
+        } else if (requestCode == ADD_MEMBER){              //添加成员
             if (resultCode == RESULT_OK){
                 List<String> idList = data.getStringArrayListExtra("ids");
                 TIMGroupManager.getInstance().inviteGroupMember(groupId, idList, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
@@ -243,17 +258,45 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
                     @Override
                     public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
+                        isChangeName = true;
                         Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
                         TIMGroupManager.getInstance().getGroupMembers(groupId, GroupMemberActivity.this);
                     }
                 });
             }
 
-        }else if (requestCode == DELETE_MEMBER){           //删除群成员
-            if (resultCode == RESULT_OK){
-                TIMGroupManager.getInstance().getGroupMembers(groupId, this);
+        }else if (requestCode == DELETE_MEMBER){            //删除群成员
+            isChangeName = true;
+            if (resultCode == RESULT_OK && data.getBundleExtra("data").getParcelableArrayList("delete") != null) {
+                list = data.getBundleExtra("data").getParcelableArrayList("delete");
+                itemList.clear();
+                for (GroupMemberProfile profile : list){
+                    itemList.add(new ProfileSummaryItem(getApplicationContext(), profile));
+                }
+                resetView();
             }
         }
+    }
+
+    private void resetGroupName(int size){
+        String name = GroupInfo.getInstance().getGroupName(groupId);
+        String p = "\\(\\d\\)$";
+        name = name.replaceAll(p, "(" + size + ")");
+        Pattern pattern = Pattern.compile(p);
+        Matcher matcher = pattern.matcher(name);
+        if (matcher.find()){
+            String m = matcher.group(0);
+            m.replaceAll("\\d", String.valueOf(size));
+        }
+        TIMGroupManager.getInstance().modifyGroupName(groupId, name, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+            }
+
+            @Override
+            public void onSuccess() {
+            }
+        });
     }
 
     private void showImagePreview(String filePath, boolean isSetHead){

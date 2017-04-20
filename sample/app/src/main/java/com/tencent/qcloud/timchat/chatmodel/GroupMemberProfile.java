@@ -1,6 +1,8 @@
 package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMGroupMemberRoleType;
@@ -12,7 +14,7 @@ import java.io.Serializable;
 /**
  * 群成员数据
  */
-public class GroupMemberProfile implements ProfileSummary,Serializable {
+public class GroupMemberProfile implements ProfileSummary, Parcelable {
     public static final int NORMAL = 0;
     public static final int ADD = 1;
     public static final int REMOVE = 2;
@@ -135,4 +137,42 @@ public class GroupMemberProfile implements ProfileSummary,Serializable {
     public void setRoleType(TIMGroupMemberRoleType roleType) {
         this.roleType = roleType;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.id);
+        dest.writeLong(this.quietTime);
+        dest.writeInt(this.roleType == null ? -1 : this.roleType.ordinal());
+        dest.writeString(this.headUrl);
+        dest.writeInt(this.type);
+    }
+
+    protected GroupMemberProfile(Parcel in) {
+        this.name = in.readString();
+        this.id = in.readString();
+        this.quietTime = in.readLong();
+        int tmpRoleType = in.readInt();
+        this.roleType = tmpRoleType == -1 ? null : TIMGroupMemberRoleType.values()[tmpRoleType];
+        this.headUrl = in.readString();
+        this.type = in.readInt();
+    }
+
+    public static final Creator<GroupMemberProfile> CREATOR = new Creator<GroupMemberProfile>() {
+        @Override
+        public GroupMemberProfile createFromParcel(Parcel source) {
+            return new GroupMemberProfile(source);
+        }
+
+        @Override
+        public GroupMemberProfile[] newArray(int size) {
+            return new GroupMemberProfile[size];
+        }
+    };
 }

@@ -1,7 +1,9 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -85,7 +87,11 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryItem
                         @Override
                         public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
                             Util.showToast(getApplicationContext(), "移出群成员成功");
-                            setResult(RESULT_OK);
+                            Intent intent = new Intent();
+                            Bundle b = new Bundle();
+                            b.putParcelableArrayList("delete", (ArrayList<? extends Parcelable>) dataList);
+                            intent.putExtra("data", b);
+                            setResult(RESULT_OK, intent);
                             finish();
                         }
                     });
@@ -99,6 +105,7 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryItem
     @Override
     public void onDelete(int position) {
         deleteList.add(itemList.get(position).getData().getIdentify());
+        dataList.remove(position);
         adapter.removeItem(position);
     }
 }

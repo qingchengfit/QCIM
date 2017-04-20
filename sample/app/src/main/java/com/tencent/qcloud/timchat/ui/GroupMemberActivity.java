@@ -237,13 +237,11 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                 TIMGroupManager.getInstance().inviteGroupMember(groupId, idList, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
                     @Override
                     public void onError(int i, String  s) {
-
+                        Toast.makeText(getApplicationContext(), "添加失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
-//                        for(TIMGroupMemberResult r : timGroupMemberResults) {
-//                        }
                         Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
                         TIMGroupManager.getInstance().getGroupMembers(groupId, GroupMemberActivity.this);
                     }

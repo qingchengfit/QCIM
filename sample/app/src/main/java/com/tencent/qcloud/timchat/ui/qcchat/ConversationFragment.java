@@ -331,13 +331,14 @@ public class ConversationFragment extends Fragment implements ConversationView,
     /**
      * 设置全部已读
      */
-    public void setAllMessageRead(){
+    public void setAllMessageRead() {
         NomalConversation conversation;
-        for(ConversationFlexItem item : flexItemList){
-            conversation = (NomalConversation) item.getConversation();
+        for (int i = 0; i < flexItemList.size(); i++) {
+            conversation = (NomalConversation) flexItemList.get(i).getConversation();
             TIMManager.getInstance().getConversation(conversation.getType(),
                     conversation.getIdentify()).setReadMessage();
         }
+        flexibleAdapter.notifyDataSetChanged();
     }
 
     /**

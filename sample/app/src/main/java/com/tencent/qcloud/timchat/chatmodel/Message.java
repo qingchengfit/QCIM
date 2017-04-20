@@ -178,6 +178,11 @@ public abstract class Message {
      *
      */
     public String getSender(){
+        if (message.getSender() == null) return "";
+        return message.getSender();
+    }
+
+    public String getNotifyName(){
         if (message.getSenderProfile() == null) return "";
         return message.getSenderProfile().getNickName();
     }

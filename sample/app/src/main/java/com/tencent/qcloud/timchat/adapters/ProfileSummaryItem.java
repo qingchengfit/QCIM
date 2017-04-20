@@ -86,9 +86,11 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
 
         if (profileSummary.getType() == GroupMemberProfile.ADD && !isDelete){
             holder.avatar.setImageResource(profileSummary.getAvatarRes());
+            holder.name.setVisibility(View.GONE);
         }
         if (profileSummary.getType() == GroupMemberProfile.REMOVE && !isDelete){
             holder.avatar.setImageResource(profileSummary.getAvatarRes());
+            holder.name.setVisibility(View.GONE);
         }
         if (profileSummary.getType() == GroupMemberProfile.NORMAL) {
             String url = profileSummary.getAvatarUrl();
@@ -97,6 +99,7 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
                     .asBitmap()
                     .into(new CircleImgWrapper(holder.avatar,
                             holder.itemView.getContext()));
+            holder.name.setVisibility(View.VISIBLE);
             holder.name.setText(profileSummary.getName());
         }
         holder.imgDelete.setTag(position);

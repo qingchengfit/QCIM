@@ -267,7 +267,8 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
         }else if (requestCode == DELETE_MEMBER){            //删除群成员
             isChangeName = true;
-            if (resultCode == RESULT_OK && data.getBundleExtra("data").getParcelableArrayList("delete") != null) {
+            list.clear();
+            if (resultCode == RESULT_OK && data.getBundleExtra("data") != null) {
                 list = data.getBundleExtra("data").getParcelableArrayList("delete");
                 itemList.clear();
                 for (GroupMemberProfile profile : list){
@@ -282,12 +283,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         String name = GroupInfo.getInstance().getGroupName(groupId);
         String p = "\\(\\d\\)$";
         name = name.replaceAll(p, "(" + size + ")");
-        Pattern pattern = Pattern.compile(p);
-        Matcher matcher = pattern.matcher(name);
-        if (matcher.find()){
-            String m = matcher.group(0);
-            m.replaceAll("\\d", String.valueOf(size));
-        }
+
         TIMGroupManager.getInstance().modifyGroupName(groupId, name, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {

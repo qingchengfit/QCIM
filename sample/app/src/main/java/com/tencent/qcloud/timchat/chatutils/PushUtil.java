@@ -54,11 +54,12 @@ public class PushUtil implements Observer {
                 msg.getRecvFlag() == TIMGroupReceiveMessageOpt.ReceiveNotNotify ||
                 MessageFactory.getMessage(msg) instanceof CustomMessage) return;
 
-        String senderStr,contentStr;
+        String senderStr,contentStr, name;
         Message message = MessageFactory.getMessage(msg);
         if (message == null) return;
         senderStr = message.getSender();
         contentStr = message.getSummary();
+        name = message.getNotifyName();
 
         Log.d(TAG, "recv msg " + contentStr);
         NotificationManager mNotificationManager = (NotificationManager) MyApplication.getContext().getSystemService(MyApplication.getContext().NOTIFICATION_SERVICE);
@@ -73,7 +74,7 @@ public class PushUtil implements Observer {
 
         PendingIntent intent = PendingIntent.getActivity(MyApplication.getContext(), 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentTitle(senderStr)//设置通知栏标题
+        mBuilder.setContentTitle(name)//设置通知栏标题
                 .setContentText(contentStr)
                 .setContentIntent(intent) //设置通知栏点击意图
 //                .setNumber(++pushNum) //设置通知集合的数量

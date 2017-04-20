@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <com.tencent.qcloud.timchat.widget.CircleImageView
-                android:id="@id/avatar"
+                android:id="@+id/avatar"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 tools:background="@drawable/head" />

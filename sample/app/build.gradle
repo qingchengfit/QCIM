@@ -28,7 +28,6 @@ dependencies {
     compile "com.android.support:support-v4:{$rootProject.libraries.supportVersion}"
     compile "com.android.support:appcompat-v7:{$rootProject.libraries.supportVersion}"
     compile project(':sdk')
-    compile project(':tlslibrary')
     compile 'eu.davidea:flexible-adapter:5.0.0-rc1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //    compile 'com.google.firebase:firebase-core:9.0.0'

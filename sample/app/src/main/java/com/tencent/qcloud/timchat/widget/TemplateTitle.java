@@ -54,6 +54,14 @@ public class TemplateTitle extends RelativeLayout {
         LinearLayout backBtn = (LinearLayout) findViewById(R.id.title_back);
         backBtn.setVisibility(canBack ? VISIBLE : INVISIBLE);
         if (canBack){
+            TextView tvBack = (TextView) findViewById(R.id.txt_back);
+            tvBack.setText(backText);
+            backBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((Activity) getContext()).finish();
+                }
+            });
             imgBack = (ImageView) findViewById(R.id.img_back);
             imgBack.setImageResource(R.drawable.ic_chat_titlebar_back);
             imgBack.setVisibility(VISIBLE);

@@ -75,7 +75,11 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryItem
                     TIMGroupManager.getInstance().deleteGroupMember(groupId, deleteList, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
                         @Override
                         public void onError(int i, String s) {
-                            Util.showToast(getApplicationContext(), "移出群成员失败，请重试");
+                            if (i == 10007){
+                                Util.showToast(getApplicationContext(), "只有群主可以移除群成员");
+                            }else {
+                                Util.showToast(getApplicationContext(), "移出群成员失败，请重试");
+                            }
                         }
 
                         @Override

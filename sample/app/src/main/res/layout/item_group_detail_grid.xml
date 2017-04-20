@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp">
 
     <RelativeLayout
         android:id="@+id/rl_member_item"
@@ -16,10 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="3dp">
+            android:paddingTop="10dp"
+            android:paddingBottom="3dp"
+            android:gravity="center"
+            >
 
             <ImageView
                 android:id="@+id/group_member_avatar"
@@ -45,8 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/ll_group_member_info"
-            android:layout_marginLeft="-25dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="-15dp"
+            android:layout_marginTop="5dp"
             android:scaleType="fitXY"/>
 
     </RelativeLayout>

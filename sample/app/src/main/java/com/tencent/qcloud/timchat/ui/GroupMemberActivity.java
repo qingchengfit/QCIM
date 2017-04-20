@@ -52,6 +52,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     public static final int IMAGE_STORE = 101;
     public static final int IMAGE_PREVIEW = 102;
     private static final int ADD_MEMBER = 103;
+    private static final int DELETE_MEMBER = 104;
 
     List<GroupMemberProfile> list = new ArrayList<>();
     RecyclerView listView;
@@ -168,7 +169,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
     @Override
     public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
-        list.clear();
+        itemList.clear();
         if (timGroupMemberInfos == null) return;
         for (TIMGroupMemberInfo item : timGroupMemberInfos){
             users.add(item.getUser());
@@ -248,7 +249,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                 });
             }
 
-        }else if (requestCode == 0){           //删除群成员
+        }else if (requestCode == DELETE_MEMBER){           //删除群成员
             if (resultCode == RESULT_OK){
                 TIMGroupManager.getInstance().getGroupMembers(groupId, this);
             }
@@ -273,7 +274,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             b.putSerializable("member", (Serializable) list);
             intent.putExtra("datas", b);
             intent.putExtra("group", groupId);
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, DELETE_MEMBER);
         }else{
             try {
                 Intent intent = new Intent();

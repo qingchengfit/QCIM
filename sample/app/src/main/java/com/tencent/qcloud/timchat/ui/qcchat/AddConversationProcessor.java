@@ -9,13 +9,11 @@ import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
-import com.tencent.imcore.BytesMap;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.common.Configs;
-import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
-import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
-import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.util.List;
 

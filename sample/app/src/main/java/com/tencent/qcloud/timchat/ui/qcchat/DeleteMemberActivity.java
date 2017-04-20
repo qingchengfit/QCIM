@@ -16,9 +16,8 @@ import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ProfileSummaryItem;
 import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
-import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
+import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
-import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -19,7 +19,7 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 import com.tencent.qcloud.timchat.chatutils.MediaUtil;
-import com.tencent.qcloud.tlslibrary.helper.Util;
+import com.tencent.qcloud.timchat.common.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -82,8 +82,8 @@ public class VoiceMessage extends Message {
         voiceIcon.setBackgroundResource(message.isSelf()?R.drawable.right_voice: R.drawable.left_voice);
         final AnimationDrawable frameAnimatio = (AnimationDrawable) voiceIcon.getBackground();
 
-        int height = Util.dpTopx(18f, context.getResources());
-        int width = Util.dpTopx(14f, context.getResources());
+        int height = Util.dpToPx(18f, context.getResources());
+        int width = Util.dpToPx(14f, context.getResources());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
         lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         RelativeLayout layout = getBubbleView(viewHolder);

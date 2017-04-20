@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.common.AppData;
+import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.widget.CircleImageView;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
-import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.util.List;
 
@@ -62,9 +62,9 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             view = LayoutInflater.from(getContext()).inflate(resourceId, null);
             viewHolder = new ViewHolder();
             viewHolder.leftMessage = (RelativeLayout) view.findViewById(R.id.leftMessage);
-            viewHolder.leftMessage.setMinimumWidth(Util.dpTopx(64f, getContext().getResources()));
+            viewHolder.leftMessage.setMinimumWidth(Util.dpToPx(64f, getContext().getResources()));
             viewHolder.rightMessage = (RelativeLayout) view.findViewById(R.id.rightMessage);
-            viewHolder.rightMessage.setMinimumWidth(Util.dpTopx(64f, getContext().getResources()));
+            viewHolder.rightMessage.setMinimumWidth(Util.dpToPx(64f, getContext().getResources()));
             viewHolder.leftPanel = (RelativeLayout) view.findViewById(R.id.leftPanel);
             viewHolder.leftVoice = (TextView) view.findViewById(R.id.text_voice_time_left);
             viewHolder.leftVoice.setVisibility(View.GONE);

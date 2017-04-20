@@ -39,6 +39,7 @@ import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
 import com.tencent.qcloud.timchat.chatmodel.TextMessage;
 import com.tencent.qcloud.timchat.chatmodel.VideoMessage;
 import com.tencent.qcloud.timchat.chatmodel.VoiceMessage;
+import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.presenter.ChatPresenter;
 import com.tencent.qcloud.timchat.ui.GroupMemberActivity;
 import com.tencent.qcloud.timchat.ui.ImagePreviewActivity;
@@ -49,7 +50,6 @@ import com.tencent.qcloud.timchat.viewfeatures.ChatView;
 import com.tencent.qcloud.timchat.widget.ChatInput;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.timchat.widget.VoiceSendingView;
-import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.io.File;
 

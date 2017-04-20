@@ -27,7 +27,7 @@ import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatutils.EmoticonUtil;
-import com.tencent.qcloud.tlslibrary.helper.Util;
+import com.tencent.qcloud.timchat.common.Util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,13 +124,13 @@ public class TextMessage extends Message {
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
         if (!isSelf()) {
-            tv.setPadding(Util.dpTopx(20f, context.getResources()),
-                    Util.dpTopx(10f, context.getResources()), Util.dpTopx(10f, context.getResources()),
-                    Util.dpTopx(10f, context.getResources()));
+            tv.setPadding(Util.dpToPx(20f, context.getResources()),
+                    Util.dpToPx(10f, context.getResources()), Util.dpToPx(10f, context.getResources()),
+                    Util.dpToPx(10f, context.getResources()));
         }else{
-            tv.setPadding(Util.dpTopx(10f, context.getResources()),
-                    Util.dpTopx(10f, context.getResources()), Util.dpTopx(20f, context.getResources()),
-                    Util.dpTopx(10f, context.getResources()));
+            tv.setPadding(Util.dpToPx(10f, context.getResources()),
+                    Util.dpToPx(10f, context.getResources()), Util.dpToPx(20f, context.getResources()),
+                    Util.dpToPx(10f, context.getResources()));
         }
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));

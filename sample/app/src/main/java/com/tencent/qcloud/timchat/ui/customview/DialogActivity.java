@@ -17,7 +17,6 @@ import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
 import com.tencent.qcloud.timchat.ui.qcchat.SplashActivity;
 import com.tencent.qcloud.timchat.chatutils.NetUtil;
-import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.List;
@@ -79,7 +78,6 @@ public class DialogActivity extends Activity implements View.OnClickListener {
     }
 
     private void logout(){
-        TlsBusiness.logout(UserInfo.getInstance().getId());
         UserInfo.getInstance().setId(null);
         GroupInfo.getInstance().clear();
         Intent intent = new Intent(this,SplashActivity.class);

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.widget.Toast;
+
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
@@ -25,13 +26,12 @@ import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.event.RefreshEvent;
-import com.tencent.qcloud.tlslibrary.helper.Util;
-import com.tencent.qcloud.tlslibrary.service.TLSService;
-import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
 import tencent.tls.platform.TLSErrInfo;
 
 /**
@@ -41,7 +41,6 @@ import tencent.tls.platform.TLSErrInfo;
 public class LoginProcessor implements TIMCallBack {
 
     private Context context;
-    private TLSService tlsService;
     private OnLoginListener onLoginListener;
     private String username;
     private String host;
@@ -51,15 +50,12 @@ public class LoginProcessor implements TIMCallBack {
         this.username = username;
         this.host = host;
         this.onLoginListener = onLoginListener;
-        tlsService = TLSService.getInstance();
-        tlsService.initTlsSdk(context);
     }
 
     public void sientInstall(){
         init();
         // 验证用户名和密码的有效性
         if (username.length() == 0) {
-            Util.showToast(context, "用户名错误");
             return;
         }
         if (!AppData.getIdentify(context).equals(username) || TextUtils.isEmpty(AppData.getUSerSig(context))) {
@@ -142,8 +138,6 @@ public class LoginProcessor implements TIMCallBack {
         int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
         //初始化IMSDK
         InitBusiness.start(context,loglvl);
-        //初始化TLS
-        TlsBusiness.init(context);
         //设置刷新监听
         RefreshEvent.getInstance();
 //        String id =  TLSService.getInstance().getLastUserIdentifier();

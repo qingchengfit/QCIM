@@ -35,12 +35,12 @@ import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 import com.tencent.qcloud.timchat.common.AppData;
+import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.timchat.ui.qcchat.DeleteMemberActivity;
 import com.tencent.qcloud.timchat.ui.qcchat.UpYunClient;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
-import com.tencent.qcloud.tlslibrary.helper.Util;
 
 import java.io.File;
 import java.io.Serializable;

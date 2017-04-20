@@ -118,7 +118,6 @@ public class TimeUtil {
         Date currenTimeZone = inputTime.getTime();
         long intelnal = (new Date()).getTime() - currenTimeZone.getTime();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currenTimeZone);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);

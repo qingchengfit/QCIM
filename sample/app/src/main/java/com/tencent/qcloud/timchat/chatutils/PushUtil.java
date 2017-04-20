@@ -17,7 +17,6 @@ import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
 import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.event.MessageEvent;
-import com.tencent.qcloud.timchat.ui.HomeActivity;
 import com.tencent.qcloud.timchat.ui.qcchat.ChatActivity;
 
 import java.util.Observable;
@@ -60,6 +59,7 @@ public class PushUtil implements Observer {
         if (message == null) return;
         senderStr = message.getSender();
         contentStr = message.getSummary();
+
         Log.d(TAG, "recv msg " + contentStr);
         NotificationManager mNotificationManager = (NotificationManager) MyApplication.getContext().getSystemService(MyApplication.getContext().NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApplication.getContext());

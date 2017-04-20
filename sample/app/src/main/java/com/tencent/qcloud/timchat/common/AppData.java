@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
+import com.tencent.qcloud.timchat.chatmodel.UserInfo;
+import com.tencent.qcloud.timchat.event.MessageEvent;
+
 /**
  * Created by fb on 2017/4/15.
  */
@@ -60,6 +64,9 @@ public class AppData {
     }
 
     public static void clear(Context context){
+        UserInfo.getInstance().setId(null);
+        MessageEvent.getInstance().clear();
+        GroupInfo.getInstance().clear();
         getSharedPreferences(context).edit().clear();
     }
 

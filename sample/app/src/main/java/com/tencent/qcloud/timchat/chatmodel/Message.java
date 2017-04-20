@@ -179,7 +179,7 @@ public abstract class Message {
      */
     public String getSender(){
         if (message.getSender() == null) return "";
-        return message.getSender();
+        return message.getSenderProfile().getNickName();
     }
 
     public String getDesc() {

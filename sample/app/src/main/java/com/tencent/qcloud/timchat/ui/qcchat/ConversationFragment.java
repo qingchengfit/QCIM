@@ -24,16 +24,12 @@ import com.tencent.TIMMessage;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Conversation;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
-import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
-import com.tencent.qcloud.timchat.chatmodel.FriendshipConversation;
-import com.tencent.qcloud.timchat.chatmodel.GroupManageConversation;
 import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
 import com.tencent.qcloud.timchat.chatmodel.NomalConversation;
 import com.tencent.qcloud.timchat.chatutils.PushUtil;
 import com.tencent.qcloud.timchat.presenter.ConversationPresenter;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
-import com.tencent.qcloud.timchat.ui.HomeActivity;
 import com.tencent.qcloud.timchat.viewfeatures.ConversationView;
 import com.tencent.qcloud.timchat.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.timchat.viewfeatures.GroupManageMessageView;
@@ -368,9 +364,9 @@ public class ConversationFragment extends Fragment implements ConversationView,
     public boolean onItemClick(int position) {
         Conversation conversation = flexItemList.get(position).getConversation();
         conversation.navToDetail(getActivity());
-        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
-            groupManagerPresenter.getGroupManageLastMessage();
-        }
+//        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
+//            groupManagerPresenter.getGroupManageLastMessage();
+//        }
         return false;
     }
 

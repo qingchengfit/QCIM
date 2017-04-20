@@ -29,6 +29,7 @@ public class AddConversationProcessor {
     private Context context;
     private FriendshipManagerPresenter presenter;
     private OnCreateConversation onCreateConversation;
+    private String name = "";
 
     public AddConversationProcessor(Context context) {
         this.context = context;
@@ -73,6 +74,7 @@ public class AddConversationProcessor {
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra(Configs.IDENTIFY, groupId);
                 intent.putExtra(Configs.CONVERSATION_TYPE, TIMConversationType.Group);
+                intent.putExtra("groupName", name);
                 context.startActivity(intent);
             }
         });
@@ -108,7 +110,8 @@ public class AddConversationProcessor {
                         }
                         index++;
                     }
-                    sb.append("...(").append(timUserProfiles.size()).append(")");
+                    sb.append("...(").append(timUserProfiles.size() + 1).append(")");
+                    name = sb.toString();
                     createGroupWithArg(datas, sb.toString());
                 }
             });

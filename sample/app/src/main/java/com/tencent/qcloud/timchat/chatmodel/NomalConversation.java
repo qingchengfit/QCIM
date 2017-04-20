@@ -40,8 +40,7 @@ public class NomalConversation extends Conversation {
 //            avator = GroupInfo.getInstance().getGroupProfile("Private",identify).getAvatarUrl();
             if (avator.equals("")) avator = String.valueOf(R.drawable.head_other);
         }else{
-            FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
-            avator = profile == null ? String.valueOf(R.drawable.head_me):profile.getAvatarUrl();
+//            avator = profile == null ? String.valueOf(R.drawable.head):profile.getAvatarUrl();
         }
         return avator;
     }
@@ -79,13 +78,13 @@ public class NomalConversation extends Conversation {
      */
     @Override
     public String getName() {
-        if (type == TIMConversationType.Group){
-            name=GroupInfo.getInstance().getGroupName(identify);
-            if (name.equals("")) name = identify;
-        }else{
-            FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
-            name=profile == null?identify:profile.getName();
-        }
+//        if (type == TIMConversationType.Group){
+//            name=GroupInfo.getInstance().getGroupName(identify);
+//            if (name.equals("")) name = identify;
+//        }else{
+//            FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
+//            name=profile == null?identify:profile.getName();
+//        }
         return name;
     }
 

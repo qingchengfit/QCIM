@@ -13,7 +13,6 @@ import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
-import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
 import com.tencent.qcloud.timchat.ui.qcchat.SplashActivity;
@@ -82,7 +81,6 @@ public class DialogActivity extends Activity implements View.OnClickListener {
     private void logout(){
         TlsBusiness.logout(UserInfo.getInstance().getId());
         UserInfo.getInstance().setId(null);
-        FriendshipInfo.getInstance().clear();
         GroupInfo.getInstance().clear();
         Intent intent = new Intent(this,SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

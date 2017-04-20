@@ -3,7 +3,6 @@ package com.tencent.qcloud.timchat.viewfeatures;
 import com.tencent.TIMConversation;
 import com.tencent.TIMGroupCacheInfo;
 import com.tencent.TIMMessage;
-import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
 
 import java.util.List;
 

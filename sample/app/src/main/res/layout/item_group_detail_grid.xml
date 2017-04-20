@@ -25,6 +25,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
+                android:padding="2dp"
                 tools:background="@drawable/head"
                 android:scaleType="fitXY"/>
 

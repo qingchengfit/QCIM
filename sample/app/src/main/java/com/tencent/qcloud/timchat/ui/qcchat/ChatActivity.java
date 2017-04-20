@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +32,6 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
 import com.tencent.qcloud.timchat.chatmodel.FileMessage;
-import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
-import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.chatmodel.ImageMessage;
 import com.tencent.qcloud.timchat.chatmodel.Message;
@@ -57,7 +56,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatActivity extends FragmentActivity implements ChatView, TIMValueCallBack<List<TIMUserProfile>> {
+public class ChatActivity extends FragmentActivity implements ChatView {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -106,6 +105,10 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
         title = (TemplateTitle) findViewById(R.id.chat_title);
 
         identify = getIntent().getStringExtra(Configs.IDENTIFY);
+        if(getIntent().getStringExtra("groupName") != null) {
+            titleStr = getIntent().getStringExtra("groupName");
+            title.setTitleText(titleStr);
+        }
         type = (TIMConversationType) getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE);
         presenter = new ChatPresenter(this, identify, type);
         input = (ChatInput) findViewById(R.id.input_panel);
@@ -173,7 +176,11 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
                         startActivityForResult(intent, MEMBER_OPERA);
                     }
                 });
-                title.setTitleText(GroupInfo.getInstance().getGroupName(identify));
+                if (!TextUtils.isEmpty(titleStr)) {
+                    title.setTitleText(titleStr);
+                }else{
+                    title.setTitleText(GroupInfo.getInstance().getGroupName(identify));
+                }
                 break;
 
         }
@@ -220,7 +227,7 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
                     CustomMessage.Type messageType = ((CustomMessage) mMessage).getType();
                     switch (messageType) {
                         case TYPING:
-                            TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
+                            title = (TemplateTitle) findViewById(R.id.chat_title);
                             title.setTitleText(getString(R.string.chat_typing));
                             handler.removeCallbacks(resetTitle);
                             handler.postDelayed(resetTitle, 3000);
@@ -539,15 +546,5 @@ public class ChatActivity extends FragmentActivity implements ChatView, TIMValue
             title.setTitleText(titleStr);
         }
     };
-
-
-    @Override
-    public void onError(int i, String s) {
-
-    }
-
-    @Override
-    public void onSuccess(List<TIMUserProfile> timUserProfiles) {
-    }
 
 }

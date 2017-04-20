@@ -20,7 +20,6 @@ import com.tencent.TIMFriendResult;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.GroupListAdapter;
-import com.tencent.qcloud.timchat.chatmodel.FriendshipInfo;
 import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.timchat.widget.NotifyDialog;
@@ -48,7 +47,6 @@ public class ManageFriendGroupActivity extends FragmentActivity implements View.
         mMyGroupList = (ListView) findViewById(R.id.group_list);
         mAddGroup = (LinearLayout) findViewById(R.id.add_group);
         mAddGroup.setOnClickListener(this);
-        groups.addAll(FriendshipInfo.getInstance().getGroups());
         mGroupListAdapter = new GroupListAdapter(this, groups, this);
         mMyGroupList.setAdapter(mGroupListAdapter);
 

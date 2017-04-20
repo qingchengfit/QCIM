@@ -1,6 +1,5 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
-import com.tencent.qcloud.timchat.chatmodel.FriendProfile;
 
 import java.util.List;
 

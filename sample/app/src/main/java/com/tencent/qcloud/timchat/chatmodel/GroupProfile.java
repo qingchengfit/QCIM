@@ -9,7 +9,6 @@ import com.tencent.TIMGroupDetailInfo;
 import com.tencent.TIMGroupMemberRoleType;
 import com.tencent.TIMGroupReceiveMessageOpt;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.ui.GroupProfileActivity;
 
 /**
  * 群资料
@@ -48,7 +47,7 @@ public class GroupProfile implements ProfileSummary {
      */
     @Override
     public int getAvatarRes() {
-        return R.drawable.head_group;
+        return R.drawable.head;
     }
 
     /**
@@ -98,8 +97,5 @@ public class GroupProfile implements ProfileSummary {
      */
     @Override
     public void onClick(Context context) {
-        Intent intent = new Intent(context, GroupProfileActivity.class);
-        intent.putExtra("identify", profile.getGroupId());
-        context.startActivity(intent);
     }
 }

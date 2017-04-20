@@ -3,6 +3,7 @@ package com.tencent.qcloud.timchat.adapters;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.GroupMemberProfile;
 import com.tencent.qcloud.timchat.chatmodel.ProfileSummary;
 import com.tencent.qcloud.timchat.common.AppData;
+import com.tencent.qcloud.timchat.widget.CircleImgWrapper;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 
 import java.util.List;
@@ -89,12 +91,12 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
             holder.avatar.setImageResource(profileSummary.getAvatarRes());
         }
         if (profileSummary.getType() == GroupMemberProfile.NORMAL) {
-            Glide.with(holder.avatar.getContext())
-                    .load(PhotoUtils.getSmall(profileSummary.getAvatarUrl()))
+            String url = profileSummary.getAvatarUrl();
+            Glide.with(holder.itemView.getContext())
+                    .load(PhotoUtils.getSmall(TextUtils.isEmpty(url) ? AppData.defaultAvatar : url))
                     .asBitmap()
-                    .placeholder(BitmapDrawable.createFromPath(AppData.defaultAvatar))
-                    .error(BitmapDrawable.createFromPath(AppData.defaultAvatar))
-                    .into(holder.avatar);
+                    .into(new CircleImgWrapper(holder.avatar,
+                            holder.itemView.getContext()));
             holder.name.setText(profileSummary.getName());
         }
         holder.imgDelete.setTag(position);

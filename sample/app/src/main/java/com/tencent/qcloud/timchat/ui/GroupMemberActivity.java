@@ -281,7 +281,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             intent.setAction(getPackageName());
             if (getPackageName().contains("staff")) {
                 intent.setData(Uri.parse("qcstaff://choose/chat_friend"));
-            }else if (getPackageName().contains("fitcoach")){
+            }else if (getPackageName().contains("coach")){
                 intent.setData(Uri.parse("qccoach://choose/chat_friend"));
             }
             startActivityForResult(intent, ADD_MEMBER);

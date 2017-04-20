@@ -16,17 +16,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="15dp"
+            android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:paddingRight="15dp"
+            android:paddingBottom="3dp">
 
             <com.tencent.qcloud.timchat.widget.CircleImageView
                 android:id="@+id/group_member_avatar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
-                android:padding="2dp"
-                tools:background="@drawable/head"
+                tools:background="@drawable/btn_add"
                 android:scaleType="fitXY"/>
 
             <TextView

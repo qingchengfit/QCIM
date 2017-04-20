@@ -178,7 +178,7 @@ public abstract class Message {
      *
      */
     public String getSender(){
-        if (message.getSender() == null) return "";
+        if (message.getSenderProfile() == null) return "";
         return message.getSenderProfile().getNickName();
     }
 

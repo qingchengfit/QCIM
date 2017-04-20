@@ -1,6 +1,8 @@
 package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +90,10 @@ public class ProfileSummaryItem extends AbstractFlexibleItem<ProfileSummaryItem.
         }
         if (profileSummary.getType() == GroupMemberProfile.NORMAL) {
             Glide.with(holder.avatar.getContext())
-                    .load(PhotoUtils.getSmall(profileSummary.getAvatarUrl() == null ? AppData.defaultAvatar : profileSummary.getAvatarUrl()))
+                    .load(PhotoUtils.getSmall(profileSummary.getAvatarUrl()))
                     .asBitmap()
+                    .placeholder(BitmapDrawable.createFromPath(AppData.defaultAvatar))
+                    .error(BitmapDrawable.createFromPath(AppData.defaultAvatar))
                     .into(holder.avatar);
             holder.name.setText(profileSummary.getName());
         }

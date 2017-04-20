@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -50,6 +51,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
     public static final int IMAGE_STORE = 101;
     public static final int IMAGE_PREVIEW = 102;
+    private static final int ADD_MEMBER = 103;
 
     List<GroupMemberProfile> list = new ArrayList<>();
     RecyclerView listView;
@@ -229,7 +231,26 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                 });
 
             }
-        } else if (requestCode == 0){           //删除群成员
+        } else if (requestCode == ADD_MEMBER){
+            if (resultCode == RESULT_OK){
+                List<String> idList = data.getStringArrayListExtra("ids");
+                TIMGroupManager.getInstance().inviteGroupMember(groupId, idList, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
+                    @Override
+                    public void onError(int i, String  s) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
+//                        for(TIMGroupMemberResult r : timGroupMemberResults) {
+//                        }
+                        Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
+                        TIMGroupManager.getInstance().getGroupMembers(groupId, GroupMemberActivity.this);
+                    }
+                });
+            }
+
+        }else if (requestCode == 0){           //删除群成员
             if (resultCode == RESULT_OK){
                 TIMGroupManager.getInstance().getGroupMembers(groupId, this);
             }
@@ -256,13 +277,14 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             intent.putExtra("group", groupId);
             startActivityForResult(intent, 0);
         }else{
-            String packageName = getApplication().getPackageName();
             Intent intent = new Intent();
-            if (packageName.substring(17,packageName.length()).equals("staffkit")){
-
-            }else{
-
+            intent.setAction(getPackageName());
+            if (getPackageName().contains("staff")) {
+                intent.setData(Uri.parse("qcstaff://choose/chat_friend"));
+            }else if (getPackageName().contains("fitcoach")){
+                intent.setData(Uri.parse("qccoach://choose/chat_friend"));
             }
+            startActivityForResult(intent, ADD_MEMBER);
         }
         return false;
     }

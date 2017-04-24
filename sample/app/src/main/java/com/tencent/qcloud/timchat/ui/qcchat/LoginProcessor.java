@@ -117,7 +117,6 @@ public class LoginProcessor implements TIMCallBack {
 
             @Override
             public void onSuccess() {
-                Toast.makeText(context, "设置用户昵称：成功", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -129,7 +128,6 @@ public class LoginProcessor implements TIMCallBack {
 
             @Override
             public void onSuccess() {
-                Toast.makeText(context, "设置用户头像：成功", Toast.LENGTH_SHORT).show();
                 AppData.putUserAvatar(context, avatarUrl);
             }
         });
@@ -195,12 +193,10 @@ public class LoginProcessor implements TIMCallBack {
 
             @Override
             public void log(String content, Throwable t) {
-                Log.d("MiPushMessageReceiver", content, t);
             }
 
             @Override
             public void log(String content) {
-                Log.d("MiPushMessageReceiver", content);
             }
         };
         Logger.setLogger(context, newLogger);

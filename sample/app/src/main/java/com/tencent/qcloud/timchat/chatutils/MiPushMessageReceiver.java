@@ -34,22 +34,16 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
 
     @Override
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
-        Log.e(TAG,"onReceivePassThroughMessage is called. " + message.toString());
-        Log.e(TAG, getSimpleDate() + " " + message.getContent());
 
         if (!TextUtils.isEmpty(message.getTopic())) {
             mTopic = message.getTopic();
         } else if (!TextUtils.isEmpty(message.getAlias())) {
             mAlias = message.getAlias();
         }
-        Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
-                + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
     }
 
     @Override
     public void onNotificationMessageClicked(Context context, MiPushMessage message) {
-        Log.e(TAG,"onNotificationMessageClicked is called. " + message.toString());
-        Log.e(TAG, getSimpleDate() + " " + message.getContent());
 
         if (!TextUtils.isEmpty(message.getTopic())) {
             mTopic = message.getTopic();
@@ -58,8 +52,6 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
         }
 //        MiPushClient.clearNotification(context);
 
-        Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
-                + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
         Intent i = new Intent();
         i.setClassName("com.tencent.qcloud.timchat", "com.tencent.qcloud.timchat.ui.qcchat.SplashActivity");
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -68,8 +60,6 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
 
     @Override
     public void onNotificationMessageArrived(Context context, MiPushMessage message) {
-        Log.e(TAG,"onNotificationMessageArrived is called. " + message.toString());
-        Log.e(TAG, getSimpleDate() + " " + message.getContent());
 
         if (!TextUtils.isEmpty(message.getTopic())) {
             mTopic = message.getTopic();
@@ -77,20 +67,15 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
             mAlias = message.getAlias();
         }
 
-        Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
-                + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
     }
 
     @Override
     public void onCommandResult(Context context, MiPushCommandMessage message) {
-        Log.e(TAG, "onCommandResult is called. " + message.toString());
         String command = message.getCommand();
         List<String> arguments = message.getCommandArguments();
         String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);
 
-        Log.e(TAG, "cmd: " + command + " | arg1: " + cmdArg1 + " | arg2: " + cmdArg2
-                + " | result: " + message.getResultCode() + " | reason: " + message.getReason());
 
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
@@ -127,19 +112,14 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
             }
         }
 
-        Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
-                + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
     }
 
     @Override
     public void onReceiveRegisterResult(Context context, MiPushCommandMessage message) {
-        Log.e(TAG, "onReceiveRegisterResult is called. " + message.toString());
         String command = message.getCommand();
         List<String> arguments = message.getCommandArguments();
         String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
 
-        Log.e(TAG, "cmd: " + command + " | arg: " + cmdArg1
-                + " | result: " + message.getResultCode() + " | reason: " + message.getReason());
 
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
@@ -151,9 +131,6 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
                 TIMManager.getInstance().setOfflinePushToken(param);
             }
         }
-
-        Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
-                + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
 
     }
 

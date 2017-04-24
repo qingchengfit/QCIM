@@ -74,6 +74,9 @@ public class VoiceMessage extends Message {
      */
     @Override
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+
+//        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
+
         LinearLayout linearLayout = new LinearLayout(MyApplication.getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setGravity(Gravity.CENTER|Gravity.RIGHT);
@@ -87,13 +90,22 @@ public class VoiceMessage extends Message {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
         lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         RelativeLayout layout = getBubbleView(viewHolder);
+        layout.setMinimumWidth(Util.dpToPx(64f, context.getResources()));
+        int duration = (int)((TIMSoundElem) message.getElement(0)).getDuration();
+        if (duration > 3){
+            layout.getLayoutParams().width = Util.dpToPx(64f + (duration - 2) * 5, context.getResources());
+            if (layout.getLayoutParams().width > Util.dpToPx(212f, context.getResources())){
+                layout.getLayoutParams().width = Util.dpToPx(212f, context.getResources());
+            }
+        }
         if (!message.isSelf()){
+            layout.setPadding(layout.getPaddingLeft(), Util.dpToPx(9f, context.getResources()), 0, Util.dpToPx(9f, context.getResources()));
             viewHolder.leftMessage.setGravity(Gravity.LEFT);
             clearView(viewHolder);
             viewHolder.leftMessage.setClipToPadding(false);
             viewHolder.leftMessage.addView(voiceIcon, lp);
         }else{
-            layout.setPadding(0, layout.getPaddingTop(), layout.getPaddingRight(), layout.getPaddingBottom());
+            layout.setPadding(0, Util.dpToPx(9f, context.getResources()), layout.getPaddingRight(), Util.dpToPx(9f, context.getResources()));
             viewHolder.rightMessage.setGravity(Gravity.RIGHT);
             clearView(viewHolder);
             layout.setClipToPadding(false);

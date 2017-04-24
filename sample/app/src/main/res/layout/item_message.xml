@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:visibility="visible"
-        android:textColor="@color/text_gray2"
+        android:textColor="#bbbbbb"
         android:textSize="12sp" />
     <RelativeLayout
         android:id="@+id/rl_whole_chat"
@@ -46,10 +46,9 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_gray1"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginBottom="3dp"
                     android:textSize="11sp"
                     android:text="name"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
                 <RelativeLayout
                     android:id="@+id/leftMessage"
                     android:layout_width="wrap_content"
@@ -71,8 +70,7 @@
                 android:textColor="@color/qc_text_grey"
                 android:layout_toRightOf="@id/ll_left"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginLeft="8dp" />
 
         </RelativeLayout>
 

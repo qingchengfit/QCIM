@@ -6,6 +6,7 @@ import android.view.View;
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMGroupTipsElem;
 import com.tencent.TIMMessage;
+import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
@@ -43,28 +44,32 @@ public class GroupTipMessage extends Message {
      */
     @Override
     public String getSummary() {
-        final TIMGroupTipsElem e = (TIMGroupTipsElem) message.getElement(0);
+        TIMGroupTipsElem e = null;
+        if (message.getElement(0) != null && message.getElement(0) instanceof  TIMGroupTipsElem){
+             e = (TIMGroupTipsElem) message.getElement(0);
+        }else{
+            return "";
+        }
         StringBuilder stringBuilder = new StringBuilder();
-        Iterator<Map.Entry<String,TIMGroupMemberInfo>> iterator = e.getChangedGroupMemberInfo().entrySet().iterator();
+        Iterator<Map.Entry<String,TIMUserProfile>> iterator = e.getChangedUserInfo().entrySet().iterator();
         switch (e.getTipsType()){
             case CancelAdmin:
             case SetAdmin:
                 return MyApplication.getContext().getString(R.string.summary_group_admin_change);
             case Join:
                 while(iterator.hasNext()){
-                    Map.Entry<String,TIMGroupMemberInfo> item = iterator.next();
-                    stringBuilder.append(getName(item.getValue()));
-                    stringBuilder.append(" ");
+                    Map.Entry<String,TIMUserProfile> item = iterator.next();
+                    stringBuilder.append(item.getValue().getNickName());
                 }
                 return stringBuilder +
                         MyApplication.getContext().getString(R.string.summary_group_mem_add);
             case Kick:
-                return e.getUserList().get(0) +
+                return e.getChangedUserInfo().get(e.getUserList().get(0)).getNickName() +
                         MyApplication.getContext().getString(R.string.summary_group_mem_kick);
             case ModifyMemberInfo:
                 while(iterator.hasNext()){
-                    Map.Entry<String,TIMGroupMemberInfo> item = iterator.next();
-                    stringBuilder.append(getName(item.getValue()));
+                    Map.Entry<String,TIMUserProfile> item = iterator.next();
+                    stringBuilder.append(item.getValue().getNickName());
                     stringBuilder.append(" ");
                 }
                 return stringBuilder +

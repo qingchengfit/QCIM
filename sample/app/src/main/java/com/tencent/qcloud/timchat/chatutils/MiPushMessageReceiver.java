@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.tencent.TIMManager;
 import com.tencent.TIMOfflinePushToken;
+import com.tencent.qcloud.sdk.Constant;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -30,8 +31,6 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
     private String mAccount;
     private String mStartTime;
     private String mEndTime;
-
-    private long mBussId = 72;
 
     @Override
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
@@ -148,7 +147,7 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
 
                 TIMOfflinePushToken param = new TIMOfflinePushToken();
                 param.setToken(mRegId);
-                param.setBussid(mBussId);
+                param.setBussid(Constant.BUSS_ID);
                 TIMManager.getInstance().setOfflinePushToken(param);
             }
         }

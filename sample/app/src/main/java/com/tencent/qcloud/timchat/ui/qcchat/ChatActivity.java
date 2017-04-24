@@ -22,12 +22,12 @@ import android.widget.Toast;
 
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
+import com.tencent.TIMGroupTipsType;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 import com.tencent.TIMMessageStatus;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
-import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatAdapter;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
@@ -39,20 +39,20 @@ import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
 import com.tencent.qcloud.timchat.chatmodel.TextMessage;
 import com.tencent.qcloud.timchat.chatmodel.VideoMessage;
 import com.tencent.qcloud.timchat.chatmodel.VoiceMessage;
+import com.tencent.qcloud.timchat.chatutils.FileUtil;
+import com.tencent.qcloud.timchat.chatutils.MediaUtil;
+import com.tencent.qcloud.timchat.chatutils.RecorderUtil;
+import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.presenter.ChatPresenter;
 import com.tencent.qcloud.timchat.ui.GroupMemberActivity;
 import com.tencent.qcloud.timchat.ui.ImagePreviewActivity;
-import com.tencent.qcloud.timchat.chatutils.FileUtil;
-import com.tencent.qcloud.timchat.chatutils.MediaUtil;
-import com.tencent.qcloud.timchat.chatutils.RecorderUtil;
 import com.tencent.qcloud.timchat.viewfeatures.ChatView;
 import com.tencent.qcloud.timchat.widget.ChatInput;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.timchat.widget.VoiceSendingView;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +82,6 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     private String titleStr;
     private Handler handler = new Handler();
     private TemplateTitle title;
-
 
     public static void navToChat(Context context, String identify, TIMConversationType type) {
         Intent intent = new Intent(context, ChatActivity.class);

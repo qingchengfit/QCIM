@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMGroupManager;
 import com.tencent.qcloud.timchat.R;
+import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 
 /**
@@ -34,6 +35,7 @@ public class SetGroupNameActivity extends FragmentActivity {
             groupId = getIntent().getStringExtra("id");
         }
         editGroupName = (EditText) findViewById(R.id.edit_group_name);
+        editGroupName.setText(GroupInfo.getInstance().getGroupName(groupId));
         title = (TemplateTitle) findViewById(R.id.group_mem_title);
         clear = (ImageView) findViewById(R.id.image_clear);
 

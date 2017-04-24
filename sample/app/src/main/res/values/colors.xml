@@ -12,7 +12,7 @@
     <color name="background_gray3">#D4D4D4</color>
     <color name="background_gray4">#EFEFF4</color>
     <color name="line">#DDDDDD</color>
-    <color name="line_btn">#BBBBBB</color>
+    <color name="line_btn">#CCC</color>
     <color name="text_gray1">#777777</color>
     <color name="text_gray2">#767676</color>
     <color name="text_blue1">#1173CB</color>

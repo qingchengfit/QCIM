@@ -305,7 +305,7 @@
     <string name="message_notify_push">离线消息推送</string>
     <string name="message_notify_c2c_music">自定义C2C消息推送声音</string>
     <string name="message_notify_group_music">自定义群消息推送声音</string>
-    <string name="title_group_member_count">群聊成员（%d）</string>
+    <string name="title_group_member_count">群聊成员(%d)</string>
 
     <string name="title_delete_member">移出群聊</string>
     <string name="title_dialog_send_picture">发送图片</string>

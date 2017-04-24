@@ -123,15 +123,9 @@ public class TextMessage extends Message {
         clearView(viewHolder);
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
-        if (!isSelf()) {
-            tv.setPadding(Util.dpToPx(20f, context.getResources()),
-                    Util.dpToPx(10f, context.getResources()), Util.dpToPx(10f, context.getResources()),
-                    Util.dpToPx(10f, context.getResources()));
-        }else{
-            tv.setPadding(Util.dpToPx(10f, context.getResources()),
-                    Util.dpToPx(10f, context.getResources()), Util.dpToPx(20f, context.getResources()),
-                    Util.dpToPx(10f, context.getResources()));
-        }
+        tv.setPadding(Util.dpToPx(12f, context.getResources()),
+                Util.dpToPx(6f, context.getResources()), Util.dpToPx(12f, context.getResources()),
+                Util.dpToPx(6f, context.getResources()));
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();

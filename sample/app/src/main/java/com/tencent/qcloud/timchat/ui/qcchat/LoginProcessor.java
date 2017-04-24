@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.huawei.android.pushagent.PushManager;
@@ -16,6 +17,7 @@ import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
+import com.tencent.qcloud.sdk.Constant;
 import com.tencent.qcloud.timchat.business.InitBusiness;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
@@ -26,6 +28,8 @@ import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.event.RefreshEvent;
+import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.lang.ref.WeakReference;
@@ -50,10 +54,10 @@ public class LoginProcessor implements TIMCallBack {
         this.username = username;
         this.host = host;
         this.onLoginListener = onLoginListener;
+        init();
     }
 
     public void sientInstall(){
-        init();
         // 验证用户名和密码的有效性
         if (username.length() == 0) {
             return;
@@ -177,10 +181,29 @@ public class LoginProcessor implements TIMCallBack {
         String deviceMan = android.os.Build.MANUFACTURER;
         //注册小米和华为推送
         if (deviceMan.equals("Xiaomi") && shouldMiInit()) {
-            MiPushClient.registerPush(context, "2882303761517480335", "5411748055335");
+            MiPushClient.registerPush(context, Constant.XIAOMI_PUSH_APPID, Constant.XIAOMI_PUSH_APPKEY);
         } else if (deviceMan.equals("HUAWEI")) {
             PushManager.requestToken(context);
         }
+
+        LoggerInterface newLogger = new LoggerInterface() {
+
+            @Override
+            public void setTag(String tag) {
+                // ignore
+            }
+
+            @Override
+            public void log(String content, Throwable t) {
+                Log.d("MiPushMessageReceiver", content, t);
+            }
+
+            @Override
+            public void log(String content) {
+                Log.d("MiPushMessageReceiver", content);
+            }
+        };
+        Logger.setLogger(context, newLogger);
 
         onLoginListener.onLoginSuccess();
     }

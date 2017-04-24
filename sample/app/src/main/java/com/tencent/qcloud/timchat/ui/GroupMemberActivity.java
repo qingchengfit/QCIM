@@ -64,6 +64,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     String groupId,type;
     private TextView tvTitle;
     private TextView btnExit;
+    private TextView tvTipsGroupName;
     private RelativeLayout rlGroupName;
     private ImageView imgGroupHead;
     private final int MEM_REQ = 100;
@@ -87,6 +88,9 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         rlGroupName = (RelativeLayout) findViewById(R.id.set_group_name);
         tvTitle = (TextView) findViewById(R.id.tv_member_count);
         btnExit = (TextView) findViewById(R.id.btn_exit_group);
+        tvTipsGroupName = (TextView) findViewById(R.id.tv_tip_group_name);
+        tvTipsGroupName.setText(GroupInfo.getInstance().getGroupName(groupId));
+
         imgGroupHead = (ImageView) findViewById(R.id.image_group_head);
         imgGroupHead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +264,12 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                     public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
                         isChangeName = true;
                         Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
-                        TIMGroupManager.getInstance().getGroupMembers(groupId, GroupMemberActivity.this);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                TIMGroupManager.getInstance().getGroupMembers(groupId, GroupMemberActivity.this);
+                            }
+                        }, 500);
                     }
                 });
             }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
     <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/chat_title"
         android:layout_width="match_parent"
@@ -18,13 +19,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/divider_grey"
+        android:layout_above="@id/input_panel"/>
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:layout_above="@id/input_panel"
-        android:layout_below="@id/chat_title">
+        android:layout_above="@+id/divider"
+        android:layout_below="@id/chat_title"
+        android:background="#fff">
 
     </ListView>
     <com.tencent.qcloud.timchat.widget.VoiceSendingView

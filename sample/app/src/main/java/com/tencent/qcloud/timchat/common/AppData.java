@@ -67,7 +67,7 @@ public class AppData {
         UserInfo.getInstance().setId(null);
         MessageEvent.getInstance().clear();
         GroupInfo.getInstance().clear();
-        getSharedPreferences(context).edit().clear();
+        getSharedPreferences(context).edit().clear().apply();
     }
 
 }

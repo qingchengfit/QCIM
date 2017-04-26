@@ -13,7 +13,7 @@ import com.tencent.TIMMessage;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 
 /**
@@ -43,7 +43,7 @@ public class FileMessage extends Message {
      * @param context    显示消息的上下文
      */
     @Override
-    public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+    public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);

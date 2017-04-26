@@ -1,35 +1,38 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroupOverlay;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
-import com.tencent.TIMGroupTipsType;
+import com.tencent.TIMGroupManager;
+import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 import com.tencent.TIMMessageStatus;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
 import com.tencent.qcloud.timchat.chatmodel.FileMessage;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
@@ -56,7 +59,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatActivity extends FragmentActivity implements ChatView {
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.common.DividerItemDecoration;
+
+public class ChatActivity extends AppCompatActivity implements ChatView, ChatItem.OnDeleteMessageItem {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -64,9 +70,9 @@ public class ChatActivity extends FragmentActivity implements ChatView {
 
     private static final String TAG = "ChatActivity";
 
-    private List<Message> messageList = new ArrayList<>();
-    private ChatAdapter adapter;
-    private ListView listView;
+    private List<ChatItem> itemList = new ArrayList<>();
+    private FlexibleAdapter flexibleAdapter;
+    private RecyclerView listView;
     private ChatPresenter presenter;
     private ChatInput input;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -112,10 +118,13 @@ public class ChatActivity extends FragmentActivity implements ChatView {
         presenter = new ChatPresenter(this, identify, type);
         input = (ChatInput) findViewById(R.id.input_panel);
         input.setChatView(this);
-        adapter = new ChatAdapter(this, R.layout.item_message, messageList);
-        listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(adapter);
-        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        flexibleAdapter = new FlexibleAdapter(itemList);
+        flexibleAdapter.addListener(this);
+        listView = (RecyclerView) findViewById(R.id.list);
+        listView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        listView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
+        listView.setAdapter(flexibleAdapter);
+
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -127,23 +136,39 @@ public class ChatActivity extends FragmentActivity implements ChatView {
                 return false;
             }
         });
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             private int firstItem;
 
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            public void onScrollStateChanged(RecyclerView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && firstItem == 0) {
                     //如果拉到顶端读取更多消息
-                    presenter.getMessage(messageList.size() > 0 ? messageList.get(0).getMessage() : null);
+                    presenter.getMessage(itemList.size() > 0 ? itemList.get(0).getData().getMessage() : null);
                 }
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                firstItem = firstVisibleItem;
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                    firstItem = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                }
             }
         });
+
+        listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.getLayoutManager().scrollToPosition(flexibleAdapter.getItemCount() - 1);
+                    }
+                }, 500);
+            }
+        });
+
         registerForContextMenu(listView);
         switch (type) {
             case C2C:
@@ -157,11 +182,10 @@ public class ChatActivity extends FragmentActivity implements ChatView {
 
                     @Override
                     public void onSuccess(List<TIMUserProfile> timUserProfiles) {
-                        for (TIMUserProfile userProfile : timUserProfiles) {
-                            adapter.setAvatar(userProfile.getFaceUrl());
-                            titleStr = userProfile.getNickName();
+                        for (TIMUserProfile profile : timUserProfiles) {
+                            titleStr = profile.getNickName();
                         }
-                        title.setTitleText(titleStr);
+                            title.setTitleText(titleStr);
                     }
                 });
                 break;
@@ -175,10 +199,19 @@ public class ChatActivity extends FragmentActivity implements ChatView {
                         startActivityForResult(intent, MEMBER_OPERA);
                     }
                 });
+
                 if (!TextUtils.isEmpty(titleStr)) {
                     title.setTitleText(titleStr);
-                }else{
-                    title.setTitleText(GroupInfo.getInstance().getGroupName(identify));
+                } else {
+                    TIMGroupManager.getInstance().getGroupMembers(identify, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
+                        @Override
+                        public void onError(int i, String s) {
+                        }
+                        @Override
+                        public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
+                            title.setTitleText(GroupInfo.getInstance().getGroupName(identify) + "(" + timGroupMemberInfos.size() + ")");
+                        }
+                    });
                 }
                 break;
 
@@ -218,7 +251,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     @Override
     public void showMessage(TIMMessage message) {
         if (message == null) {
-            adapter.notifyDataSetChanged();
+            flexibleAdapter.notifyDataSetChanged();
         } else {
             Message mMessage = MessageFactory.getMessage(message);
             if (mMessage != null) {
@@ -235,14 +268,19 @@ public class ChatActivity extends FragmentActivity implements ChatView {
                             break;
                     }
                 } else {
-                    if (messageList.size() == 0) {
+                    if (itemList.size() == 0) {
                         mMessage.setHasTime(null);
                     } else {
-                        mMessage.setHasTime(messageList.get(messageList.size() - 1).getMessage());
+                        mMessage.setHasTime(itemList.get(itemList.size() - 1).getData().getMessage());
                     }
-                    messageList.add(mMessage);
-                    adapter.notifyDataSetChanged();
-                    listView.setSelection(adapter.getCount() - 1);
+                    itemList.add(new ChatItem(getApplicationContext(), mMessage, this));
+                    flexibleAdapter.notifyDataSetChanged();
+                    new Handler(getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            listView.getLayoutManager().scrollToPosition(flexibleAdapter.getItemCount() - 1);
+                        }
+                    }, 500);
                 }
 
             }
@@ -267,14 +305,21 @@ public class ChatActivity extends FragmentActivity implements ChatView {
             ++newMsgNum;
             if (i != messages.size() - 1) {
                 mMessage.setHasTime(messages.get(i + 1));
-                messageList.add(0, mMessage);
+                itemList.add(0, new ChatItem(getApplicationContext(), mMessage, this));
             } else {
                 mMessage.setHasTime(null);
-                messageList.add(0, mMessage);
+                itemList.add(0, new ChatItem(getApplicationContext(), mMessage, this));
             }
         }
-        adapter.notifyDataSetChanged();
-        listView.setSelection(newMsgNum);
+        flexibleAdapter.notifyDataSetChanged();
+        final int finalNewMsgNum = newMsgNum;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                listView.getLayoutManager().scrollToPosition(finalNewMsgNum);
+            }
+        }, 500);
+
     }
 
     /**
@@ -282,7 +327,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
      */
     @Override
     public void clearAllMessage() {
-        messageList.clear();
+        itemList.clear();
     }
 
     /**
@@ -304,13 +349,14 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     @Override
     public void onSendMessageFail(int code, String desc, TIMMessage message) {
         long id = message.getMsgUniqueId();
-        for (Message msg : messageList) {
+        for (int i = 0; i< itemList.size(); i++) {
+            Message msg = itemList.get(i).getData();
             if (msg.getMessage().getMsgUniqueId() == id) {
                 switch (code) {
                     case 80001:
                         //发送内容包含敏感词
                         msg.setDesc(getString(R.string.chat_content_bad));
-                        adapter.notifyDataSetChanged();
+                        flexibleAdapter.notifyDataSetChanged();
                         break;
                 }
             }
@@ -434,43 +480,43 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     }
 
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        Message message = messageList.get(info.position);
-        menu.add(0, 1, Menu.NONE, getString(R.string.chat_del));
-        if (message.isSendFail()) {
-            menu.add(0, 2, Menu.NONE, getString(R.string.chat_resend));
-        }
-        if (message instanceof ImageMessage || message instanceof FileMessage) {
-            menu.add(0, 3, Menu.NONE, getString(R.string.chat_save));
-        }
-    }
-
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Message message = messageList.get(info.position);
-        switch (item.getItemId()) {
-            case 1:
-                message.remove();
-                messageList.remove(info.position);
-                adapter.notifyDataSetChanged();
-                break;
-            case 2:
-                messageList.remove(message);
-                presenter.sendMessage(message.getMessage());
-                break;
-            case 3:
-                message.save();
-                break;
-            default:
-                break;
-        }
-        return super.onContextItemSelected(item);
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v,
+//                                    ContextMenu.ContextMenuInfo menuInfo) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+//        Message message = itemList.get(info.position).getData();
+//        menu.add(0, 1, Menu.NONE, getString(R.string.chat_del));
+//        if (message.isSendFail()) {
+//            menu.add(0, 2, Menu.NONE, getString(R.string.chat_resend));
+//        }
+//        if (message instanceof ImageMessage || message instanceof FileMessage) {
+//            menu.add(0, 3, Menu.NONE, getString(R.string.chat_save));
+//        }
+//    }
+//
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        Message message = itemList.get(info.position).getData();
+//        switch (item.getItemId()) {
+//            case 1:
+//                message.remove();
+//                flexibleAdapter.removeItem(info.position);
+//                flexibleAdapter.notifyDataSetChanged();
+//                break;
+//            case 2:
+////                messageList.remove(message);
+////                presenter.sendMessage(message.getMessage());
+//                break;
+//            case 3:
+//                message.save();
+//                break;
+//            default:
+//                break;
+//        }
+//        return super.onContextItemSelected(item);
+//    }
 
 
     @Override
@@ -545,5 +591,25 @@ public class ChatActivity extends FragmentActivity implements ChatView {
             title.setTitleText(titleStr);
         }
     };
+
+    @Override
+    public void onDelete(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("删除会话？")
+                .setNegativeButton("取消", null)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        itemList.get(position).getData().getMessage().remove();
+                        flexibleAdapter.removeItem(position);
+                        flexibleAdapter.notifyDataSetChanged();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
+    }
 
 }

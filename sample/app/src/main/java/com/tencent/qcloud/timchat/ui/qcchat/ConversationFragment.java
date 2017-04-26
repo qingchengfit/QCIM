@@ -378,6 +378,8 @@ public class ConversationFragment extends Fragment implements ConversationView,
             conversation = ((NomalConversation) selectItem.getConversation());
         }
         if (conversation != null) {
+            TIMManager.getInstance().getConversation(conversation.getType(),
+                    conversation.getIdentify()).setReadMessage();
             if (presenter.delConversation((conversation).getType(),
                     conversation.getIdentify())) {
                 flexibleAdapter.removeItem(position);

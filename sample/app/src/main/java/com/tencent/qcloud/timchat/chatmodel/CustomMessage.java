@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMMessage;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +90,7 @@ public class CustomMessage extends Message {
      * @param context    显示消息的上下文
      */
     @Override
-    public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+    public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
 
     }
 

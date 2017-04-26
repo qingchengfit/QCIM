@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -24,9 +21,11 @@ import com.tencent.TIMMessage;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
-import com.tencent.qcloud.timchat.ui.ImageViewActivity;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
+import com.tencent.qcloud.timchat.common.Util;
+import com.tencent.qcloud.timchat.ui.ImageViewActivity;
+import com.tencent.qcloud.timchat.widget.ChatImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,7 +68,7 @@ public class ImageMessage extends Message {
      * @param context 显示消息的上下文
      */
     @Override
-    public void showMessage(final ChatAdapter.ViewHolder viewHolder, final Context context) {
+    public void showMessage(final ChatItem.ViewHolder viewHolder, final Context context) {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);
@@ -77,17 +76,15 @@ public class ImageMessage extends Message {
         switch (message.status()){
             case Sending:
 
-                ImageView imageView = new ImageView(MyApplication.getContext());
-                imageView.setImageBitmap(getThumb(e.getPath()));
+                ChatImageView imageView = new ChatImageView(MyApplication.getContext());
+                imageView.setMaxWidth(Util.dpToPx(300f, MyApplication.getContext().getResources()));
+                imageView.setBitmap(getThumb(e.getPath()), BitmapFactory.decodeResource(context.getResources(), R.drawable.chat_bubble_green));
 
                 clearView(viewHolder);
                 RelativeLayout layout = getBubbleView(viewHolder);
-                layout.setBackground(new BitmapDrawable(getThumb(e.getPath())));
-//                layout.setPadding(0,0,0,0);
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
-//                params.addRule(RelativeLayout.LEFT_OF, R.id.rightAvatar);
-//                layout.setLayoutParams(params);
-//                layout.addView(imageView);
+                layout.removeAllViews();
+                layout.setPadding(0,0,0,0);
+                layout.addView(imageView);
                 break;
             case SendSucc:
                 for(final TIMImage image : e.getImageList()) {
@@ -219,10 +216,11 @@ public class ImageMessage extends Message {
         }
     }
 
-    private void showThumb(final ChatAdapter.ViewHolder viewHolder,String filename) {
+    private void showThumb(final ChatItem.ViewHolder viewHolder, String filename) {
         Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(filename));
-        ImageView imageView = new ImageView(MyApplication.getContext());
-        imageView.setImageBitmap(bitmap);
+        ChatImageView imageView = new ChatImageView(MyApplication.getContext());
+        imageView.setMaxWidth(Util.dpToPx(300f, MyApplication.getContext().getResources()));
+        imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_green));
         RelativeLayout layout = getBubbleView(viewHolder);
         layout.removeAllViews();
         layout.setPadding(0, 0, 0, 0);
@@ -232,7 +230,7 @@ public class ImageMessage extends Message {
         layout.addView(imageView, params);
     }
 
-    private void setImageEvent(final ChatAdapter.ViewHolder viewHolder, final String fileName,final Context context){
+    private void setImageEvent(final ChatItem.ViewHolder viewHolder, final String fileName, final Context context){
         getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -26,16 +26,14 @@
         android:background="@color/divider_grey"
         android:layout_above="@id/input_panel"/>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
         android:layout_above="@+id/divider"
         android:layout_below="@id/chat_title"
-        android:background="#fff">
-
-    </ListView>
+        android:background="#fff"/>
     <com.tencent.qcloud.timchat.widget.VoiceSendingView
         android:id="@+id/voice_sending"
         android:layout_width="130dp"

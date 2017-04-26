@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.icu.util.Measure;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -25,7 +24,7 @@ import com.tencent.TIMMessageDraft;
 import com.tencent.TIMTextElem;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.EmoticonUtil;
 import com.tencent.qcloud.timchat.common.Util;
 
@@ -36,8 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import eu.davidea.flexibleadapter.utils.Utils;
 
 /**
  * 文本消息数据
@@ -116,16 +113,15 @@ public class TextMessage extends Message {
      * @param context 显示消息的上下文
      */
     @Override
-    public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+    public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
-            getBubbleView(viewHolder).setGravity(Gravity.NO_GRAVITY);
         clearView(viewHolder);
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
-        tv.setPadding(Util.dpToPx(12f, context.getResources()),
-                Util.dpToPx(6f, context.getResources()), Util.dpToPx(12f, context.getResources()),
-                Util.dpToPx(6f, context.getResources()));
+//        tv.setPadding(Util.dpToPx(12f, context.getResources()),
+//                Util.dpToPx(6f, context.getResources()), Util.dpToPx(12f, context.getResources()),
+//                Util.dpToPx(6f, context.getResources()));
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();

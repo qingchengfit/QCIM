@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:focusable="true">
     <TextView
@@ -55,6 +55,10 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:longClickable="true"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="12dp"
                     android:background="@drawable/chat_bubble_grey"
                     android:clipToPadding="true"/>
 
@@ -94,6 +98,11 @@
                 android:clickable="true"
                 android:longClickable="true"
                 android:layout_toLeftOf="@id/rightAvatar"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="20dp"
+                android:clipToPadding="true"
                 android:background="@drawable/chat_bubble_green"/>
 
             <TextView

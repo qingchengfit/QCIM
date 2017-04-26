@@ -15,4 +15,5 @@
         <activity android:name=".ui.GroupMemberActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
+
 </manifest>

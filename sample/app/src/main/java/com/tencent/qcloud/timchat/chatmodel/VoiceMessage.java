@@ -1,22 +1,21 @@
 package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
+import android.drm.DrmStore;
 import android.graphics.drawable.AnimationDrawable;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.tencent.TIMMessage;
 import com.tencent.TIMSoundElem;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 import com.tencent.qcloud.timchat.chatutils.MediaUtil;
 import com.tencent.qcloud.timchat.common.Util;
@@ -73,13 +72,13 @@ public class VoiceMessage extends Message {
      * @param context 显示消息的上下文
      */
     @Override
-    public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+    public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
 
 //        tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
-
+        clearView(viewHolder);
         LinearLayout linearLayout = new LinearLayout(MyApplication.getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setGravity(Gravity.CENTER|Gravity.RIGHT);
+        linearLayout.setGravity(Gravity.CENTER);
         ImageView voiceIcon = new ImageView(MyApplication.getContext());
         voiceIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         voiceIcon.setBackgroundResource(message.isSelf()?R.drawable.right_voice: R.drawable.left_voice);
@@ -87,10 +86,14 @@ public class VoiceMessage extends Message {
 
         int height = Util.dpToPx(18f, context.getResources());
         int width = Util.dpToPx(14f, context.getResources());
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
-        lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout.setLayoutParams(params);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
+        voiceIcon.setLayoutParams(lp);
+//        lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         RelativeLayout layout = getBubbleView(viewHolder);
-        layout.setMinimumWidth(Util.dpToPx(64f, context.getResources()));
+        linearLayout.setMinimumWidth(Util.dpToPx(64f, context.getResources()));
         int duration = (int)((TIMSoundElem) message.getElement(0)).getDuration();
         if (duration > 3){
             layout.getLayoutParams().width = Util.dpToPx(64f + (duration - 2) * 5, context.getResources());
@@ -99,17 +102,17 @@ public class VoiceMessage extends Message {
             }
         }
         if (!message.isSelf()){
-            layout.setPadding(layout.getPaddingLeft(), Util.dpToPx(9f, context.getResources()), 0, Util.dpToPx(9f, context.getResources()));
+//            layout.setPadding(layout.getPaddingLeft(), Util.dpToPx(9f, context.getResources()), 0, Util.dpToPx(9f, context.getResources()));
             viewHolder.leftMessage.setGravity(Gravity.LEFT);
-            clearView(viewHolder);
-            viewHolder.leftMessage.setClipToPadding(false);
-            viewHolder.leftMessage.addView(voiceIcon, lp);
+            linearLayout.setGravity(Gravity.LEFT);
+            linearLayout.addView(voiceIcon);
+            viewHolder.leftMessage.addView(linearLayout);
         }else{
-            layout.setPadding(0, Util.dpToPx(9f, context.getResources()), layout.getPaddingRight(), Util.dpToPx(9f, context.getResources()));
+//            layout.setPadding(0, Util.dpToPx(9f, context.getResources()), layout.getPaddingRight(), Util.dpToPx(9f, context.getResources()));
             viewHolder.rightMessage.setGravity(Gravity.RIGHT);
-            clearView(viewHolder);
-            layout.setClipToPadding(false);
-            layout.addView(voiceIcon, lp);
+            linearLayout.setGravity(Gravity.RIGHT);
+            linearLayout.addView(voiceIcon);
+            viewHolder.rightMessage.addView(linearLayout);
         }
 
 //        clearView(viewHolder);
@@ -129,7 +132,6 @@ public class VoiceMessage extends Message {
             @Override
             public void onClick(View v) {
                 VoiceMessage.this.playAudio(frameAnimatio);
-
 
             }
         });

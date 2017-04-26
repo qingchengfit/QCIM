@@ -38,9 +38,7 @@ public class AddConversationProcessor {
         this.onCreateConversation = onCreateConversation;
     }
 
-    /**
-     * @param datas    id列表
-     */
+    @Deprecated
     public void createGroupWithArg(final List<String> datas, final String name) {
 
         TIMGroupManager.getInstance().createGroup(GroupInfo.privateGroup,

@@ -9,7 +9,7 @@ import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class GroupTipMessage extends Message {
      * @param context    显示消息的上下文
      */
     @Override
-    public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
+    public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
         viewHolder.leftPanel.setVisibility(View.GONE);
         viewHolder.rightPanel.setVisibility(View.GONE);
         viewHolder.systemMessage.setVisibility(View.VISIBLE);

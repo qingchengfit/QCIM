@@ -292,16 +292,6 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
         String name = GroupInfo.getInstance().getGroupName(groupId);
         String p = "\\(\\d\\)$";
         name = name.replaceAll(p, "(" + size + ")");
-
-        TIMGroupManager.getInstance().modifyGroupName(groupId, name, new TIMCallBack() {
-            @Override
-            public void onError(int i, String s) {
-            }
-
-            @Override
-            public void onSuccess() {
-            }
-        });
     }
 
     private void showImagePreview(String filePath, boolean isSetHead){
@@ -323,7 +313,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             intent.putExtra("datas", b);
             intent.putExtra("group", groupId);
             startActivityForResult(intent, DELETE_MEMBER);
-        }else{
+        }else if (groupMemberProfile.getType() == GroupMemberProfile.ADD){
             try {
                 Intent intent = new Intent();
                 intent.setAction(getPackageName());

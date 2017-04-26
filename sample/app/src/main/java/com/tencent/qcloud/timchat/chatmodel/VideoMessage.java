@@ -17,7 +17,7 @@ import com.tencent.TIMVideo;
 import com.tencent.TIMVideoElem;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.ui.VideoActivity;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 import com.tencent.qcloud.timchat.chatutils.MediaUtil;
@@ -63,7 +63,7 @@ public class VideoMessage extends Message {
      * @param context 显示消息的上下文
      */
     @Override
-    public void showMessage(final ChatAdapter.ViewHolder viewHolder, final Context context) {
+    public void showMessage(final ChatItem.ViewHolder viewHolder, final Context context) {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);
@@ -131,7 +131,7 @@ public class VideoMessage extends Message {
     /**
      * 显示缩略图
      */
-    private void showSnapshot(final ChatAdapter.ViewHolder viewHolder,final Bitmap bitmap){
+    private void showSnapshot(final ChatItem.ViewHolder viewHolder, final Bitmap bitmap){
         if (bitmap == null) return;
         ImageView imageView = new ImageView(MyApplication.getContext());
         imageView.setImageBitmap(bitmap);
@@ -145,7 +145,7 @@ public class VideoMessage extends Message {
         context.startActivity(intent);
     }
 
-    private void setVideoEvent(final ChatAdapter.ViewHolder viewHolder, final String fileName,final Context context){
+    private void setVideoEvent(final ChatItem.ViewHolder viewHolder, final String fileName, final Context context){
         getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

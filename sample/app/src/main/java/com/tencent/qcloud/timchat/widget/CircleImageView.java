@@ -18,7 +18,7 @@ import android.widget.ImageView;
 /**
  * 圆形图片控件
  */
-public class CircleImageView extends ImageView {
+public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
 
     private Bitmap mBitmap;

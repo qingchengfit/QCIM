@@ -1,18 +1,18 @@
 package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageStatus;
-import com.tencent.qcloud.timchat.adapters.ChatAdapter;
+import com.tencent.qcloud.timchat.R;
+import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.TimeUtil;
-import com.tencent.qcloud.timchat.common.AppData;
-import com.tencent.qcloud.timchat.widget.PhotoUtils;
+import com.tencent.qcloud.timchat.common.Util;
 
 /**
  * 消息数据基类
@@ -42,14 +42,14 @@ public abstract class Message {
      * @param viewHolder 界面样式
      * @param context 显示消息的上下文
      */
-    public abstract void showMessage(ChatAdapter.ViewHolder viewHolder, Context context);
+    public abstract void showMessage(ChatItem.ViewHolder viewHolder, Context context);
 
     /**
      * 获取显示气泡
      *
      * @param viewHolder 界面样式
      */
-    public RelativeLayout getBubbleView(ChatAdapter.ViewHolder viewHolder){
+    public RelativeLayout getBubbleView(ChatItem.ViewHolder viewHolder){
         viewHolder.systemMessage.setVisibility(hasTime?View.VISIBLE:View.GONE);
         viewHolder.systemMessage.setText(TimeUtil.getNotifacationTimeStr(message.timestamp()));
         showDesc(viewHolder);
@@ -82,7 +82,7 @@ public abstract class Message {
      *
      * @param viewHolder 界面样式
      */
-    public void showStatus(ChatAdapter.ViewHolder viewHolder){
+    public void showStatus(ChatItem.ViewHolder viewHolder){
         switch (message.status()){
             case Sending:
                 viewHolder.error.setVisibility(View.GONE);
@@ -168,9 +168,18 @@ public abstract class Message {
      * 清除气泡原有数据
      *
      */
-    protected void clearView(ChatAdapter.ViewHolder viewHolder){
+    protected void clearView(ChatItem.ViewHolder viewHolder){
         getBubbleView(viewHolder).removeAllViews();
         getBubbleView(viewHolder).setOnClickListener(null);
+        viewHolder.leftMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_grey));
+        viewHolder.rightMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_green));
+        getBubbleView(viewHolder).getLayoutParams().width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+        getBubbleView(viewHolder).setPadding(Util.dpToPx(12f, viewHolder.getContentView().getResources()),
+                Util.dpToPx(8f, viewHolder.getContentView().getResources()),
+                Util.dpToPx(12f, viewHolder.getContentView().getResources()),
+                Util.dpToPx(8f, viewHolder.getContentView().getResources()));
+        viewHolder.leftMessage.setGravity(Gravity.CENTER);
+        viewHolder.rightMessage.setGravity(Gravity.CENTER);
     }
 
     /**
@@ -196,7 +205,7 @@ public abstract class Message {
     }
 
 
-    private void showDesc(ChatAdapter.ViewHolder viewHolder){
+    private void showDesc(ChatItem.ViewHolder viewHolder){
 
         if (desc == null || desc.equals("")){
             viewHolder.rightDesc.setVisibility(View.GONE);

@@ -52,6 +52,7 @@ import com.tencent.qcloud.timchat.ui.GroupMemberActivity;
 import com.tencent.qcloud.timchat.ui.ImagePreviewActivity;
 import com.tencent.qcloud.timchat.viewfeatures.ChatView;
 import com.tencent.qcloud.timchat.widget.ChatInput;
+import com.tencent.qcloud.timchat.widget.ScrollLinearLayoutManager;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.timchat.widget.VoiceSendingView;
 
@@ -88,6 +89,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
     private String titleStr;
     private Handler handler = new Handler();
     private TemplateTitle title;
+    private String avatar;
 
     public static void navToChat(Context context, String identify, TIMConversationType type) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -103,7 +105,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -121,7 +123,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         flexibleAdapter = new FlexibleAdapter(itemList);
         flexibleAdapter.addListener(this);
         listView = (RecyclerView) findViewById(R.id.list);
-        listView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        listView.setLayoutManager(new ScrollLinearLayoutManager(getApplicationContext()));
         listView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
         listView.setAdapter(flexibleAdapter);
 
@@ -163,9 +165,12 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                 new Handler(getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listView.getLayoutManager().scrollToPosition(flexibleAdapter.getItemCount() - 1);
+                        RecyclerView.State state = new RecyclerView.State();
+                        ((ScrollLinearLayoutManager)listView.getLayoutManager()).setSpeedSlow();
+                        listView.getLayoutManager().smoothScrollToPosition(listView, state, flexibleAdapter.getItemCount() - 1);
+//                        listView.smoothScrollToPosition(flexibleAdapter.getItemCount() - 1);
                     }
-                }, 500);
+                }, 1000);
             }
         });
 
@@ -184,6 +189,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                     public void onSuccess(List<TIMUserProfile> timUserProfiles) {
                         for (TIMUserProfile profile : timUserProfiles) {
                             titleStr = profile.getNickName();
+                            avatar = profile.getFaceUrl();
                         }
                             title.setTitleText(titleStr);
                     }
@@ -253,7 +259,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         if (message == null) {
             flexibleAdapter.notifyDataSetChanged();
         } else {
-            Message mMessage = MessageFactory.getMessage(message);
+            final Message mMessage = MessageFactory.getMessage(message);
             if (mMessage != null) {
                 if (mMessage instanceof CustomMessage) {
                     CustomMessage.Type messageType = ((CustomMessage) mMessage).getType();
@@ -273,8 +279,14 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                     } else {
                         mMessage.setHasTime(itemList.get(itemList.size() - 1).getData().getMessage());
                     }
-                    itemList.add(new ChatItem(getApplicationContext(), mMessage, this));
-                    flexibleAdapter.notifyDataSetChanged();
+
+                    new Handler(getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            itemList.add(new ChatItem(getApplicationContext(), mMessage, avatar, ChatActivity.this));
+                            flexibleAdapter.notifyDataSetChanged();
+                        }
+                    }, 300);
                     new Handler(getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -297,7 +309,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
     public void showMessage(List<TIMMessage> messages) {
         int newMsgNum = 0;
         for (int i = 0; i < messages.size(); ++i) {
-            Message mMessage = MessageFactory.getMessage(messages.get(i));
+            final Message mMessage = MessageFactory.getMessage(messages.get(i));
             if (mMessage == null || messages.get(i).status() == TIMMessageStatus.HasDeleted)
                 continue;
             if (mMessage instanceof CustomMessage && (((CustomMessage) mMessage).getType() == CustomMessage.Type.TYPING ||
@@ -305,10 +317,20 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
             ++newMsgNum;
             if (i != messages.size() - 1) {
                 mMessage.setHasTime(messages.get(i + 1));
-                itemList.add(0, new ChatItem(getApplicationContext(), mMessage, this));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemList.add(0, new ChatItem(getApplicationContext(), mMessage, avatar, ChatActivity.this));
+                    }
+                }, 500);
             } else {
                 mMessage.setHasTime(null);
-                itemList.add(0, new ChatItem(getApplicationContext(), mMessage, this));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemList.add(0, new ChatItem(getApplicationContext(), mMessage, avatar, ChatActivity.this));
+                    }
+                }, 500);
             }
         }
         flexibleAdapter.notifyDataSetChanged();

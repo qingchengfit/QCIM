@@ -45,9 +45,10 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
      *
      * @param context  The current context.
      */
-    public ChatItem(Context context, Message message, OnDeleteMessageItem onDeleteMessageItem) {
+    public ChatItem(Context context, Message message, String avatar, OnDeleteMessageItem onDeleteMessageItem) {
         this.context = context;
         this.message = message;
+        this.avatar = avatar;
         this.onDeleteMessageItem = onDeleteMessageItem;
     }
 
@@ -74,7 +75,10 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
 
-        getAvatar(holder);
+        Glide.with(holder.leftAvatar.getContext())
+                .load(PhotoUtils.getSmall(TextUtils.isEmpty(avatar) ? AppData.defaultAvatar : avatar))
+                .asBitmap()
+                .into(holder.leftAvatar);
         Glide.with(holder.rightAvatar.getContext())
                 .load(PhotoUtils.getSmall(AppData.getAvatar(holder.rightAvatar.getContext())))
                 .asBitmap()
@@ -96,10 +100,7 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
             @Override
             public void onSuccess(List<TIMUserProfile> timUserProfiles) {
                 for (TIMUserProfile profile : timUserProfiles) {
-                    Glide.with(holder.leftAvatar.getContext())
-                            .load(PhotoUtils.getSmall(TextUtils.isEmpty(profile.getFaceUrl()) ? AppData.defaultAvatar : avatar))
-                            .asBitmap()
-                            .into(holder.leftAvatar);
+
                 }
             }
         });

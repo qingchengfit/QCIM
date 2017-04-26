@@ -220,7 +220,11 @@ public class ImageMessage extends Message {
         Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(filename));
         ChatImageView imageView = new ChatImageView(MyApplication.getContext());
         imageView.setMaxWidth(Util.dpToPx(300f, MyApplication.getContext().getResources()));
-        imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_green));
+        if (isSelf()) {
+            imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_green));
+        }else{
+            imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_grey));
+        }
         RelativeLayout layout = getBubbleView(viewHolder);
         layout.removeAllViews();
         layout.setPadding(0, 0, 0, 0);

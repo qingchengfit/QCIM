@@ -57,9 +57,14 @@ public class PushUtil implements Observer {
         String senderStr,contentStr, name;
         Message message = MessageFactory.getMessage(msg);
         if (message == null) return;
-        senderStr = message.getSender();
-        contentStr = message.getSummary();
+        if (msg.getConversation().getType() == TIMConversationType.Group){
+            senderStr = message.getMessage().getConversation().getPeer();
+        }else {
+            senderStr = message.getSender();
+        }
+
         name = message.getNotifyName();
+        contentStr = message.getSummary();
 
         Log.d(TAG, "recv msg " + contentStr);
         NotificationManager mNotificationManager = (NotificationManager) MyApplication.getContext().getSystemService(MyApplication.getContext().NOTIFICATION_SERVICE);

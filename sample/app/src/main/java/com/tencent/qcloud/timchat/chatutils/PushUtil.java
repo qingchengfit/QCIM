@@ -66,7 +66,6 @@ public class PushUtil implements Observer {
         name = message.getNotifyName();
         contentStr = message.getSummary();
 
-        Log.d(TAG, "recv msg " + contentStr);
         NotificationManager mNotificationManager = (NotificationManager) MyApplication.getContext().getSystemService(MyApplication.getContext().NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApplication.getContext());
         Intent notificationIntent = new Intent(MyApplication.getContext(), ChatActivity.class);

@@ -72,7 +72,7 @@ public class AddConversationProcessor {
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra(Configs.IDENTIFY, groupId);
                 intent.putExtra(Configs.CONVERSATION_TYPE, TIMConversationType.Group);
-                intent.putExtra("groupName", name + count);
+                intent.putExtra("groupName", name + "(" + count + ")");
                 context.startActivity(intent);
             }
         });

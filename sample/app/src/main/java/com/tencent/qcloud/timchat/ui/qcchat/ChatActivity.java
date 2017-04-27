@@ -167,7 +167,9 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                     public void run() {
                         RecyclerView.State state = new RecyclerView.State();
                         ((ScrollLinearLayoutManager)listView.getLayoutManager()).setSpeedSlow();
-                        listView.getLayoutManager().smoothScrollToPosition(listView, state, flexibleAdapter.getItemCount() - 1);
+                        if (flexibleAdapter.getItemCount() > 1) {
+                            listView.getLayoutManager().smoothScrollToPosition(listView, state, flexibleAdapter.getItemCount() - 1);
+                        }
 //                        listView.smoothScrollToPosition(flexibleAdapter.getItemCount() - 1);
                     }
                 }, 1000);

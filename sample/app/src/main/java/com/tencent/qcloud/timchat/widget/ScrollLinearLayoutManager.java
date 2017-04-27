@@ -47,7 +47,6 @@ public class ScrollLinearLayoutManager extends LinearLayoutManager{
 
         public void setSpeedSlow() {
             //自己在这里用density去乘，希望不同分辨率设备上滑动速度相同
-            //0.3f是自己估摸的一个值，可以根据不同需求自己修改
             MILLISECONDS_PER_INCH = contxt.getResources().getDisplayMetrics().density * 0.06f;
         }
 

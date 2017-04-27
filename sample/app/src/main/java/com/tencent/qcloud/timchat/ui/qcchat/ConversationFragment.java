@@ -98,7 +98,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
     @Override
     public void onResume(){
         super.onResume();
-        refresh();
+//        refresh();
         PushUtil.getInstance().reset();
     }
 
@@ -158,7 +158,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
         }
         conversation.setLastMessage(MessageFactory.getMessage(message));
         flexItemList.add(new ConversationFlexItem(getContext(), conversation));
-        Collections.sort(flexItemList);
+//        Collections.sort(flexItemList);
         refresh();
     }
 

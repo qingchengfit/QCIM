@@ -633,7 +633,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         AlertDialog dialog = builder.create();
         dialog.show();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_green));
     }
 
 }

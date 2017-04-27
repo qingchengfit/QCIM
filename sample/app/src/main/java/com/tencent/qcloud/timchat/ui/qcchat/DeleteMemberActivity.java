@@ -77,7 +77,7 @@ public class DeleteMemberActivity extends Activity implements ProfileSummaryItem
                         @Override
                         public void onError(int i, String s) {
                             if (i == 10007){
-                                Util.showToast(getApplicationContext(), "只有群主可以移除群成员");
+                                Util.showToast(getApplicationContext(), "仅群聊创建人可移除成员");
                             }else {
                                 Util.showToast(getApplicationContext(), "移出群成员失败，请重试");
                             }

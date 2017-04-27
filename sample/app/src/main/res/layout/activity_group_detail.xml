@@ -57,7 +57,7 @@
 
     <include layout="@layout/divider_grey"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1px"
         android:layout_marginTop="12dp"
         />
     <RelativeLayout
@@ -105,7 +105,7 @@
 
     <include layout="@layout/divider_grey"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1px"
         android:layout_marginTop="15dp"
         />
     <TextView
@@ -132,7 +132,7 @@
 
     <include layout="@layout/divider_grey"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1px"
         android:layout_marginTop="20dp"
         />
     <TextView

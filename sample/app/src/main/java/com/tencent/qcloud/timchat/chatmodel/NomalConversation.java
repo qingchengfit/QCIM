@@ -38,7 +38,7 @@ public class NomalConversation extends Conversation {
     public String getAvatar() {
         if (type == TIMConversationType.Group){
 //            avator = GroupInfo.getInstance().getGroupProfile("Private",identify).getAvatarUrl();
-            if (avator.equals("")) avator = String.valueOf(R.drawable.head_other);
+            if (avator.equals("")) avator = String.valueOf(R.drawable.head);
         }else{
 //            avator = profile == null ? String.valueOf(R.drawable.head):profile.getAvatarUrl();
         }

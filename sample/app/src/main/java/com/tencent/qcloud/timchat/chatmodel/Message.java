@@ -174,10 +174,6 @@ public abstract class Message {
         viewHolder.leftMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_grey));
         viewHolder.rightMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_green));
         getBubbleView(viewHolder).getLayoutParams().width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-        getBubbleView(viewHolder).setPadding(Util.dpToPx(12f, viewHolder.getContentView().getResources()),
-                Util.dpToPx(8f, viewHolder.getContentView().getResources()),
-                Util.dpToPx(12f, viewHolder.getContentView().getResources()),
-                Util.dpToPx(8f, viewHolder.getContentView().getResources()));
         viewHolder.leftMessage.setGravity(Gravity.CENTER);
         viewHolder.rightMessage.setGravity(Gravity.CENTER);
     }

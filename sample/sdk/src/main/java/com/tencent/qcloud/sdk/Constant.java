@@ -18,6 +18,9 @@ public class Constant {
     //证书ID
     public static int BUSS_ID;
 
+    //华为证书ID
+    public static int HUAWEI_BUSS_ID;
+
     public static void setAccountType(int accountType) {
         ACCOUNT_TYPE = accountType;
     }
@@ -36,6 +39,10 @@ public class Constant {
 
     public static void setBussId(int bussId) {
         BUSS_ID = bussId;
+    }
+
+    public static void setHuaweiBussId(int huaweiBussId) {
+        HUAWEI_BUSS_ID = huaweiBussId;
     }
 
     //    public static final int ACCOUNT_TYPE = 792;

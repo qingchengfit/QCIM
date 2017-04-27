@@ -3,6 +3,8 @@ package com.tencent.qcloud.timchat.chatmodel;
 import android.content.Context;
 import android.drm.DrmStore;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,8 @@ import java.io.IOException;
 public class VoiceMessage extends Message {
 
     private static final String TAG = "VoiceMessage";
+    private static final int CHANGE_VOICE = 1001;
+    private VoiceHandler handler;
 
     public VoiceMessage(TIMMessage message){
         this.message = message;
@@ -65,6 +69,7 @@ public class VoiceMessage extends Message {
         message.addElement(elem);
     }
 
+
     /**
      * 显示消息
      *
@@ -94,21 +99,27 @@ public class VoiceMessage extends Message {
 //        lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         RelativeLayout layout = getBubbleView(viewHolder);
         linearLayout.setMinimumWidth(Util.dpToPx(64f, context.getResources()));
+        int mWidth;
         int duration = (int)((TIMSoundElem) message.getElement(0)).getDuration();
-        if (duration > 3){
-            layout.getLayoutParams().width = Util.dpToPx(64f + (duration - 2) * 5, context.getResources());
-            if (layout.getLayoutParams().width > Util.dpToPx(212f, context.getResources())){
-                layout.getLayoutParams().width = Util.dpToPx(212f, context.getResources());
+        if (duration > 3) {
+            mWidth = 64 + (duration - 3) * 5;
+            if (mWidth > 212){
+                mWidth = 212;
             }
+        }else{
+            mWidth = 64;
         }
+
+        layout.getLayoutParams().width = Util.dpToPx(mWidth, context.getResources());
+
         if (!message.isSelf()){
-//            layout.setPadding(layout.getPaddingLeft(), Util.dpToPx(9f, context.getResources()), 0, Util.dpToPx(9f, context.getResources()));
+            layout.setPadding(layout.getPaddingLeft(), Util.dpToPx(9f, context.getResources()), 0, Util.dpToPx(9f, context.getResources()));
             viewHolder.leftMessage.setGravity(Gravity.LEFT);
             linearLayout.setGravity(Gravity.LEFT);
             linearLayout.addView(voiceIcon);
             viewHolder.leftMessage.addView(linearLayout);
         }else{
-//            layout.setPadding(0, Util.dpToPx(9f, context.getResources()), layout.getPaddingRight(), Util.dpToPx(9f, context.getResources()));
+            layout.setPadding(0, Util.dpToPx(9f, context.getResources()), layout.getPaddingRight(), Util.dpToPx(9f, context.getResources()));
             viewHolder.rightMessage.setGravity(Gravity.RIGHT);
             linearLayout.setGravity(Gravity.RIGHT);
             linearLayout.addView(voiceIcon);
@@ -136,6 +147,51 @@ public class VoiceMessage extends Message {
             }
         });
         showStatus(viewHolder);
+    }
+
+    private void startVoiceHandler(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int width;
+                int duration = (int)((TIMSoundElem) message.getElement(0)).getDuration();
+                if (duration > 3) {
+                    width = 64 + (duration - 3) * 5;
+                    if (width > 212){
+                        width = 212;
+                    }
+                }else{
+                    width = 64;
+                }
+                handler.sendEmptyMessage(width);
+            }
+        }).start();
+    }
+
+    class  VoiceHandler extends Handler{
+
+        private ChatItem.ViewHolder viewHolder;
+        private Context context;
+        private ViewGroup layout;
+
+        public VoiceHandler(Context context, Looper looper, ChatItem.ViewHolder viewHolder) {
+            super(looper);
+            this.viewHolder = viewHolder;
+            this.context = context;
+        }
+
+        public void setLayout(ViewGroup layout){
+            this.layout = layout;
+        }
+
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            if (msg.what != 0){
+                viewHolder.sender.setVisibility(View.GONE);
+                layout.getLayoutParams().width = Util.dpToPx(msg.what, context.getResources());
+            }
+        }
     }
 
     /**

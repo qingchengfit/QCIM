@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
@@ -65,6 +67,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+
 public class ChatActivity extends AppCompatActivity implements ChatView, ChatItem.OnDeleteMessageItem {
 
     static {
@@ -92,6 +96,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
     private Handler handler = new Handler();
     private TemplateTitle title;
     private String avatar;
+    private boolean isC2C;
+    private RelativeLayout root;
 
     public static void navToChat(Context context, String identify, TIMConversationType type) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -107,11 +113,16 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    }
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         title = (TemplateTitle) findViewById(R.id.chat_title);
+        root = (RelativeLayout) findViewById(R.id.root);
 
         identify = getIntent().getStringExtra(Configs.IDENTIFY);
         if(getIntent().getStringExtra("groupName") != null) {
@@ -126,7 +137,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         flexibleAdapter.addListener(this);
         listView = (RecyclerView) findViewById(R.id.list);
         listView.setLayoutManager(new ScrollLinearLayoutManager(getApplicationContext()));
-        listView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
+        listView.setNestedScrollingEnabled(false);
         listView.setAdapter(flexibleAdapter);
 
         listView.setOnTouchListener(new View.OnTouchListener() {
@@ -140,6 +151,24 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                 return false;
             }
         });
+
+        listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RecyclerView.State state = new RecyclerView.State();
+                        ((ScrollLinearLayoutManager)listView.getLayoutManager()).setSpeedSlow();
+                        if (flexibleAdapter.getItemCount() > 1) {
+                            listView.getLayoutManager().smoothScrollToPosition(listView, state, flexibleAdapter.getItemCount() - 1);
+                        }
+                    }
+                }, 1000);
+            }
+        });
+
         listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             private int firstItem;
@@ -160,27 +189,9 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
             }
         });
 
-        listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                new Handler(getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        RecyclerView.State state = new RecyclerView.State();
-                        ((ScrollLinearLayoutManager)listView.getLayoutManager()).setSpeedSlow();
-                        if (flexibleAdapter.getItemCount() > 1) {
-                            listView.getLayoutManager().smoothScrollToPosition(listView, state, flexibleAdapter.getItemCount() - 1);
-                        }
-//                        listView.smoothScrollToPosition(flexibleAdapter.getItemCount() - 1);
-                    }
-                }, 1000);
-            }
-        });
-
-        registerForContextMenu(listView);
         switch (type) {
             case C2C:
+                isC2C = true;
                 List<String> list = new ArrayList<>();
                 list.add(identify);
                 TIMFriendshipManager.getInstance().getUsersProfile(list, new TIMValueCallBack<List<TIMUserProfile>>() {
@@ -195,12 +206,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                             titleStr = profile.getNickName();
                             avatar = profile.getFaceUrl();
                         }
+
                             title.setTitleText(titleStr);
                     }
                 });
                 break;
             case Group:
-                title.setMoreImg(R.drawable.ic_form_group);
+                title.setMoreImg(R.drawable.ic_form_white_group);
                 title.setMoreImgAction(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -230,6 +242,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         presenter.start();
     }
 
+    private boolean isC2C(){
+        return isC2C;
+    }
+
 
     @Override
     protected void onPause() {
@@ -252,14 +268,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         presenter.stop();
     }
 
-
     /**
      * 显示消息
      *
      * @param message
      */
     @Override
-    public void showMessage(TIMMessage message) {
+    public void showMessage(final TIMMessage message) {
         if (message == null) {
             flexibleAdapter.notifyDataSetChanged();
         } else {
@@ -283,14 +298,17 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
                     } else {
                         mMessage.setHasTime(itemList.get(itemList.size() - 1).getData().getMessage());
                     }
-
+                    List<String> list = new ArrayList<>();
+                    list.add(message.getSender());
                     new Handler(getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            itemList.add(new ChatItem(getApplicationContext(), mMessage, avatar, ChatActivity.this));
+                            itemList.add(new ChatItem(getApplicationContext(), mMessage,
+                                    isC2C() || mMessage.isSelf() ? avatar : message.getSenderProfile().getFaceUrl(), ChatActivity.this));
+
                             flexibleAdapter.notifyDataSetChanged();
                         }
-                    }, 300);
+                    }, 500);
                     new Handler(getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -321,18 +339,22 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
             ++newMsgNum;
             if (i != messages.size() - 1) {
                 mMessage.setHasTime(messages.get(i + 1));
-                new Handler().postDelayed(new Runnable() {
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        itemList.add(0, new ChatItem(getApplicationContext(), mMessage, avatar, ChatActivity.this));
+                        itemList.add(0, new ChatItem(getApplicationContext(), mMessage,
+                                isC2C() || mMessage.isSelf() ? avatar : mMessage.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
                     }
                 }, 500);
             } else {
                 mMessage.setHasTime(null);
-                new Handler().postDelayed(new Runnable() {
+                List<String> list = new ArrayList<>();
+                list.add(mMessage.getSender());
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        itemList.add(0, new ChatItem(getApplicationContext(), mMessage, avatar, ChatActivity.this));
+                        itemList.add(0, new ChatItem(getApplicationContext(), mMessage,
+                                isC2C() || mMessage.isSelf() ? avatar : mMessage.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
                     }
                 }, 500);
             }
@@ -667,8 +689,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_green));
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_green));
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
     }
 
 }

@@ -22,6 +22,7 @@ import com.tencent.TIMFaceElem;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 import com.tencent.TIMTextElem;
+import com.tencent.imcore.Msg;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatItem;
@@ -117,6 +118,19 @@ public class TextMessage extends Message {
         viewHolder.leftVoice.setVisibility(View.GONE);
         viewHolder.rightVoice.setVisibility(View.GONE);
         clearView(viewHolder);
+        viewHolder.leftMessage.setGravity(Gravity.CENTER);
+        viewHolder.rightMessage.setGravity(Gravity.CENTER);
+        if (isSelf()) {
+            getBubbleView(viewHolder).setPadding(Util.dpToPx(12f, viewHolder.getContentView().getResources()),
+                    Util.dpToPx(8f, viewHolder.getContentView().getResources()),
+                    Util.dpToPx(20f, viewHolder.getContentView().getResources()),
+                    Util.dpToPx(8f, viewHolder.getContentView().getResources()));
+        }else{
+            getBubbleView(viewHolder).setPadding(Util.dpToPx(20f, viewHolder.getContentView().getResources()),
+                    Util.dpToPx(8f, viewHolder.getContentView().getResources()),
+                    Util.dpToPx(12f, viewHolder.getContentView().getResources()),
+                    Util.dpToPx(8f, viewHolder.getContentView().getResources()));
+        }
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
 //        tv.setPadding(Util.dpToPx(12f, context.getResources()),
@@ -126,7 +140,7 @@ public class TextMessage extends Message {
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         for (int i = 0; i < message.getElementCount(); ++i){
             elems.add(message.getElement(i));
             if (message.getElement(i).getType() == TIMElemType.Text){

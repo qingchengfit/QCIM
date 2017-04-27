@@ -145,6 +145,10 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
     }
 
+    public InputMode getInputMode() {
+        return inputMode;
+    }
+
     private void updateView(InputMode mode){
         if (mode == inputMode) return;
         leavingCurrentState();

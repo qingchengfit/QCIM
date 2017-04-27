@@ -1,5 +1,6 @@
 package com.tencent.qcloud.timchat.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -81,6 +82,9 @@ public class SetGroupNameActivity extends FragmentActivity {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("groupName", editGroupName.getText().toString());
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                 });

@@ -57,6 +57,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     public static final int IMAGE_PREVIEW = 102;
     private static final int ADD_MEMBER = 103;
     private static final int DELETE_MEMBER = 104;
+    private static final int CHANGE_GROUP_NAME = 105;
 
     List<GroupMemberProfile> list = new ArrayList<>();
     RecyclerView listView;
@@ -165,7 +166,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             public void onClick(View view) {
                 Intent intent = new Intent(GroupMemberActivity.this, SetGroupNameActivity.class);
                 intent.putExtra("id", groupId);
-                startActivity(intent);
+                startActivityForResult(intent, CHANGE_GROUP_NAME);
             }
         });
 
@@ -284,6 +285,13 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                     itemList.add(new ProfileSummaryItem(getApplicationContext(), profile));
                 }
                 resetView();
+            }
+        }else if(requestCode == CHANGE_GROUP_NAME){
+            if (resultCode == RESULT_OK){
+                if (data.getStringExtra("groupName") != null) {
+                    title.setTitleText(data.getStringExtra("groupName"));
+                    tvTipsGroupName.setText(data.getStringExtra("groupName"));
+                }
             }
         }
     }

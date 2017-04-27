@@ -1,13 +1,19 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -16,12 +22,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroupOverlay;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.Toast;
-
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
@@ -55,13 +59,11 @@ import com.tencent.qcloud.timchat.widget.ChatInput;
 import com.tencent.qcloud.timchat.widget.ScrollLinearLayoutManager;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.timchat.widget.VoiceSendingView;
-
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.common.DividerItemDecoration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.common.DividerItemDecoration;
 
 public class ChatActivity extends AppCompatActivity implements ChatView, ChatItem.OnDeleteMessageItem {
 
@@ -406,10 +408,21 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         Intent intent_photo = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent_photo.resolveActivity(getPackageManager()) != null) {
             File tempFile = FileUtil.getTempFile(FileUtil.FileType.IMG);
+            Uri toCamera = null;
             if (tempFile != null) {
                 fileUri = Uri.fromFile(tempFile);
+
+                if (Build.VERSION.SDK_INT >= 24){
+                    toCamera = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider",tempFile);
+                    List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(intent_photo, PackageManager.MATCH_DEFAULT_ONLY);
+                    for (ResolveInfo resolveInfo : resInfoList) {
+                        String packageName = resolveInfo.activityInfo.packageName;
+                        grantUriPermission(packageName, toCamera, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
+                }else
+                    toCamera = Uri.fromFile(tempFile);
             }
-            intent_photo.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            intent_photo.putExtra(MediaStore.EXTRA_OUTPUT, toCamera);
             startActivityForResult(intent_photo, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
@@ -547,7 +560,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK && fileUri != null) {
-                showImagePreview(fileUri.getPath());
+
+                showImagePreview(FileUtil.getFilePath(this, fileUri));
             }
         } else if (requestCode == IMAGE_STORE) {
             if (resultCode == RESULT_OK && data != null) {
@@ -581,7 +595,28 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
         }
 
     }
-
+    public static String getRealFilePath( final Context context, final Uri uri ) {
+        if ( null == uri ) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if ( scheme == null )
+            data = uri.getPath();
+        else if ( ContentResolver.SCHEME_FILE.equals( scheme ) ) {
+            data = uri.getPath();
+        } else if ( ContentResolver.SCHEME_CONTENT.equals( scheme ) ) {
+            Cursor cursor = context.getContentResolver().query( uri, new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null );
+            if ( null != cursor ) {
+                if ( cursor.moveToFirst() ) {
+                    int index = cursor.getColumnIndex( MediaStore.Images.ImageColumns.DATA );
+                    if ( index > -1 ) {
+                        data = cursor.getString( index );
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
 
     private void showImagePreview(String path) {
         if (path == null) return;

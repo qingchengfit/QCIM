@@ -2,8 +2,8 @@
 <animation-list
     android:oneshot="false"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_voice_play3" android:duration="200" />
-    <item android:drawable="@drawable/ic_voice_play1" android:duration="200" />
-    <item android:drawable="@drawable/ic_voice_play2" android:duration="200" />
-    <item android:drawable="@drawable/ic_voice_play3" android:duration="200" />
+    <item android:drawable="@drawable/ic_voiceplay_left_3" android:duration="200" />
+    <item android:drawable="@drawable/ic_voiceplay_left_1" android:duration="200" />
+    <item android:drawable="@drawable/ic_voiceplay_left_2" android:duration="200" />
+    <item android:drawable="@drawable/ic_voiceplay_left_3" android:duration="200" />
 </animation-list>

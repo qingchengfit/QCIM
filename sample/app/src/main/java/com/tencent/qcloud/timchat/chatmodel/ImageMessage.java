@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -240,6 +241,8 @@ public class ImageMessage extends Message {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ImageViewActivity.class);
                 intent.putExtra("filename", fileName);
+                if (Build.VERSION.SDK_INT < 21)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
@@ -249,6 +252,8 @@ public class ImageMessage extends Message {
         if (FileUtil.isCacheFileExist(image.getUuid())){
             Intent intent = new Intent(context, ImageViewActivity.class);
             intent.putExtra("filename", image.getUuid());
+            if (Build.VERSION.SDK_INT < 21)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }else{
             if (!isDownloading){
@@ -268,6 +273,8 @@ public class ImageMessage extends Message {
                         isDownloading = false;
                         Intent intent = new Intent(context, ImageViewActivity.class);
                         intent.putExtra("filename", image.getUuid());
+                        if (Build.VERSION.SDK_INT < 21)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
                 });

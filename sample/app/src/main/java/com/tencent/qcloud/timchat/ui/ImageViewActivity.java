@@ -1,23 +1,21 @@
 package com.tencent.qcloud.timchat.ui;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
-
 import java.io.IOException;
 
-public class ImageViewActivity extends Activity {
+public class ImageViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

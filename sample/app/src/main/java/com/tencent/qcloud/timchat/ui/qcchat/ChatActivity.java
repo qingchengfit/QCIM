@@ -62,12 +62,9 @@ import com.tencent.qcloud.timchat.widget.ScrollLinearLayoutManager;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.timchat.widget.VoiceSendingView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.common.DividerItemDecoration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 public class ChatActivity extends AppCompatActivity implements ChatView, ChatItem.OnDeleteMessageItem {
 
@@ -434,7 +431,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
             if (tempFile != null) {
                 fileUri = Uri.fromFile(tempFile);
 
-                if (Build.VERSION.SDK_INT >= 24){
+                if (Build.VERSION.SDK_INT >= 24 && getApplication().getPackageName().contains("coach")){
                     toCamera = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider",tempFile);
                     List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(intent_photo, PackageManager.MATCH_DEFAULT_ONLY);
                     for (ResolveInfo resolveInfo : resInfoList) {

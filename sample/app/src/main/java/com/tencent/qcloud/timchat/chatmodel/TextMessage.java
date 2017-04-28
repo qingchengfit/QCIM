@@ -15,20 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
 import com.tencent.TIMFaceElem;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 import com.tencent.TIMTextElem;
-import com.tencent.imcore.Msg;
 import com.tencent.qcloud.timchat.MyApplication;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.EmoticonUtil;
 import com.tencent.qcloud.timchat.common.Util;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -140,6 +137,7 @@ public class TextMessage extends Message {
         tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         List<TIMElem> elems = new ArrayList<>();
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = Util.dpToPx(8f, viewHolder.getContentView().getResources());
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         for (int i = 0; i < message.getElementCount(); ++i){
             elems.add(message.getElement(i));

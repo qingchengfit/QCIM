@@ -431,7 +431,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, ChatIte
             if (tempFile != null) {
                 fileUri = Uri.fromFile(tempFile);
 
-                if (Build.VERSION.SDK_INT >= 24 && getApplication().getPackageName().contains("coach")){
+                if (Build.VERSION.SDK_INT >= 24){
                     toCamera = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider",tempFile);
                     List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(intent_photo, PackageManager.MATCH_DEFAULT_ONLY);
                     for (ResolveInfo resolveInfo : resInfoList) {

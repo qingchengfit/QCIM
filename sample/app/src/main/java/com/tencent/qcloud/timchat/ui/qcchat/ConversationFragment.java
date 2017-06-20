@@ -1,11 +1,8 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendFutureItem;
@@ -33,14 +29,12 @@ import com.tencent.qcloud.timchat.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.timchat.viewfeatures.ConversationView;
 import com.tencent.qcloud.timchat.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.timchat.viewfeatures.GroupManageMessageView;
-
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.common.DividerItemDecoration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.common.DividerItemDecoration;
 
 /**
  * 会话列表界面
@@ -365,7 +359,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
     public boolean onItemClick(int position) {
         NomalConversation conversation = (NomalConversation) flexItemList.get(position).getConversation();
         TIMManager.getInstance().getConversation(conversation.getType(),
-                conversation.getIdentify()).setReadMessage();
+            conversation.getIdentify()).setReadMessage();
         flexibleAdapter.notifyItemChanged(position);
         conversation.navToDetail(getActivity());
 //        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {

@@ -1,18 +1,12 @@
 package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.RelativeLayout;
-
 import com.tencent.TIMConversationType;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageStatus;
-import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.adapters.ChatItem;
 import com.tencent.qcloud.timchat.chatutils.TimeUtil;
-import com.tencent.qcloud.timchat.common.Util;
 
 /**
  * 消息数据基类
@@ -49,7 +43,7 @@ public abstract class Message {
      *
      * @param viewHolder 界面样式
      */
-    public RelativeLayout getBubbleView(ChatItem.ViewHolder viewHolder){
+    public void getBubbleView(ChatItem.ViewHolder viewHolder){
         viewHolder.systemMessage.setVisibility(hasTime?View.VISIBLE:View.GONE);
         viewHolder.systemMessage.setText(TimeUtil.getNotifacationTimeStr(message.timestamp()));
         showDesc(viewHolder);
@@ -57,7 +51,6 @@ public abstract class Message {
         if (message.isSelf()){
             viewHolder.leftPanel.setVisibility(View.GONE);
             viewHolder.rightPanel.setVisibility(View.VISIBLE);
-            return viewHolder.rightMessage;
         }else{
             viewHolder.leftPanel.setVisibility(View.VISIBLE);
             viewHolder.rightPanel.setVisibility(View.GONE);
@@ -66,13 +59,12 @@ public abstract class Message {
                 viewHolder.sender.setVisibility(View.VISIBLE);
                 String name = "";
                 if (message.getSenderGroupMemberProfile()!=null) name = message.getSenderGroupMemberProfile().getNameCard();
-                if (name.equals("")&&message.getSenderProfile()!=null) name = message.getSenderProfile().getNickName();
+                if (name.equals("") && message.getSenderProfile()!=null) name = message.getSenderProfile().getNickName();
                 if (name.equals("")) name = message.getSender();
                 viewHolder.sender.setText(name);
             }else{
                 viewHolder.sender.setVisibility(View.GONE);
             }
-            return viewHolder.leftMessage;
         }
 
     }
@@ -152,7 +144,7 @@ public abstract class Message {
             hasTime = true;
             return;
         }
-        hasTime = this.message.timestamp() - message.timestamp() > 300;
+        hasTime = Math.abs(this.message.timestamp() - message.timestamp()) > 300;
     }
 
 
@@ -169,13 +161,10 @@ public abstract class Message {
      *
      */
     protected void clearView(ChatItem.ViewHolder viewHolder){
-        getBubbleView(viewHolder).removeAllViews();
-        getBubbleView(viewHolder).setOnClickListener(null);
-        viewHolder.leftMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_grey));
-        viewHolder.rightMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_green));
-        getBubbleView(viewHolder).getLayoutParams().width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-        viewHolder.leftMessage.setGravity(Gravity.CENTER);
-        viewHolder.rightMessage.setGravity(Gravity.CENTER);
+        //viewHolder.leftMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_grey));
+        //viewHolder.rightMessage.setBackground(ContextCompat.getDrawable(viewHolder.getContentView().getContext(), R.drawable.chat_bubble_green));
+        //viewHolder.leftMessage.setGravity(Gravity.CENTER);
+        //viewHolder.rightMessage.setGravity(Gravity.CENTER);
     }
 
     /**

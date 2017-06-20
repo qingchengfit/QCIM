@@ -312,5 +312,6 @@
     <string name="select_picture_from_album">从相册选择</string>
     <string name="open_camera">打开摄像头</string>
 
+    <string name="text_click_resume_name">点击查看%s的简历</string>
 
 </resources>

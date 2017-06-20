@@ -132,10 +132,10 @@ public class VideoMessage extends Message {
      * 显示缩略图
      */
     private void showSnapshot(final ChatItem.ViewHolder viewHolder, final Bitmap bitmap){
-        if (bitmap == null) return;
-        ImageView imageView = new ImageView(MyApplication.getContext());
-        imageView.setImageBitmap(bitmap);
-        getBubbleView(viewHolder).addView(imageView);
+        //if (bitmap == null) return;
+        //ImageView imageView = new ImageView(MyApplication.getContext());
+        //imageView.setImageBitmap(bitmap);
+        //getBubbleView(viewHolder).addView(imageView);
     }
 
     private void showVideo(String path, Context context){
@@ -146,11 +146,11 @@ public class VideoMessage extends Message {
     }
 
     private void setVideoEvent(final ChatItem.ViewHolder viewHolder, final String fileName, final Context context){
-        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showVideo(FileUtil.getCacheFilePath(fileName),context);
-            }
-        });
+        //getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        showVideo(FileUtil.getCacheFilePath(fileName),context);
+        //    }
+        //});
     }
 }

@@ -58,4 +58,14 @@
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_out</item>
     </style>
 
+    <style name="QcTextStyleLargeDark">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_dark</item>
+    </style>
+
+    <style name="QcTextStyleMediumDark">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_dark</item>
+    </style>
+
 </resources>

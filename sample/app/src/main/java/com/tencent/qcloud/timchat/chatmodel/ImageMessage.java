@@ -76,16 +76,15 @@ public class ImageMessage extends Message {
         TIMImageElem e = (TIMImageElem) message.getElement(0);
         switch (message.status()){
             case Sending:
-
-                ChatImageView imageView = new ChatImageView(MyApplication.getContext());
-                imageView.setMaxWidth(Util.dpToPx(300f, MyApplication.getContext().getResources()));
-                imageView.setBitmap(getThumb(e.getPath()), BitmapFactory.decodeResource(context.getResources(), R.drawable.chat_bubble_green));
-
-                clearView(viewHolder);
-                RelativeLayout layout = getBubbleView(viewHolder);
-                layout.removeAllViews();
-                layout.setPadding(0,0,0,0);
-                layout.addView(imageView);
+                //ChatImageView imageView = new ChatImageView(MyApplication.getContext());
+                //imageView.setMaxWidth(Util.dpToPx(300f, MyApplication.getContext().getResources()));
+                //imageView.setBitmap(getThumb(e.getPath()), BitmapFactory.decodeResource(context.getResources(), R.drawable.chat_bubble_green));
+                //
+                //clearView(viewHolder);
+                //RelativeLayout layout = getBubbleView(viewHolder);
+                //layout.removeAllViews();
+                //layout.setPadding(0,0,0,0);
+                //layout.addView(imageView);
                 break;
             case SendSucc:
                 for(final TIMImage image : e.getImageList()) {
@@ -113,12 +112,12 @@ public class ImageMessage extends Message {
                     if (image.getType() == TIMImageType.Original){
                         final String uuid = image.getUuid();
 //                        setImageEvent(viewHolder, uuid,context);
-                        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                navToImageview(image, context);
-                            }
-                        });
+//                        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                navToImageview(image, context);
+//                            }
+//                        });
                     }
                 }
                 break;
@@ -175,16 +174,16 @@ public class ImageMessage extends Message {
      * 缩略图是将原图等比压缩，压缩后宽、高中较小的一个等于198像素
      * 详细信息参见文档
      */
-    private Bitmap getThumb(String path){
+    public Bitmap getThumb(String path){
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
         int reqWidth, reqHeight, width=options.outWidth, height=options.outHeight;
         if (width > height){
-            reqWidth = 198;
+            reqWidth = 468;
             reqHeight = (reqWidth * height)/width;
         }else{
-            reqHeight = 198;
+            reqHeight = 468;
             reqWidth = (width * reqHeight)/height;
         }
         int inSampleSize = 1;
@@ -221,34 +220,34 @@ public class ImageMessage extends Message {
         Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(filename));
         ChatImageView imageView = new ChatImageView(MyApplication.getContext());
         imageView.setMaxWidth(Util.dpToPx(300f, MyApplication.getContext().getResources()));
-        if (isSelf()) {
-            imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_green));
-        }else{
-            imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_grey));
-        }
-        RelativeLayout layout = getBubbleView(viewHolder);
-        layout.removeAllViews();
-        layout.setPadding(0, 0, 0, 0);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.LEFT_OF, R.id.rightAvatar);
-        layout.addView(imageView, params);
+        //if (isSelf()) {
+        //    imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_green));
+        //}else{
+        //    imageView.setBitmap(bitmap, BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.chat_bubble_grey));
+        //}
+        ////RelativeLayout layout = getBubbleView(viewHolder);
+        //layout.removeAllViews();
+        //layout.setPadding(0, 0, 0, 0);
+        //RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        //        ViewGroup.LayoutParams.WRAP_CONTENT);
+        //params.addRule(RelativeLayout.LEFT_OF, R.id.rightAvatar);
+        //layout.addView(imageView, params);
     }
 
     private void setImageEvent(final ChatItem.ViewHolder viewHolder, final String fileName, final Context context){
-        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ImageViewActivity.class);
-                intent.putExtra("filename", fileName);
-                if (Build.VERSION.SDK_INT < 21)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
-        });
+        //getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        Intent intent = new Intent(context, ImageViewActivity.class);
+        //        intent.putExtra("filename", fileName);
+        //        if (Build.VERSION.SDK_INT < 21)
+        //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //        context.startActivity(intent);
+        //    }
+        //});
     }
 
-    private void navToImageview(final TIMImage image, final Context context){
+    public void navToImageview(final TIMImage image, final Context context){
         if (FileUtil.isCacheFileExist(image.getUuid())){
             Intent intent = new Intent(context, ImageViewActivity.class);
             intent.putExtra("filename", image.getUuid());

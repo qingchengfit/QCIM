@@ -112,46 +112,46 @@ public class TextMessage extends Message {
      */
     @Override
     public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
-        viewHolder.leftVoice.setVisibility(View.GONE);
-        viewHolder.rightVoice.setVisibility(View.GONE);
-        clearView(viewHolder);
-        viewHolder.leftMessage.setGravity(Gravity.CENTER);
-        viewHolder.rightMessage.setGravity(Gravity.CENTER);
-        if (isSelf()) {
-            getBubbleView(viewHolder).setPadding(Util.dpToPx(12f, viewHolder.getContentView().getResources()),
-                    Util.dpToPx(8f, viewHolder.getContentView().getResources()),
-                    Util.dpToPx(20f, viewHolder.getContentView().getResources()),
-                    Util.dpToPx(8f, viewHolder.getContentView().getResources()));
-        }else{
-            getBubbleView(viewHolder).setPadding(Util.dpToPx(20f, viewHolder.getContentView().getResources()),
-                    Util.dpToPx(8f, viewHolder.getContentView().getResources()),
-                    Util.dpToPx(12f, viewHolder.getContentView().getResources()),
-                    Util.dpToPx(8f, viewHolder.getContentView().getResources()));
-        }
-        boolean hasText = false;
-        TextView tv = new TextView(MyApplication.getContext());
-//        tv.setPadding(Util.dpToPx(12f, context.getResources()),
-//                Util.dpToPx(6f, context.getResources()), Util.dpToPx(12f, context.getResources()),
-//                Util.dpToPx(6f, context.getResources()));
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
-        List<TIMElem> elems = new ArrayList<>();
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = Util.dpToPx(8f, viewHolder.getContentView().getResources());
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        for (int i = 0; i < message.getElementCount(); ++i){
-            elems.add(message.getElement(i));
-            if (message.getElement(i).getType() == TIMElemType.Text){
-                hasText = true;
-            }
-        }
-        SpannableStringBuilder stringBuilder = getString(elems, context);
-        if (!hasText){
-            stringBuilder.insert(0," ");
-        }
-        tv.setText(stringBuilder);
-        getBubbleView(viewHolder).addView(tv, params);
-        showStatus(viewHolder);
+//        viewHolder.leftVoice.setVisibility(View.GONE);
+//        viewHolder.rightVoice.setVisibility(View.GONE);
+//        clearView(viewHolder);
+//        viewHolder.leftMessage.setGravity(Gravity.CENTER);
+//        viewHolder.rightMessage.setGravity(Gravity.CENTER);
+//        if (isSelf()) {
+//            getBubbleView(viewHolder).setPadding(Util.dpToPx(12f, viewHolder.getContentView().getResources()),
+//                    Util.dpToPx(8f, viewHolder.getContentView().getResources()),
+//                    Util.dpToPx(20f, viewHolder.getContentView().getResources()),
+//                    Util.dpToPx(8f, viewHolder.getContentView().getResources()));
+//        }else{
+//            getBubbleView(viewHolder).setPadding(Util.dpToPx(20f, viewHolder.getContentView().getResources()),
+//                    Util.dpToPx(8f, viewHolder.getContentView().getResources()),
+//                    Util.dpToPx(12f, viewHolder.getContentView().getResources()),
+//                    Util.dpToPx(8f, viewHolder.getContentView().getResources()));
+//        }
+//        boolean hasText = false;
+//        TextView tv = new TextView(MyApplication.getContext());
+////        tv.setPadding(Util.dpToPx(12f, context.getResources()),
+////                Util.dpToPx(6f, context.getResources()), Util.dpToPx(12f, context.getResources()),
+////                Util.dpToPx(6f, context.getResources()));
+//        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+//        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
+//        List<TIMElem> elems = new ArrayList<>();
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        params.leftMargin = Util.dpToPx(8f, viewHolder.getContentView().getResources());
+//        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+//        for (int i = 0; i < message.getElementCount(); ++i){
+//            elems.add(message.getElement(i));
+//            if (message.getElement(i).getType() == TIMElemType.Text){
+//                hasText = true;
+//            }
+//        }
+//        SpannableStringBuilder stringBuilder = getString(elems, context);
+//        if (!hasText){
+//            stringBuilder.insert(0," ");
+//        }
+//        tv.setText(stringBuilder);
+//        getBubbleView(viewHolder).addView(tv, params);
+//        showStatus(viewHolder);
     }
 
     /**

@@ -6,6 +6,7 @@
     <color name="transparent">#00000000</color>
 
 
+    <color name="resume_grey">#F8F8F8</color>
     <color name="background">#F9F7F8</color>
     <color name="background_gray1">#f4f4f4</color>
     <color name="background_gray2">#E6E6E6</color>
@@ -26,6 +27,8 @@
     <color name="btn_blue_hover">#1E86E4</color>
     <color name="btn_text">#FFFFFF</color>
     <color name="btn_text_hover">#CCFFFFFF</color>
+    <color name="text_dark">#333333</color>
+    <color name="text_grey">#bbbbbb</color>
 
     <color name="divider_grey">#dddddd</color>
     <!--蒙版-->

@@ -3,6 +3,8 @@ package com.tencent.qcloud.timchat.viewfeatures;
 import com.tencent.TIMMessage;
 import com.tencent.TIMMessageDraft;
 
+import com.tencent.qcloud.timchat.chatmodel.RecruitModel;
+import com.tencent.qcloud.timchat.chatmodel.ResumeModel;
 import java.util.List;
 
 /**
@@ -108,6 +110,5 @@ public interface ChatView extends MvpView {
      *
      */
     void showDraft(TIMMessageDraft draft);
-
 
 }

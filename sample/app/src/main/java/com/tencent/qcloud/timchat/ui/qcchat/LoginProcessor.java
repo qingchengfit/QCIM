@@ -36,6 +36,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.regex.Pattern;
 import tencent.tls.platform.TLSErrInfo;
 
 /**
@@ -48,6 +49,7 @@ public class LoginProcessor implements TIMCallBack {
     private OnLoginListener onLoginListener;
     private String username;
     private String host;
+    private int errorTimes;
 
     public LoginProcessor(Context context, String username, String host, OnLoginListener onLoginListener) throws Exception {
         this.context = context;
@@ -167,7 +169,13 @@ public class LoginProcessor implements TIMCallBack {
         TLSErrInfo tlsErrInfo = new TLSErrInfo();
         tlsErrInfo.ErrCode = i;
         tlsErrInfo.Msg = s;
-        onLoginListener.onLoginFailed(tlsErrInfo);
+
+        if (i / 10000 == 7 && errorTimes < 3){
+            navToHome();
+            errorTimes++;
+        }else {
+            onLoginListener.onLoginFailed(tlsErrInfo);
+        }
     }
 
     @Override

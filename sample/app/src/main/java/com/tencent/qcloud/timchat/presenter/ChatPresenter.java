@@ -25,7 +25,7 @@ public class ChatPresenter implements Observer {
     private ChatView view;
     private TIMConversation conversation;
     private boolean isGetingMessage = false;
-    private final int LAST_MESSAGE_NUM = 20;
+    private final int LAST_MESSAGE_NUM = 10;
     private final static String TAG = "ChatPresenter";
 
     public ChatPresenter(ChatView view, String identify, TIMConversationType type){
@@ -82,7 +82,6 @@ public class ChatPresenter implements Observer {
             public void onSuccess(TIMMessage msg) {
                 //发送消息成功,消息状态已在sdk中修改，此时只需更新界面
                 MessageEvent.getInstance().onNewMessage(null);
-
             }
         });
         //message对象为发送中状态

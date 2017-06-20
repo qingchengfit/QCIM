@@ -44,16 +44,16 @@ public class FileMessage extends Message {
      */
     @Override
     public void showMessage(ChatItem.ViewHolder viewHolder, Context context) {
-        viewHolder.leftVoice.setVisibility(View.GONE);
-        viewHolder.rightVoice.setVisibility(View.GONE);
-        clearView(viewHolder);
-        TIMFileElem e = (TIMFileElem) message.getElement(0);
-        TextView tv = new TextView(MyApplication.getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
-        tv.setText(e.getFileName());
-        getBubbleView(viewHolder).addView(tv);
-        showStatus(viewHolder);
+        //viewHolder.leftVoice.setVisibility(View.GONE);
+        //viewHolder.rightVoice.setVisibility(View.GONE);
+        //clearView(viewHolder);
+        //TIMFileElem e = (TIMFileElem) message.getElement(0);
+        //TextView tv = new TextView(MyApplication.getContext());
+        //tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        //tv.setTextColor(MyApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
+        //tv.setText(e.getFileName());
+        //getBubbleView(viewHolder).addView(tv);
+        //showStatus(viewHolder);
     }
 
     /**

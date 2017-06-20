@@ -1,5 +1,6 @@
 package com.tencent.qcloud.timchat.business;
 
+import android.os.Looper;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMManager;
 import com.tencent.TIMUser;
@@ -30,6 +31,7 @@ public class LoginBusiness {
         user.setAccountType(String.valueOf(Constant.ACCOUNT_TYPE));
         user.setAppIdAt3rd(String.valueOf(Constant.SDK_APPID));
         user.setIdentifier(identify);
+
         //发起登录请求
         TIMManager.getInstance().login(
                 Constant.SDK_APPID,

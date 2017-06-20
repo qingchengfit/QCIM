@@ -12,11 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.chatmodel.Message;
+import com.tencent.qcloud.timchat.chatutils.TimeUtil;
 import com.tencent.qcloud.timchat.common.AppData;
 import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.widget.CircleImageView;
@@ -32,7 +34,7 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 /**
  * 聊天界面adapter
  */
-public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
+public class ChatItem<T extends ChatItem.ViewHolder> extends AbstractFlexibleItem<T> {
 
     private final String TAG = "ChatItem";
 
@@ -53,6 +55,10 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
         this.onDeleteMessageItem = onDeleteMessageItem;
     }
 
+    public ChatItem(Context context){
+        this.context = context;
+    }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
 
@@ -63,8 +69,28 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
     }
 
     @Override
-    public ViewHolder createViewHolder(FlexibleAdapter adapter, LayoutInflater inflater, ViewGroup parent) {
-        ViewHolder vh = new ViewHolder(inflater.inflate(getLayoutRes(), parent, false), adapter);
+    public T createViewHolder(final FlexibleAdapter adapter, LayoutInflater inflater, ViewGroup parent) {
+        T vh = (T) new ViewHolder(inflater.inflate(getLayoutRes(), parent, false), adapter);
+        //leftMessage.setOnLongClickListener(new View.OnLongClickListener() {
+        //    @Override
+        //    public boolean onLongClick(View view) {
+        //        int pos = adapter.;
+        //        if (onDeleteMessageItem != null){
+        //            onDeleteMessageItem.onDelete(pos);
+        //        }
+        //        return false;
+        //    }
+        //});
+        //rightMessage.setOnLongClickListener(new View.OnLongClickListener() {
+        //    @Override
+        //    public boolean onLongClick(View view) {
+        //        int pos = getAdapterPosition();
+        //        if (onDeleteMessageItem != null){
+        //            onDeleteMessageItem.onDelete(pos);
+        //        }
+        //        return false;
+        //    }
+        //});
         return vh;
     }
 
@@ -74,48 +100,25 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
     }
 
     @Override
-    public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
-
-        Glide.with(holder.leftAvatar.getContext())
+    public void bindViewHolder(FlexibleAdapter adapter, T holder, int position, List payloads) {
+        Glide.with(context)
                 .load(PhotoUtils.getSmall(TextUtils.isEmpty(avatar) ? AppData.defaultAvatar : avatar))
                 .asBitmap()
                 .into(holder.leftAvatar);
-        Glide.with(holder.rightAvatar.getContext())
-                .load(PhotoUtils.getSmall(AppData.getAvatar(holder.rightAvatar.getContext())))
+        Glide.with(context)
+                .load(PhotoUtils.getSmall(AppData.getAvatar(context)))
                 .asBitmap()
                 .into(holder.rightAvatar);
 
-
-        message.showMessage(holder, context);
+        message.getBubbleView(holder);
     }
-
-    private void getAvatar(final ViewHolder holder){
-        List<String> list = new ArrayList<>();
-        list.add(message.getSender());
-        TIMFriendshipManager.getInstance().getUsersProfile(list, new TIMValueCallBack<List<TIMUserProfile>>() {
-            @Override
-            public void onError(int i, String s) {
-                Util.showToast(context, s);
-            }
-
-            @Override
-            public void onSuccess(List<TIMUserProfile> timUserProfiles) {
-                for (TIMUserProfile profile : timUserProfiles) {
-
-                }
-            }
-        });
-    }
-
 
     @Override
     public boolean equals(Object o) {
         return false;
     }
 
-    public class ViewHolder extends FlexibleViewHolder{
-        public RelativeLayout leftMessage;
-        public RelativeLayout rightMessage;
+    public static class ViewHolder extends FlexibleViewHolder{
         public RelativeLayout leftPanel;
         public RelativeLayout rightPanel;
         public RelativeLayout senderLayout;
@@ -131,44 +134,16 @@ public class ChatItem extends AbstractFlexibleItem<ChatItem.ViewHolder> {
 
         public ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
-            leftMessage = (RelativeLayout) view.findViewById(R.id.leftMessage);
-            leftMessage.setMinimumWidth(Util.dpToPx(64f, view.getContext().getResources()));
-            rightMessage = (RelativeLayout) view.findViewById(R.id.rightMessage);
-            rightMessage.setMinimumWidth(Util.dpToPx(64f, view.getContext().getResources()));
             leftPanel = (RelativeLayout) view.findViewById(R.id.leftPanel);
-            leftVoice = (TextView) view.findViewById(R.id.text_voice_time_left);
-            leftVoice.setVisibility(View.GONE);
             rightPanel = (RelativeLayout) view.findViewById(R.id.rightPanel);
             sending = (ProgressBar) view.findViewById(R.id.sending);
             error = (ImageView) view.findViewById(R.id.sendError);
             sender = (TextView) view.findViewById(R.id.sender);
             rightDesc = (TextView) view.findViewById(R.id.rightDesc);
-            rightVoice = (TextView) view.findViewById(R.id.text_voice_time_right);
-            leftVoice.setVisibility(View.GONE);
             systemMessage = (TextView) view.findViewById(R.id.systemMessage);
             senderLayout = (RelativeLayout) view.findViewById(R.id.sendStatus);
             leftAvatar = (CircleImageView) view.findViewById(R.id.leftAvatar);
             rightAvatar = (CircleImageView) view.findViewById(R.id.rightAvatar);
-            leftMessage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    int pos = getAdapterPosition();
-                    if (onDeleteMessageItem != null){
-                        onDeleteMessageItem.onDelete(pos);
-                    }
-                    return false;
-                }
-            });
-            rightMessage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    int pos = getAdapterPosition();
-                    if (onDeleteMessageItem != null){
-                        onDeleteMessageItem.onDelete(pos);
-                    }
-                    return false;
-                }
-            });
         }
     }
 

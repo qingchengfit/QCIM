@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ee11"
+    android:gravity="center_vertical"
+    >
+
+  <ImageView
+      android:id="@+id/img_resume"
+      android:layout_width="44dp"
+      android:layout_height="44dp"
+      android:layout_margin="15dp"
+      android:src="@drawable/head"
+      android:padding="0.5dp"
+      android:scaleType="centerCrop"
+      />
+  
+    <TextView
+        android:id="@+id/resume_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="林雪婷"
+        android:textColor="@color/qc_text_black"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/img_resume"
+        android:layout_alignTop="@id/img_resume"
+        android:layout_marginTop="5dp"
+        />
+
+    <ImageView
+        android:id="@+id/resume_gender"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        tools:src="@drawable/ic_gender_signal_female"
+        android:layout_toRightOf="@id/resume_name"
+        android:layout_marginLeft="3dp"
+        android:layout_alignTop="@id/img_resume"
+        android:layout_marginTop="5dp"
+        />
+
+    <ImageView
+        android:id="@+id/resume_word_year"
+        android:layout_width="15dp"
+        android:layout_height="13dp"
+        android:layout_toRightOf="@id/img_resume"
+        app:srcCompat="@drawable/vd_recruit_jobintro_experience"
+        android:layout_below="@id/resume_name"
+        />
+
+    <TextView
+        android:id="@+id/resume_text_work_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/resume_name"
+        tools:text="2年"
+        android:textSize="12sp"
+        android:textColor="@color/qc_text_black"
+        android:layout_toRightOf="@id/resume_word_year"
+        android:layout_marginLeft="3dp"
+        />
+
+    <ImageView
+        android:id="@+id/resume_agree"
+        android:layout_width="15dp"
+        android:layout_height="13dp"
+        android:layout_toRightOf="@id/resume_text_work_year"
+        android:layout_marginLeft="15dp"
+        app:srcCompat="@drawable/vd_recruit_jobintro_education"
+        android:layout_below="@id/resume_name"
+        />
+
+    <TextView
+        android:id="@+id/resume_text_agree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/resume_name"
+        tools:text="2年"
+        android:textSize="12sp"
+        android:textColor="@color/qc_text_black"
+        android:layout_toRightOf="@id/resume_agree"
+        android:layout_marginLeft="3dp"
+        />
+
+    <ImageView
+        android:id="@+id/resume_age"
+        android:layout_width="15dp"
+        android:layout_height="13dp"
+        android:layout_toRightOf="@id/resume_text_agree"
+        android:layout_marginLeft="15dp"
+        app:srcCompat="@drawable/vd_recruit_jobintro_age"
+        android:layout_below="@id/resume_name"
+        />
+
+    <TextView
+        android:id="@+id/resume_text_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/resume_name"
+        tools:text="2年"
+        android:textSize="12sp"
+        android:textColor="@color/qc_text_black"
+        android:layout_toRightOf="@id/resume_age"
+        android:layout_marginLeft="3dp"
+        />
+    
+  <include
+      android:id="@+id/divider"
+      layout="@layout/divider_grey"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_below="@id/resume_text_age"
+      android:layout_marginTop="18dp"
+      android:layout_marginLeft="12dp"
+      android:layout_marginRight="12dp"/>
+
+
+  <TextView
+      android:id="@+id/text_click_resume"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:text="点击查看林雪婷的简历"
+      android:layout_below="@id/divider"
+      android:layout_marginTop="6dp"
+      android:textColor="@color/qc_text_grey"
+      android:textSize="12sp"
+      android:paddingLeft="12dp"
+      android:paddingBottom="7dp"
+      />
+
+</RelativeLayout>

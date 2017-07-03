@@ -1,6 +1,7 @@
 package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,12 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
     return holder;
   }
 
+  public String getJobId(){
+    if (recruitModel != null)
+      return recruitModel.id;
+    else return "";
+  }
+
   @Override public Message getData() {
     return message;
   }
@@ -70,12 +77,12 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
         .into(holder.imgGym);
 
     holder.tvPositionName.setText(recruitModel.name);
-    holder.tvSalary.setText(RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary));
-    holder.tvGymInfo.setText(recruitModel.address + "·" + recruitModel.gym_name);
-    holder.tvWorkYear.setText(RecruitBusinessUtils.getWorkYear(recruitModel.min_work_year, recruitModel.max_work_year));
+    holder.tvSalary.setText(RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary,"面议"));
+    holder.tvGymInfo.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name)?"":"·" + recruitModel.gym_name));
+    holder.tvWorkYear.setText(RecruitBusinessUtils.getWorkYear(recruitModel.min_work_year, recruitModel.max_work_year,"经验"));
     holder.tvGender.setText(recruitModel.gender == 1 ? "男性" : "女性");
-    holder.tvAge.setText(RecruitBusinessUtils.getAge(recruitModel.min_age, recruitModel.max_age));
-    holder.tvHeight.setText(RecruitBusinessUtils.getHeight(recruitModel.min_height, recruitModel.max_height));
+    holder.tvAge.setText(RecruitBusinessUtils.getAge(recruitModel.min_age, recruitModel.max_age,"年龄"));
+    holder.tvHeight.setText(RecruitBusinessUtils.getHeight(recruitModel.min_height, recruitModel.max_height,"身高"));
   }
 
   @Override public int getLayoutRes() {

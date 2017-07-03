@@ -98,6 +98,9 @@
           android:paddingRight="4dp"
           android:paddingTop="2dp"
           tools:text="3-5年"
+          android:textSize="12sp"
+          android:lines="1"
+          android:ellipsize="end"
           />
 
       <TextView
@@ -110,6 +113,9 @@
           android:paddingLeft="4dp"
           android:paddingRight="4dp"
           android:paddingTop="2dp"
+          android:textSize="12sp"
+          android:lines="1"
+          android:ellipsize="end"
           />
 
       <TextView
@@ -122,6 +128,9 @@
           android:paddingLeft="4dp"
           android:paddingRight="4dp"
           android:paddingTop="2dp"
+          android:textSize="12sp"
+          android:lines="1"
+          android:ellipsize="end"
           />
 
       <TextView
@@ -134,6 +143,9 @@
           android:paddingLeft="4dp"
           android:paddingRight="4dp"
           android:paddingTop="2dp"
+          android:textSize="12sp"
+          android:lines="1"
+          android:ellipsize="end"
           />
 
     </LinearLayout>

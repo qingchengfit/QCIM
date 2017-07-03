@@ -139,7 +139,7 @@ public class ConversationFragment extends Fragment implements ConversationView,
             groupManagerPresenter.getGroupManageLastMessage();
             return;
         }
-        if (MessageFactory.getMessage(message) instanceof CustomMessage) return;
+        if (MessageFactory.getMessage(message) instanceof CustomMessage && ((CustomMessage) MessageFactory.getMessage(message)).getType() == CustomMessage.Type.TYPING) return;
         NomalConversation conversation = new NomalConversation(message.getConversation());
         Iterator<ConversationFlexItem> iterator =flexItemList.iterator();
         while (iterator.hasNext()){

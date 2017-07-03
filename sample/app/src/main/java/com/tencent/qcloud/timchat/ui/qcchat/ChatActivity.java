@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -182,10 +181,10 @@ public class ChatActivity extends AppCompatActivity
         }
       }
     });
-
-    if (getIntent().getIntExtra(Configs.CHAT_RECRUIT_STATE, 0) != 0) {
-      chatSendResume.setVisibility(View.VISIBLE);
-    }
+    // TODO: 2017/6/23 暂时屏蔽
+    //if (getIntent().getIntExtra(Configs.CHAT_RECRUIT_STATE, 0) != 0) {
+    //  chatSendResume.setVisibility(View.VISIBLE);
+    //}
 
     switch (type) {
       case C2C:
@@ -195,7 +194,7 @@ public class ChatActivity extends AppCompatActivity
         TIMFriendshipManager.getInstance()
             .getUsersProfile(list, new TIMValueCallBack<List<TIMUserProfile>>() {
               @Override public void onError(int i, String s) {
-                Util.showToast(getApplicationContext(), s);
+                Util.showToast(ChatActivity.this, s);
               }
 
               @Override public void onSuccess(List<TIMUserProfile> timUserProfiles) {
@@ -303,7 +302,7 @@ public class ChatActivity extends AppCompatActivity
               flexibleAdapter.notifyDataSetChanged();
               break;
             case RESUME:
-              itemList.add(0, new ChatResumeItem(getApplicationContext(), mMessage,
+              itemList.add(0, new ChatResumeItem(this, mMessage,
                   isC2C() || mMessage.isSelf() ? avatar
                       : mMessage.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
               flexibleAdapter.notifyDataSetChanged();
@@ -330,22 +329,22 @@ public class ChatActivity extends AppCompatActivity
 
     if (message instanceof TextMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatTextItem(getApplicationContext(), message,
+        itemList.add(0, new ChatTextItem(this, message,
             isC2C() || message.isSelf() ? avatar
                 : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       } else {
-        itemList.add(new ChatTextItem(getApplicationContext(), message,
+        itemList.add(new ChatTextItem(this, message,
             isC2C() || message.isSelf() ? avatar
                 : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       }
     }
     if (message instanceof ImageMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatImageItem(getApplicationContext(), message,
+        itemList.add(0, new ChatImageItem(this, message,
             isC2C() || message.isSelf() ? avatar
                 : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       } else {
-        itemList.add(new ChatImageItem(getApplicationContext(), message,
+        itemList.add(new ChatImageItem(this, message,
             isC2C() || message.isSelf() ? avatar
                 : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       }
@@ -353,11 +352,11 @@ public class ChatActivity extends AppCompatActivity
 
     if (message instanceof VoiceMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatVoiceItem(getApplicationContext(), message,
+        itemList.add(0, new ChatVoiceItem(this, message,
             isC2C() || message.isSelf() ? avatar
                 : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       } else {
-        itemList.add(new ChatVoiceItem(getApplicationContext(), message,
+        itemList.add(new ChatVoiceItem(this, message,
             isC2C() || message.isSelf() ? avatar
                 : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       }
@@ -365,10 +364,10 @@ public class ChatActivity extends AppCompatActivity
     if (message instanceof CustomMessage){
       switch (((CustomMessage) message).getType()){
         case RECRUIT:
-          itemList.add(new ChatRercuitItem(getBaseContext(), (RecruitModel) (((CustomMessage) message).getData()), message));
+          itemList.add(new ChatRercuitItem(this, (RecruitModel) (((CustomMessage) message).getData()), message));
           break;
         case RESUME:
-          itemList.add(new ChatResumeItem(getApplicationContext(), message,
+          itemList.add(new ChatResumeItem(this, message,
               isC2C() || message.isSelf() ? avatar
                   : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
           break;
@@ -733,12 +732,12 @@ public class ChatActivity extends AppCompatActivity
     AlertDialog dialog = builder.create();
     dialog.show();
     dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_green));
+        .setTextColor(ContextCompat.getColor(this, R.color.qc_green));
     dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.qc_text_grey));
+        .setTextColor(ContextCompat.getColor(this, R.color.qc_text_grey));
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
+  @Override
   public boolean onItemClick(int position) {
     if (flexibleAdapter.getItem(position) instanceof ChatTextItem) {
       return false;
@@ -750,11 +749,33 @@ public class ChatActivity extends AppCompatActivity
       return false;
     }
     if (flexibleAdapter.getItem(position) instanceof ChatRercuitItem){
+      outLink(getCurAppSchema(this)+"://job/"+((ChatRercuitItem) flexibleAdapter.getItem(position)).getJobId()+"/");
       return false;
     }
     if (flexibleAdapter.getItem(position) instanceof ChatResumeItem){
+      outLink(getCurAppSchema(this)+"://resume/?id="+((ChatResumeItem) flexibleAdapter.getItem(position)).getResumeId());
       return false;
     }
     return false;
+  }
+
+  public static String getCurAppSchema(Context context){
+    String packagename = context.getPackageName();
+    if (packagename.contains("coach")){
+      return "qccoach";
+    }else {
+      return "qcstaff";
+    }
+  }
+
+  public void outLink(String uri){
+    try{
+      Intent toOut = new Intent();
+      toOut.setPackage(getPackageName());
+      toOut.setData(Uri.parse(uri));
+      startActivity(toOut);
+    }catch (Exception e){
+
+    }
   }
 }

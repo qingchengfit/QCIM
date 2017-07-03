@@ -7,18 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
-
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.GroupInfo;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
-import com.tencent.qcloud.timchat.ui.qcchat.SplashActivity;
 import com.tencent.qcloud.timchat.chatutils.NetUtil;
+import com.tencent.qcloud.timchat.ui.qcchat.SplashActivity;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
 import java.util.List;
 
 public class DialogActivity extends Activity implements View.OnClickListener {
@@ -50,13 +47,13 @@ public class DialogActivity extends Activity implements View.OnClickListener {
                             new TIMCallBack() {
                                 @Override
                                 public void onError(int i, String s) {
-                                    Toast.makeText(DialogActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(DialogActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
                                     logout();
                                 }
 
                                 @Override
                                 public void onSuccess() {
-                                    Toast.makeText(DialogActivity.this, getString(R.string.login_succ), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(DialogActivity.this, getString(R.string.login_succ), Toast.LENGTH_SHORT).show();
                                     String deviceMan = android.os.Build.MANUFACTURER;
                                     //注册小米和华为推送
                                     if (deviceMan.equals("Xiaomi") && shouldMiInit()) {

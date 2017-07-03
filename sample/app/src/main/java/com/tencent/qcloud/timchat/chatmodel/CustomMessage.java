@@ -2,15 +2,12 @@ package com.tencent.qcloud.timchat.chatmodel;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMMessage;
 import com.tencent.qcloud.timchat.adapters.ChatItem;
-
-import org.json.JSONException;
-
 import java.io.IOException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -51,7 +48,8 @@ public class CustomMessage extends Message {
       }
     } catch (JSONException e) {
       Log.e(TAG, "generate json error");
-    } TIMCustomElem elem = new TIMCustomElem();
+    }
+    TIMCustomElem elem = new TIMCustomElem();
     elem.setData(data.getBytes());
     message.addElement(elem);
   }
@@ -60,57 +58,58 @@ public class CustomMessage extends Message {
     message = new TIMMessage();
     TIMCustomElem elem = new TIMCustomElem();
     this.type = type;
-    if(type == Type.RECRUIT || type == Type.RESUME) {
+    if (type == Type.RECRUIT || type == Type.RESUME) {
       elem.setData(jsonStr.getBytes());
     }
     message.addElement(elem);
   }
 
-  public Object getData(){
+  public Object getData() {
     Object dataObj = null;
-    String json = new  String(((TIMCustomElem)(message.getElement(0))).getData());
-      try {
-        JSONObject jsonObject = new JSONObject(json);
-        int action = jsonObject.getInt("userAction");
-        JSONObject dataObject = jsonObject.getJSONObject("data");
-        switch (action){
-          case TYPE_RESUME:
-            ResumeModel resumeModel = new ResumeModel();
-            resumeModel.id = dataObject.getString("id");
+    String json = new String(((TIMCustomElem) (message.getElement(0))).getData());
+    try {
+      JSONObject jsonObject = new JSONObject(json);
+      int action = jsonObject.getInt("userAction");
+      JSONObject dataObject = jsonObject.getJSONObject("data");
+      switch (action) {
+        case TYPE_RESUME:
+          ResumeModel resumeModel = new ResumeModel();
+          if (dataObject.has("id")) resumeModel.id = dataObject.getString("id");
+          if (dataObject.has("max_education")) {
             resumeModel.max_education = dataObject.getInt("max_education");
-            resumeModel.birthday = dataObject.getString("birthday");
-            resumeModel.gender = dataObject.getInt("gender");
-            resumeModel.avatar = dataObject.getString("avatar");
-            resumeModel.work_year = dataObject.getInt("work_year");
-            resumeModel.username = dataObject.getString("username");
-            dataObj = resumeModel;
-            break;
-          case TYPE_RECRUIT:
-            Gson gson = new Gson();
-            //RecruitModel recruitModel = gson.fromJson(json, RecruitModel.class);
-            RecruitModel recruitModel = new RecruitModel();
-            recruitModel.id = dataObject.getString("id");
-            recruitModel.address = dataObject.getString("address");
-            recruitModel.gender = dataObject.getInt("gender");
-            recruitModel.photo = dataObject.getString("photo");
-            recruitModel.max_age = dataObject.getInt("max_age");
-            recruitModel.min_age = dataObject.getInt("min_age");
-            recruitModel.max_height = dataObject.getInt("max_height");
-            recruitModel.min_height = dataObject.getInt("min_height");
-            recruitModel.max_salary = dataObject.getInt("max_salary");
-            recruitModel.min_salary = dataObject.getInt("min_salary");
-            recruitModel.max_work_year = dataObject.getInt("max_work_year");
-            recruitModel.min_work_year = dataObject.getInt("min_work_year");
-            recruitModel.name = dataObject.getString("name");
-            dataObj = recruitModel;
-            break;
-        }
-      } catch (JSONException e) {
-        e.printStackTrace();
+          }
+          if (dataObject.has("birthday")) resumeModel.birthday = dataObject.getString("birthday");
+          if (dataObject.has("gender")) resumeModel.gender = dataObject.getInt("gender");
+          if (dataObject.has("avatar")) resumeModel.avatar = dataObject.getString("avatar");
+          if (dataObject.has("work_year")) resumeModel.work_year = dataObject.getInt("work_year");
+          if (dataObject.has("username")) resumeModel.username = dataObject.getString("username");
+          dataObj = resumeModel;
+          break;
+        case TYPE_RECRUIT:
+          Gson gson = new Gson();
+          //RecruitModel recruitModel = gson.fromJson(json, RecruitModel.class);
+          RecruitModel recruitModel = new RecruitModel();
+          recruitModel.id = dataObject.getString("id");
+          recruitModel.address = dataObject.getString("address");
+          recruitModel.gender = dataObject.getInt("gender");
+          recruitModel.photo = dataObject.getString("photo");
+          recruitModel.max_age = dataObject.getInt("max_age");
+          recruitModel.min_age = dataObject.getInt("min_age");
+          recruitModel.max_height = dataObject.getInt("max_height");
+          recruitModel.min_height = dataObject.getInt("min_height");
+          recruitModel.max_salary = dataObject.getInt("max_salary");
+          recruitModel.min_salary = dataObject.getInt("min_salary");
+          recruitModel.max_work_year = dataObject.getInt("max_work_year");
+          recruitModel.min_work_year = dataObject.getInt("min_work_year");
+          recruitModel.name = dataObject.getString("name");
+          dataObj = recruitModel;
+          break;
+      }
+    } catch (JSONException e) {
+      e.printStackTrace();
     }
     return dataObj;
   }
-
 
   public Type getType() {
     return type;
@@ -160,13 +159,12 @@ public class CustomMessage extends Message {
    * 获取消息摘要
    */
   @Override public String getSummary() {
-    switch (type){
-      case RECRUIT:
-        return "职位邀请【" + ((RecruitModel)getData()).name+ "】";
-      case RESUME:
-        return "投递简历【" + ((ResumeModel)getData()).username + "的简历】";
-      default:
-        return "";
+    if (type == Type.RECRUIT){
+      return "职位【" + ((RecruitModel) getData()).name + "】";
+    }else if (type == Type.RESUME){
+      return "投递简历【" + ((ResumeModel) getData()).username + "的简历】";
+    }else {
+      return "";
     }
   }
 

@@ -14,32 +14,25 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.huawei.android.pushagent.PushManager;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.business.InitBusiness;
-import com.tencent.qcloud.timchat.business.LoginBusiness;
 import com.tencent.qcloud.timchat.chatmodel.UserInfo;
-import com.tencent.qcloud.timchat.chatutils.NetUtil;
 import com.tencent.qcloud.timchat.chatutils.PushUtil;
 import com.tencent.qcloud.timchat.event.FriendshipEvent;
 import com.tencent.qcloud.timchat.event.GroupEvent;
 import com.tencent.qcloud.timchat.event.MessageEvent;
-import com.tencent.qcloud.timchat.event.RefreshEvent;
 import com.tencent.qcloud.timchat.presenter.SplashPresenter;
 import com.tencent.qcloud.timchat.viewfeatures.SplashView;
 import com.tencent.qcloud.timchat.widget.NotifyDialog;
-
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,11 +129,11 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
                 });
                 break;
             case 6200:
-                Toast.makeText(this,getString(R.string.login_error_timeout),Toast.LENGTH_SHORT).show();
+                //Log.e("qcim","登超时");
                 navToLogin();
                 break;
             default:
-                Toast.makeText(this,getString(R.string.login_error),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,getString(R.string.login_error),Toast.LENGTH_SHORT).show();
                 navToLogin();
                 break;
         }

@@ -169,7 +169,7 @@ public class ChatActivity extends AppCompatActivity
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && firstItem == itemList.size() - 1) {
           //如果拉到顶端读取更多消息
           presenter.getMessage(
-              itemList.size() > 1 ? itemList.get(itemList.size() - 1).getData().getMessage()
+              itemList.size() >= 1 ? itemList.get(itemList.size() - 1).getData().getMessage()
                   : null);
         }
       }

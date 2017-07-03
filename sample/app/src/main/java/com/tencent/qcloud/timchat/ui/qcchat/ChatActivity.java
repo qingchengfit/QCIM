@@ -110,6 +110,7 @@ public class ChatActivity extends AppCompatActivity
   private boolean isC2C;
   private RelativeLayout root;
   private List<ChatItem> tempItemList = new ArrayList<>();
+  private String resumeJson;
 
   public static void navToChat(Context context, String identify, TIMConversationType type) {
     Intent intent = new Intent(context, ChatActivity.class);
@@ -245,6 +246,7 @@ public class ChatActivity extends AppCompatActivity
 
     if (getIntent().getStringExtra(Configs.CHAT_JOB_RESUME) != null
         && !TextUtils.isEmpty(getIntent().getStringExtra(Configs.CHAT_JOB_RESUME))) {
+      resumeJson = getIntent().getStringExtra(Configs.CHAT_JOB_RESUME);
       sendResumeMessage(getIntent().getStringExtra(Configs.CHAT_JOB_RESUME));
     }
   }
@@ -275,7 +277,7 @@ public class ChatActivity extends AppCompatActivity
   //点击投递简历
   @OnClick(R2.id.chat_send_button)
   public void onSendRecruit(){
-
+    sendResumeMessage(resumeJson);
   }
 
   /**

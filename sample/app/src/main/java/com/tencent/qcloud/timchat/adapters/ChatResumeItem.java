@@ -83,6 +83,7 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
           resumeModel.gender == 1 ? R.drawable.ic_gender_signal_male
               : R.drawable.ic_gender_signal_female);
     }
+    message.showStatus(holder);
   }
 
   class ResumeVH extends ChatItem.ViewHolder {

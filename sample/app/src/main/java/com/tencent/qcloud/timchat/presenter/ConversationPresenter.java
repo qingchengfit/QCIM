@@ -1,8 +1,6 @@
 package com.tencent.qcloud.timchat.presenter;
 
 import android.util.Log;
-
-import com.tencent.IMCoreWrapper;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupCacheInfo;
@@ -16,7 +14,6 @@ import com.tencent.qcloud.timchat.event.MessageEvent;
 import com.tencent.qcloud.timchat.event.RefreshEvent;
 import com.tencent.qcloud.timchat.ui.qcchat.ConversationBean;
 import com.tencent.qcloud.timchat.viewfeatures.ConversationView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -85,6 +82,8 @@ public class ConversationPresenter implements Observer {
         List<TIMConversation> result = new ArrayList<>();
         for (TIMConversation conversation : list){
             if (conversation.getType() == TIMConversationType.System) continue;
+
+            Log.e(TAG,"id:"+conversation.getIdentifer() + "   peer"+conversation.getPeer());
             result.add(conversation);
             conversation.getMessage(1, null, new TIMValueCallBack<List<TIMMessage>>() {
                 @Override

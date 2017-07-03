@@ -87,7 +87,7 @@ public class QQLoginService {
                 /** 授权失败的回调 */
                 @Override
                 public void onError(UiError error) {
-                    Util.showToast(activity, "授权失败");
+                    //Util.showToast(activity, "授权失败");
                     Message msg = new Message();
                     msg.arg1 = AUTHORIZATION_FAIL;
                     handler.sendMessage(msg);
@@ -95,7 +95,7 @@ public class QQLoginService {
                 /** 授权成功的回调*/
                 @Override
                 public void onComplete(Object response) {
-                    Util.showToast(activity, "授权成功");
+                    //Util.showToast(activity, "授权成功");
                     activity.finish();
                     Message msg = new Message();
                     msg.what = 2;
@@ -106,7 +106,7 @@ public class QQLoginService {
                 /** 取消授权的回调*/
                 @Override
                 public void onCancel() {
-                    Util.showToast(activity, "取消授权");
+                    //Util.showToast(activity, "取消授权");
                     Message msg = new Message();
                     msg.arg1 = AUTHORIZATION_CANCEL;
                     handler.sendMessage(msg);

@@ -1,10 +1,13 @@
 package com.tencent.qcloud.timchat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -14,8 +17,10 @@ import com.tencent.qcloud.timchat.R2;
 import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.ResumeModel;
+import com.tencent.qcloud.timchat.chatutils.RecruitBusinessUtils;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.List;
 
 /**
@@ -23,6 +28,7 @@ import java.util.List;
  */
 
 public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
+
 
   private Message message;
   private Context context;
@@ -49,6 +55,19 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
     return holder;
   }
 
+  public ResumeModel getResume() {
+    return (ResumeModel) ((CustomMessage) message).getData();
+  }
+
+  public String getResumeId() {
+    ResumeModel r = (ResumeModel) ((CustomMessage) message).getData();
+    if (r != null) {
+      return r.id;
+    } else {
+      return "";
+    }
+  }
+
   @Override public void bindViewHolder(FlexibleAdapter adapter, ResumeVH holder, int position,
       List payloads) {
     super.bindViewHolder(adapter, holder, position, payloads);
@@ -62,12 +81,14 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
           .asBitmap()
           .into(holder.imgResume);
       holder.resumeName.setText(resumeModel.username);
-      holder.resumeTextAge.setText(resumeModel.birthday);
-      holder.resumeTextAgree.setText(resumeModel.max_education + "");
-      holder.resumeTextWorkYear.setText(resumeModel.work_year + "");
-      holder.textClickResume.setText(context.getString(R.string.text_click_resume_name, resumeModel.username));
+      holder.resumeTextAge.setText(RecruitBusinessUtils.getAge(resumeModel.birthday));
+      holder.resumeTextAgree.setText(
+          RecruitBusinessUtils.getDegree(context, resumeModel.max_education));
+      holder.resumeTextWorkYear.setText(RecruitBusinessUtils.getWorkYear(resumeModel.work_year));
+      holder.textClickResume.setText(
+          context.getString(R.string.text_click_resume_name, resumeModel.username));
       holder.resumeGender.setImageResource(
-          resumeModel.gender == 1 ? R.drawable.ic_gender_signal_male
+          resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
               : R.drawable.ic_gender_signal_female);
     } else {
       Glide.with(context)
@@ -75,18 +96,21 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
           .asBitmap()
           .into(holder.imgLeftResume);
       holder.leftResumeName.setText(resumeModel.username);
-      holder.leftResumeTextAge.setText(resumeModel.birthday);
-      holder.leftResumeTextAgree.setText(resumeModel.max_education + "");
-      holder.leftResumeTextWorkYear.setText(resumeModel.work_year + "");
-      holder.leftTextClickResume.setText(context.getString(R.string.text_click_resume_name, resumeModel.username));
+      holder.leftResumeTextAge.setText(RecruitBusinessUtils.getAge(resumeModel.birthday));
+      holder.leftResumeTextAgree.setText(
+          RecruitBusinessUtils.getDegree(context, resumeModel.max_education));
+      holder.leftResumeTextWorkYear.setText(
+          RecruitBusinessUtils.getWorkYear(resumeModel.work_year));
+      holder.leftTextClickResume.setText(
+          context.getString(R.string.text_click_resume_name, resumeModel.username));
       holder.leftResumeGender.setImageResource(
-          resumeModel.gender == 1 ? R.drawable.ic_gender_signal_male
+          resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
               : R.drawable.ic_gender_signal_female);
     }
+    message.showStatus(holder);
   }
 
-  class ResumeVH extends ChatItem.ViewHolder {
-
+  public class ResumeVH extends ChatItem.ViewHolder {
     @BindView(R2.id.img_resume) ImageView imgResume;
     @BindView(R2.id.resume_name) TextView resumeName;
     @BindView(R2.id.resume_gender) ImageView resumeGender;
@@ -103,10 +127,43 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
     @BindView(R2.id.left_resume_text_agree) TextView leftResumeTextAgree;
     @BindView(R2.id.left_resume_text_age) TextView leftResumeTextAge;
     @BindView(R2.id.left_text_click_resume) TextView leftTextClickResume;
-
-    public ResumeVH(View view, FlexibleAdapter adapter) {
+    @BindView(R2.id.leftMessage) RelativeLayout leftMessage;
+    @BindView(R2.id.rightMessage) RelativeLayout rightMessage;
+    public ResumeVH(View view, final FlexibleAdapter adapter) {
       super(view, adapter);
       ButterKnife.bind(this, view);
+      leftMessage.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          jumpToResumeId(adapter);
+        }
+      });
+      rightMessage.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          jumpToResumeId(adapter);
+        }
+      });
+
+    }
+
+    // TODO: 2017/6/24 硬编码 要改
+    public void jumpToResumeId(FlexibleAdapter adapter){
+      IFlexible item = adapter.getItem(getAdapterPosition());
+      if (item instanceof ChatResumeItem){
+        String id = ((ChatResumeItem) item).getResumeId();
+        String packagename = context.getPackageName();
+        String uri = "";
+        if (packagename.contains("coach")) {
+          uri = uri+"qccoach://resume/?id="+id;
+        }else uri = uri+"qcstaff://resume/?id="+id;
+        try{
+          Intent toOut = new Intent();
+          toOut.setPackage(context.getPackageName());
+          toOut.setData(Uri.parse(uri));
+          context.startActivity(toOut);
+        }catch (Exception e){
+          e.printStackTrace();
+        }
+      }
     }
   }
 }

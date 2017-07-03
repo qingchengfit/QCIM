@@ -2,10 +2,9 @@ package com.tencent.qcloud.timchat.common;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.util.TypedValue;
-import android.widget.Button;
 import android.widget.Toast;
-
 import tencent.tls.platform.TLSErrInfo;
 
 /**
@@ -72,9 +71,8 @@ public class Util {
      * @function: 显示使用TLSSDK过程中发生的错误信息
      * */
     public static void notOK(Context context, TLSErrInfo errInfo) {
-        showToast(context, String.format("%s: %s",
-                errInfo.ErrCode == TLSErrInfo.TIMEOUT ?
-                        "网络超时" : "错误", errInfo.Msg));
+      Log.e("qcim", String.format("%s: %s", errInfo.ErrCode == TLSErrInfo.TIMEOUT ? "网络超时" : "错误",
+          errInfo.Msg));
     }
 
     public static int dpToPx(float dp, Resources resources) {

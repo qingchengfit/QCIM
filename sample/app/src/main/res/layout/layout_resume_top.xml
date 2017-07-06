@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rect_square_img"
+    android:gravity="center_vertical"
+    android:minHeight="98dp"
+    android:orientation="horizontal"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    >
+
+  <ImageView
+      android:id="@+id/img_head_resume"
+      android:layout_width="68dp"
+      android:layout_height="68dp"
+      android:layout_margin="15dp"
+      android:background="@drawable/head"
+      android:padding="0.5dp"
+      android:scaleType="centerCrop"
+      />
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:orientation="vertical"
+      >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+      <TextView
+          android:id="@+id/tv_resume_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:text="林雪婷"
+          style="@style/QcTextStyleLargeDark"
+          />
+
+      <ImageView
+          android:id="@+id/img_resume_gender"
+          android:layout_width="14dp"
+          android:layout_height="14dp"
+          tools:src="@drawable/ic_gender_signal_female"
+          android:layout_marginLeft="4dp"
+          />
+
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_resume_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        tools:text="北京朝阳区 · 银马健身酒仙桥店"
+        style="@style/QcTextStyleMediumDark"
+        />
+
+    <android.support.v4.widget.Space
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_resume_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="私人教练 · 北京 · 10-20K"
+        style="@style/QcTextStyleMediumDark"
+        android:textColor="@color/qc_text_grey"
+        />
+  </LinearLayout>
+
+  <android.support.v4.widget.Space
+      android:layout_width="15dp"
+      android:layout_height="wrap_content"
+      />
+</LinearLayout>

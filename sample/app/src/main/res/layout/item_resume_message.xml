@@ -390,6 +390,7 @@
             android:id="@+id/sending"
             android:layout_width="15dp"
             android:layout_height="15dp"
+            android:layout_marginRight="10dp"
             />
         <ImageView
             android:id="@+id/sendError"
@@ -397,6 +398,7 @@
             android:layout_height="15dp"
             android:src="@drawable/ic_error"
             android:visibility="gone"
+            android:layout_marginRight="10dp"
             />
         <TextView
             android:id="@+id/text_voice_time_right"

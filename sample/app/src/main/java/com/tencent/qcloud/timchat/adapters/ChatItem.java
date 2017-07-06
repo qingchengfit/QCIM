@@ -39,7 +39,7 @@ public class ChatItem<T extends ChatItem.ViewHolder> extends AbstractFlexibleIte
     private final String TAG = "ChatItem";
 
     private String avatar;
-    private Message message;
+    public Message message;
     private Context context;
     private OnDeleteMessageItem onDeleteMessageItem;
 
@@ -110,7 +110,7 @@ public class ChatItem<T extends ChatItem.ViewHolder> extends AbstractFlexibleIte
                 .asBitmap()
                 .into(holder.rightAvatar);
 
-        message.getBubbleView(holder);
+      message.getBubbleView(holder);
     }
 
     @Override

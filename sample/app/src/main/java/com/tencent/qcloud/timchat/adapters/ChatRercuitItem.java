@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +18,7 @@ import com.tencent.qcloud.timchat.R2;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.RecruitModel;
 import com.tencent.qcloud.timchat.chatutils.RecruitBusinessUtils;
+import com.tencent.qcloud.timchat.widget.CircleImageView;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import java.util.List;
@@ -26,9 +29,9 @@ import java.util.List;
 
 public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
 
+
   private RecruitModel recruitModel;
   private Context context;
-  private Message message;
 
   /**
    * Constructor
@@ -54,10 +57,12 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
     return holder;
   }
 
-  public String getJobId(){
-    if (recruitModel != null)
+  public String getJobId() {
+    if (recruitModel != null) {
       return recruitModel.id;
-    else return "";
+    } else {
+      return "";
+    }
   }
 
   @Override public Message getData() {
@@ -66,40 +71,46 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
 
   @Override public void bindViewHolder(FlexibleAdapter adapter, RecruitVH holder, int position,
       List payloads) {
-
-    if (recruitModel == null){
+    super.bindViewHolder(adapter, holder, position, payloads);
+    if (recruitModel == null) {
       return;
     }
+    if (message.isSelf()) {
+      Glide.with(context).load(PhotoUtils.getSmall(recruitModel.photo)).asBitmap().into(holder.imgLeftInviteRecruit);
 
-    Glide.with(context)
-        .load(PhotoUtils.getSmall(recruitModel.photo))
-        .asBitmap()
-        .into(holder.imgGym);
+      holder.tvLeftInviteName.setText(recruitModel.name);
+      holder.leftInviteRecruitSalary.setText(
+          RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary, "面议"));
+      holder.leftInviteAddress.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
+          : "·" + recruitModel.gym_name));
+    }else{
+      Glide.with(context).load(PhotoUtils.getSmall(recruitModel.photo)).asBitmap().into(holder.imgRightInviteRecruit);
 
-    holder.tvPositionName.setText(recruitModel.name);
-    holder.tvSalary.setText(RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary,"面议"));
-    holder.tvGymInfo.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name)?"":"·" + recruitModel.gym_name));
-    holder.tvWorkYear.setText(RecruitBusinessUtils.getWorkYear(recruitModel.min_work_year, recruitModel.max_work_year,"经验"));
-    holder.tvGender.setText(recruitModel.gender == 1 ? "男性" : "女性");
-    holder.tvAge.setText(RecruitBusinessUtils.getAge(recruitModel.min_age, recruitModel.max_age,"年龄"));
-    holder.tvHeight.setText(RecruitBusinessUtils.getHeight(recruitModel.min_height, recruitModel.max_height,"身高"));
+      holder.tvRightInviteName.setText(recruitModel.name);
+      holder.rightInviteRecruitSalary.setText(
+          RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary, "面议"));
+      holder.rightInviteAddress.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
+          : "·" + recruitModel.gym_name));
+    }
+    message.showStatus(holder);
   }
 
   @Override public int getLayoutRes() {
-    return R.layout.item_recruit;
+    return R.layout.item_send_invite;
   }
 
   class RecruitVH extends ChatItem.ViewHolder {
 
-    @BindView(R2.id.img_gym) ImageView imgGym;
-    @BindView(R2.id.tv_position_name) TextView tvPositionName;
-    @BindView(R2.id.tv_salary) TextView tvSalary;
-    @BindView(R2.id.tv_gym_info) TextView tvGymInfo;
-    @BindView(R2.id.tv_work_year) TextView tvWorkYear;
-    @BindView(R2.id.tv_gender) TextView tvGender;
-    @BindView(R2.id.tv_age) TextView tvAge;
-    @BindView(R2.id.tv_height) TextView tvHeight;
-    @BindView(R2.id.layout_limit) LinearLayout layoutLimit;
+    @BindView(R2.id.img_left_invite_recruit) ImageView imgLeftInviteRecruit;
+    @BindView(R2.id.tv_left_invite_name) TextView tvLeftInviteName;
+    @BindView(R2.id.left_invite_recruit_salary) TextView leftInviteRecruitSalary;
+    @BindView(R2.id.left_invite_address) TextView leftInviteAddress;
+    @BindView(R2.id.leftMessage) RelativeLayout leftMessage;
+    @BindView(R2.id.img_right_invite_recruit) ImageView imgRightInviteRecruit;
+    @BindView(R2.id.tv_right_invite_name) TextView tvRightInviteName;
+    @BindView(R2.id.right_invite_recruit_salary) TextView rightInviteRecruitSalary;
+    @BindView(R2.id.right_invite_address) TextView rightInviteAddress;
+    @BindView(R2.id.rightMessage) RelativeLayout rightMessage;
 
     public RecruitVH(View view, FlexibleAdapter adapter) {
       super(view, adapter);

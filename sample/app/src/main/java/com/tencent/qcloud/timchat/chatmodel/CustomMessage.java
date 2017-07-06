@@ -20,6 +20,9 @@ public class CustomMessage extends Message {
   private final int TYPE_TYPING = 14;
   private final int TYPE_RECRUIT = 1001;
   private final int TYPE_RESUME = 1002;
+  private final int TYPE_SEND_RECRUIT = 1003;
+  private final int TYPE_TOP_RESUME = 1004;
+
 
   private Type type;
   private String desc;
@@ -73,6 +76,7 @@ public class CustomMessage extends Message {
       JSONObject dataObject = jsonObject.getJSONObject("data");
       switch (action) {
         case TYPE_RESUME:
+        case TYPE_TOP_RESUME:
           ResumeModel resumeModel = new ResumeModel();
           if (dataObject.has("id")) resumeModel.id = dataObject.getString("id");
           if (dataObject.has("max_education")) {
@@ -83,11 +87,16 @@ public class CustomMessage extends Message {
           if (dataObject.has("avatar")) resumeModel.avatar = dataObject.getString("avatar");
           if (dataObject.has("work_year")) resumeModel.work_year = dataObject.getInt("work_year");
           if (dataObject.has("username")) resumeModel.username = dataObject.getString("username");
+          if (dataObject.has("city")) resumeModel.city = dataObject.getString("city");
+          if (dataObject.has("min_salary")) resumeModel.min_salary = dataObject.getInt("min_salary");
+          if (dataObject.has("max_salary")) resumeModel.max_salary = dataObject.getInt("max_salary");
+          if (dataObject.has("height")) resumeModel.height = (int) dataObject.get("height");
+          if (dataObject.has("weight")) resumeModel.weight = (int) dataObject.get("weight");
+
           dataObj = resumeModel;
           break;
         case TYPE_RECRUIT:
-          Gson gson = new Gson();
-          //RecruitModel recruitModel = gson.fromJson(json, RecruitModel.class);
+        case TYPE_SEND_RECRUIT:
           RecruitModel recruitModel = new RecruitModel();
           recruitModel.id = dataObject.getString("id");
           recruitModel.address = dataObject.getString("address");
@@ -139,6 +148,12 @@ public class CustomMessage extends Message {
         case TYPE_RESUME:
           type = Type.RESUME;
           break;
+        case TYPE_SEND_RECRUIT:
+          type = Type.SEND_RECRUIT;
+          break;
+        case TYPE_TOP_RESUME:
+          type = Type.TOP_RESUME;
+          break;
       }
     } catch (IOException | JSONException e) {
       Log.e(TAG, "parse json error");
@@ -176,6 +191,6 @@ public class CustomMessage extends Message {
   }
 
   public enum Type {
-    TYPING, INVALID, RECRUIT, RESUME,
+    TYPING, INVALID, RECRUIT, RESUME, SEND_RECRUIT, TOP_RESUME,
   }
 }

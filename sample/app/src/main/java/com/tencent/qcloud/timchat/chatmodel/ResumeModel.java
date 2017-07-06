@@ -13,7 +13,11 @@ public class ResumeModel {
   public int max_education;
   public String birthday;
   public int gender;
-
-  public int deliveried;   // 1 表示已投递
+  public String city;
+  public int weight;
+  public int height;
+  public Integer max_salary; //薪水
+  public Integer min_salary;
+  public String exp_job;
 
 }

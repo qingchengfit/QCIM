@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
+
     <com.tencent.qcloud.timchat.widget.TemplateTitle
         android:id="@+id/chat_title"
         android:layout_width="match_parent"
@@ -19,28 +20,48 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:layout_below="@id/chat_title"
         >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="聊得不错？向对方"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="聊得不错？向对方"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            />
 
-        />
-
-    <TextView
-        android:id="@+id/chat_send_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="投递简历"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:textColor="@color/chat_background"
-        />
+        <TextView
+            android:id="@+id/chat_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="投递简历"
+            android:paddingTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/chat_background"
+            android:paddingBottom="10dp"
+            />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_detail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chat_send_resume"
+        android:visibility="visible"
+        android:layout_marginTop="10dp"
+        >
+
+        <include android:id="@+id/layout_recruit"
+            layout="@layout/item_recruit"
+            android:visibility="visible"/>
+
+        <include
+            android:id="@+id/layout_resume"
+            layout="@layout/layout_resume_top"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
     <com.tencent.qcloud.timchat.widget.ChatInput
         android:id="@+id/input_panel"
@@ -56,21 +77,23 @@
         android:layout_above="@id/input_panel"/>
 
     <LinearLayout
+        android:id="@+id/chat_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/chat_send_resume"
+        android:layout_below="@id/frame_detail_layout"
         android:layout_above="@id/divider"
         android:gravity="top"
         >
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="?actionBarSize"
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:background="#fff"/>
-
+        android:background="#fff"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_marginTop="20dp"/>
     </LinearLayout>
 
     <com.tencent.qcloud.timchat.widget.VoiceSendingView

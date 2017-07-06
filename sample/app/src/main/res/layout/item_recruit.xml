@@ -6,9 +6,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_rect_square_img"
     android:gravity="center_vertical"
-    android:minHeight="108dp"
+    android:minHeight="98dp"
     android:orientation="horizontal"
-    android:layout_margin="15dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
     >
 
   <ImageView

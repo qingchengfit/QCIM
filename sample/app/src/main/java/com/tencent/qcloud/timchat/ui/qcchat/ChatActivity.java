@@ -25,6 +25,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.bumptech.glide.Glide;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMFriendshipManager;
 import com.tencent.TIMGroupManager;
@@ -56,12 +59,14 @@ import com.tencent.qcloud.timchat.chatmodel.ImageMessage;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.MessageFactory;
 import com.tencent.qcloud.timchat.chatmodel.RecruitModel;
+import com.tencent.qcloud.timchat.chatmodel.ResumeModel;
 import com.tencent.qcloud.timchat.chatmodel.TextMessage;
 import com.tencent.qcloud.timchat.chatmodel.VideoMessage;
 import com.tencent.qcloud.timchat.chatmodel.VoiceMessage;
 import com.tencent.qcloud.timchat.chatutils.FileUtil;
 import com.tencent.qcloud.timchat.chatutils.MediaUtil;
 import com.tencent.qcloud.timchat.chatutils.RecorderUtil;
+import com.tencent.qcloud.timchat.chatutils.RecruitBusinessUtils;
 import com.tencent.qcloud.timchat.common.Configs;
 import com.tencent.qcloud.timchat.common.Util;
 import com.tencent.qcloud.timchat.presenter.ChatPresenter;
@@ -69,6 +74,7 @@ import com.tencent.qcloud.timchat.ui.GroupMemberActivity;
 import com.tencent.qcloud.timchat.ui.ImagePreviewActivity;
 import com.tencent.qcloud.timchat.viewfeatures.ChatView;
 import com.tencent.qcloud.timchat.widget.ChatInput;
+import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import com.tencent.qcloud.timchat.widget.TemplateTitle;
 import com.tencent.qcloud.timchat.widget.VoiceSendingView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -84,8 +90,26 @@ public class ChatActivity extends AppCompatActivity
   }
 
   private static final String TAG = "ChatActivity";
-  @BindView(R2.id.chat_send_button) TextView chatSendButton;
-  @BindView(R2.id.chat_send_resume) LinearLayout chatSendResume;
+  @BindView(R2.id.img_gym) ImageView imgGym;
+  @BindView(R2.id.tv_position_name) TextView tvPositionName;
+  @BindView(R2.id.tv_salary) TextView tvSalary;
+  @BindView(R2.id.tv_gym_info) TextView tvGymInfo;
+  @BindView(R2.id.tv_work_year) TextView tvWorkYear;
+  @BindView(R2.id.tv_gender) TextView tvGender;
+  @BindView(R2.id.tv_age) TextView tvAge;
+  @BindView(R2.id.tv_height) TextView tvHeight;
+  @BindView(R2.id.img_head_resume) ImageView imgHeadResume;
+  @BindView(R2.id.tv_resume_name) TextView tvResumeName;
+  @BindView(R2.id.img_resume_gender) ImageView imgResumeGender;
+  @BindView(R2.id.tv_resume_info) TextView tvResumeInfo;
+  @BindView(R2.id.tv_resume_detail) TextView tvResumeDetail;
+  @BindView(R2.id.frame_detail_layout) FrameLayout frameDetailLayout;
+  @BindView(R2.id.layout_recruit) View layoutRecruit;
+  @BindView(R2.id.layout_resume) View layoutResume;
+  @BindView(R2.id.chat_send_resume)
+  public LinearLayout chatSendResume;
+  @BindView(R2.id.chat_send_button)
+  public TextView tvSendResume;
 
   private List<ChatItem> itemList = new ArrayList<>();
   private FlexibleAdapter flexibleAdapter;
@@ -133,14 +157,23 @@ public class ChatActivity extends AppCompatActivity
     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     title = (TemplateTitle) findViewById(R.id.chat_title);
     root = (RelativeLayout) findViewById(R.id.root);
-    chatSendResume.setVisibility(View.GONE);
+    frameDetailLayout.setVisibility(View.GONE);
 
     identify = getIntent().getStringExtra(Configs.IDENTIFY);
     if (getIntent().getStringExtra("groupName") != null) {
       titleStr = getIntent().getStringExtra("groupName");
       title.setTitleText(titleStr);
     }
-    type = (TIMConversationType) getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE);
+    if (getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE) != null) {
+      type = (TIMConversationType) getIntent().getSerializableExtra(Configs.CONVERSATION_TYPE);
+    }
+    if (getIntent().getIntExtra(Configs.TEMP_CONVERSATION_TYPE, 0) != 0) {
+      if (getIntent().getIntExtra(Configs.TEMP_CONVERSATION_TYPE, 0) == Configs.C2C) {
+        type = TIMConversationType.C2C;
+      } else {
+        type = TIMConversationType.Group;
+      }
+    }
     presenter = new ChatPresenter(this, identify, type);
     input = (ChatInput) findViewById(R.id.input_panel);
     input.setChatView(this);
@@ -149,6 +182,7 @@ public class ChatActivity extends AppCompatActivity
     //linearLayoutManager.setStackFromEnd(false);
     listView.setLayoutManager(
         new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, true));
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
     listView.setNestedScrollingEnabled(false);
     listView.setAdapter(flexibleAdapter);
     listView.setOnTouchListener(new View.OnTouchListener() {
@@ -166,7 +200,8 @@ public class ChatActivity extends AppCompatActivity
       private int firstItem;
 
       @Override public void onScrollStateChanged(RecyclerView view, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && firstItem == itemList.size() - 1) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+            && firstItem == itemList.size() - 1) {
           //如果拉到顶端读取更多消息
           presenter.getMessage(
               itemList.size() >= 1 ? itemList.get(itemList.size() - 1).getData().getMessage()
@@ -181,10 +216,6 @@ public class ChatActivity extends AppCompatActivity
         }
       }
     });
-    // TODO: 2017/6/23 暂时屏蔽
-    //if (getIntent().getIntExtra(Configs.CHAT_RECRUIT_STATE, 0) != 0) {
-    //  chatSendResume.setVisibility(View.VISIBLE);
-    //}
 
     switch (type) {
       case C2C:
@@ -238,15 +269,18 @@ public class ChatActivity extends AppCompatActivity
     voiceSendingView = (VoiceSendingView) findViewById(R.id.voice_sending);
     presenter.start();
 
-    if (getIntent().getStringExtra(Configs.CHAT_RECRUIT) != null
-        && !TextUtils.isEmpty(getIntent().getStringExtra(Configs.CHAT_RECRUIT))) {
+    if (getIntent().getStringExtra(Configs.CHAT_RECRUIT) != null && !TextUtils.isEmpty(
+        getIntent().getStringExtra(Configs.CHAT_RECRUIT))) {
       sendRercuitMessage(getIntent().getStringExtra(Configs.CHAT_RECRUIT));
     }
 
-    if (getIntent().getStringExtra(Configs.CHAT_JOB_RESUME) != null
-        && !TextUtils.isEmpty(getIntent().getStringExtra(Configs.CHAT_JOB_RESUME))) {
+    if (getIntent().getStringExtra(Configs.CHAT_JOB_RESUME) != null && !TextUtils.isEmpty(
+        getIntent().getStringExtra(Configs.CHAT_JOB_RESUME))) {
       resumeJson = getIntent().getStringExtra(Configs.CHAT_JOB_RESUME);
-      sendResumeMessage(getIntent().getStringExtra(Configs.CHAT_JOB_RESUME));
+    }
+
+    if (getIntent().getBooleanExtra(Configs.SEND_RESUME, false)) {
+      sendResumeMessage(resumeJson);
     }
   }
 
@@ -273,12 +307,6 @@ public class ChatActivity extends AppCompatActivity
     presenter.stop();
   }
 
-  //点击投递简历
-  @OnClick(R2.id.chat_send_button)
-  public void onSendRecruit(){
-    sendResumeMessage(resumeJson);
-  }
-
   /**
    * 显示消息
    */
@@ -298,14 +326,21 @@ public class ChatActivity extends AppCompatActivity
               handler.postDelayed(resetTitle, 3000);
               break;
             case RECRUIT:
-              itemList.add(0, new ChatRercuitItem(getBaseContext(), (RecruitModel) (((CustomMessage) mMessage).getData()), mMessage));
-              flexibleAdapter.notifyDataSetChanged();
+              showTopRercuit(mMessage);
               break;
             case RESUME:
               itemList.add(0, new ChatResumeItem(this, mMessage,
                   isC2C() || mMessage.isSelf() ? avatar
                       : mMessage.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
               flexibleAdapter.notifyDataSetChanged();
+              break;
+            case SEND_RECRUIT:
+              itemList.add(0, new ChatRercuitItem(getBaseContext(),
+                  (RecruitModel) (((CustomMessage) mMessage).getData()), mMessage));
+              flexibleAdapter.notifyDataSetChanged();
+              break;
+            case TOP_RESUME:
+              showTopResume(mMessage);
               break;
             default:
               break;
@@ -325,66 +360,127 @@ public class ChatActivity extends AppCompatActivity
     }
   }
 
+  @OnClick(R2.id.chat_send_button)
+  public void onSendResume(){
+    sendResume();
+  }
+
+  public void sendResume(){
+    sendResumeMessage(resumeJson);
+  }
+
+  private void showTopResume(Message mMessage) {
+    frameDetailLayout.setVisibility(View.VISIBLE);
+    layoutRecruit.setVisibility(View.GONE);
+    layoutResume.setVisibility(View.VISIBLE);
+    ResumeModel resumeModel = (ResumeModel) ((CustomMessage) mMessage).getData();
+
+    Glide.with(getBaseContext())
+        .load(PhotoUtils.getSmall(resumeModel.avatar))
+        .asBitmap()
+        .into(imgHeadResume);
+
+    tvResumeName.setText(resumeModel.username);
+    imgResumeGender.setImageResource(resumeModel.gender == 1 ? R.drawable.ic_gender_signal_male
+        : R.drawable.ic_gender_signal_female);
+    tvResumeInfo.setText(resumeModel.work_year
+        + "年经验|"
+        + RecruitBusinessUtils.getAge(resumeModel.birthday)
+        + "|"
+        + resumeModel.height
+        + "cm,"
+        + resumeModel.weight
+        + "kg|"
+        + RecruitBusinessUtils.getDegree(getBaseContext(), resumeModel.max_education));
+    tvResumeDetail.setText(
+        resumeModel.exp_job + " · " + resumeModel.city + " · " + RecruitBusinessUtils.getSalary(
+            resumeModel.min_salary, resumeModel.max_education));
+  }
+
+  private void showTopRercuit(Message mMessage) {
+    frameDetailLayout.setVisibility(View.VISIBLE);
+    layoutRecruit.setVisibility(View.VISIBLE);
+    layoutResume.setVisibility(View.GONE);
+    RecruitModel recruitModel = (RecruitModel) (((CustomMessage) mMessage).getData());
+
+    Glide.with(getBaseContext())
+        .load(PhotoUtils.getSmall(recruitModel.photo))
+        .asBitmap()
+        .into(imgGym);
+    tvPositionName.setText(recruitModel.name);
+    tvSalary.setText(
+        RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary, "面议"));
+    tvGymInfo.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
+        : "·" + recruitModel.gym_name));
+    tvWorkYear.setText(
+        RecruitBusinessUtils.getWorkYear(recruitModel.min_work_year, recruitModel.max_work_year,
+            "经验"));
+    tvGender.setText(recruitModel.gender == 1 ? "男性" : "女性");
+    tvAge.setText(RecruitBusinessUtils.getAge(recruitModel.min_age, recruitModel.max_age, "年龄"));
+    tvHeight.setText(
+        RecruitBusinessUtils.getHeight(recruitModel.min_height, recruitModel.max_height, "身高"));
+  }
+
   private void dispatchMessage(Message message, boolean isSingle) {
 
     if (message instanceof TextMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatTextItem(this, message,
-            isC2C() || message.isSelf() ? avatar
-                : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(0, new ChatTextItem(this, message, isC2C() || message.isSelf() ? avatar
+            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       } else {
-        itemList.add(new ChatTextItem(this, message,
-            isC2C() || message.isSelf() ? avatar
-                : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(new ChatTextItem(this, message, isC2C() || message.isSelf() ? avatar
+            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       }
     }
     if (message instanceof ImageMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatImageItem(this, message,
-            isC2C() || message.isSelf() ? avatar
-                : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(0, new ChatImageItem(this, message, isC2C() || message.isSelf() ? avatar
+            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       } else {
-        itemList.add(new ChatImageItem(this, message,
-            isC2C() || message.isSelf() ? avatar
-                : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(new ChatImageItem(this, message, isC2C() || message.isSelf() ? avatar
+            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       }
     }
 
     if (message instanceof VoiceMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatVoiceItem(this, message,
-            isC2C() || message.isSelf() ? avatar
-                : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(0, new ChatVoiceItem(this, message, isC2C() || message.isSelf() ? avatar
+            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       } else {
-        itemList.add(new ChatVoiceItem(this, message,
-            isC2C() || message.isSelf() ? avatar
-                : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(new ChatVoiceItem(this, message, isC2C() || message.isSelf() ? avatar
+            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
       }
     }
-    if (message instanceof CustomMessage){
-      switch (((CustomMessage) message).getType()){
-        case RECRUIT:
-          itemList.add(new ChatRercuitItem(this, (RecruitModel) (((CustomMessage) message).getData()), message));
+    if (message instanceof CustomMessage) {
+      switch (((CustomMessage) message).getType()) {
+        case SEND_RECRUIT:
+          itemList.add(
+              new ChatRercuitItem(this, (RecruitModel) (((CustomMessage) message).getData()),
+                  message));
           break;
         case RESUME:
-          itemList.add(new ChatResumeItem(this, message,
-              isC2C() || message.isSelf() ? avatar
-                  : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+          itemList.add(new ChatResumeItem(this, message, isC2C() || message.isSelf() ? avatar
+              : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+          break;
+        case TOP_RESUME:
+          showTopResume(message);
+          break;
+        case RECRUIT:
+          showTopRercuit(message);
           break;
       }
     }
-
   }
 
   ////对聊天记录进行重新排序
-  private void reSortList(){
-      if (tempItemList.size() == 0) return;
-      List<ChatItem> newMessages = new ArrayList<>();
-      for (int i = tempItemList.size() - 1 ; i >= 0; i--){
-          newMessages.add(tempItemList.get(i));
-      }
-      tempItemList.clear();
-      tempItemList.addAll(newMessages);
+  private void reSortList() {
+    if (tempItemList.size() == 0) return;
+    List<ChatItem> newMessages = new ArrayList<>();
+    for (int i = tempItemList.size() - 1; i >= 0; i--) {
+      newMessages.add(tempItemList.get(i));
+    }
+    tempItemList.clear();
+    tempItemList.addAll(newMessages);
   }
 
   /**
@@ -396,7 +492,8 @@ public class ChatActivity extends AppCompatActivity
     for (int i = 0; i < messages.size(); ++i) {
       final Message mMessage = MessageFactory.getMessage(messages.get(i));
       if (mMessage == null || messages.get(i).status() == TIMMessageStatus.HasDeleted) continue;
-      if (mMessage instanceof CustomMessage && (((CustomMessage) mMessage).getType() == CustomMessage.Type.TYPING
+      if (mMessage instanceof CustomMessage && (((CustomMessage) mMessage).getType()
+          == CustomMessage.Type.TYPING
           || ((CustomMessage) mMessage).getType() == CustomMessage.Type.INVALID)) {
         continue;
       }
@@ -441,7 +538,7 @@ public class ChatActivity extends AppCompatActivity
    * @param desc 返回描述
    */
   @Override public void onSendMessageFail(int code, String desc, TIMMessage message) {
-    if (message == null){
+    if (message == null) {
       return;
     }
     long id = message.getMsgUniqueId();
@@ -482,11 +579,12 @@ public class ChatActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= 24) {
           toCamera = FileProvider.getUriForFile(this,
               this.getApplicationContext().getPackageName() + ".provider", tempFile);
-          List<ResolveInfo> resInfoList =
-              getPackageManager().queryIntentActivities(intent_photo, PackageManager.MATCH_DEFAULT_ONLY);
+          List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(intent_photo,
+              PackageManager.MATCH_DEFAULT_ONLY);
           for (ResolveInfo resolveInfo : resInfoList) {
             String packageName = resolveInfo.activityInfo.packageName;
-            grantUriPermission(packageName, toCamera, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            grantUriPermission(packageName, toCamera,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
           }
         } else {
           toCamera = Uri.fromFile(tempFile);
@@ -737,8 +835,7 @@ public class ChatActivity extends AppCompatActivity
         .setTextColor(ContextCompat.getColor(this, R.color.qc_text_grey));
   }
 
-  @Override
-  public boolean onItemClick(int position) {
+  @Override public boolean onItemClick(int position) {
     if (flexibleAdapter.getItem(position) instanceof ChatTextItem) {
       return false;
     }
@@ -748,33 +845,35 @@ public class ChatActivity extends AppCompatActivity
     if (flexibleAdapter.getItem(position) instanceof ChatVoiceItem) {
       return false;
     }
-    if (flexibleAdapter.getItem(position) instanceof ChatRercuitItem){
-      outLink(getCurAppSchema(this)+"://job/"+((ChatRercuitItem) flexibleAdapter.getItem(position)).getJobId()+"/");
+    if (flexibleAdapter.getItem(position) instanceof ChatRercuitItem) {
+      outLink(getCurAppSchema(this) + "://job/" + ((ChatRercuitItem) flexibleAdapter.getItem(
+          position)).getJobId() + "/");
       return false;
     }
-    if (flexibleAdapter.getItem(position) instanceof ChatResumeItem){
-      outLink(getCurAppSchema(this)+"://resume/?id="+((ChatResumeItem) flexibleAdapter.getItem(position)).getResumeId());
+    if (flexibleAdapter.getItem(position) instanceof ChatResumeItem) {
+      outLink(getCurAppSchema(this) + "://resume/?id=" + ((ChatResumeItem) flexibleAdapter.getItem(
+          position)).getResumeId());
       return false;
     }
     return false;
   }
 
-  public static String getCurAppSchema(Context context){
+  public static String getCurAppSchema(Context context) {
     String packagename = context.getPackageName();
-    if (packagename.contains("coach")){
+    if (packagename.contains("coach")) {
       return "qccoach";
-    }else {
+    } else {
       return "qcstaff";
     }
   }
 
-  public void outLink(String uri){
-    try{
+  public void outLink(String uri) {
+    try {
       Intent toOut = new Intent();
       toOut.setPackage(getPackageName());
       toOut.setData(Uri.parse(uri));
       startActivity(toOut);
-    }catch (Exception e){
+    } catch (Exception e) {
 
     }
   }

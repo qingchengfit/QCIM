@@ -110,6 +110,8 @@ public class ChatActivity extends AppCompatActivity
   public LinearLayout chatSendResume;
   @BindView(R2.id.chat_send_button)
   public TextView tvSendResume;
+  @BindView(R2.id.frag_bottom_position_select)
+  public FrameLayout fragBottomPosition;
 
   private List<ChatItem> itemList = new ArrayList<>();
   private FlexibleAdapter flexibleAdapter;
@@ -134,6 +136,8 @@ public class ChatActivity extends AppCompatActivity
   private RelativeLayout root;
   private List<ChatItem> tempItemList = new ArrayList<>();
   private String resumeJson;
+  private boolean isLatestResume;
+  private boolean isLatestRecruit;
 
   public static void navToChat(Context context, String identify, TIMConversationType type) {
     Intent intent = new Intent(context, ChatActivity.class);
@@ -158,6 +162,7 @@ public class ChatActivity extends AppCompatActivity
     title = (TemplateTitle) findViewById(R.id.chat_title);
     root = (RelativeLayout) findViewById(R.id.root);
     frameDetailLayout.setVisibility(View.GONE);
+    chatSendResume.setVisibility(View.GONE);
 
     identify = getIntent().getStringExtra(Configs.IDENTIFY);
     if (getIntent().getStringExtra("groupName") != null) {
@@ -284,6 +289,10 @@ public class ChatActivity extends AppCompatActivity
     }
   }
 
+  public int getFragId(){
+    return R.id.frag_bottom_position_select;
+  }
+
   private boolean isC2C() {
     return isC2C;
   }
@@ -326,7 +335,10 @@ public class ChatActivity extends AppCompatActivity
               handler.postDelayed(resetTitle, 3000);
               break;
             case RECRUIT:
-              showTopRercuit(mMessage);
+              if (!isLatestRecruit) {
+                showTopRercuit(mMessage);
+                isLatestRecruit = true;
+              }
               break;
             case RESUME:
               itemList.add(0, new ChatResumeItem(this, mMessage,
@@ -340,7 +352,10 @@ public class ChatActivity extends AppCompatActivity
               flexibleAdapter.notifyDataSetChanged();
               break;
             case TOP_RESUME:
-              showTopResume(mMessage);
+              if (!isLatestResume) {
+                showTopResume(mMessage);
+                isLatestRecruit = true;
+              }
               break;
             default:
               break;
@@ -369,10 +384,15 @@ public class ChatActivity extends AppCompatActivity
     sendResumeMessage(resumeJson);
   }
 
-  private void showTopResume(Message mMessage) {
+  private void showTopResume(final Message mMessage) {
     frameDetailLayout.setVisibility(View.VISIBLE);
     layoutRecruit.setVisibility(View.GONE);
     layoutResume.setVisibility(View.VISIBLE);
+    layoutResume.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        outLink(getCurAppSchema(getBaseContext()) + "://resume/?id=" + ((ResumeModel)((CustomMessage)mMessage).getData()).id);
+      }
+    });
     ResumeModel resumeModel = (ResumeModel) ((CustomMessage) mMessage).getData();
 
     Glide.with(getBaseContext())
@@ -384,23 +404,28 @@ public class ChatActivity extends AppCompatActivity
     imgResumeGender.setImageResource(resumeModel.gender == 1 ? R.drawable.ic_gender_signal_male
         : R.drawable.ic_gender_signal_female);
     tvResumeInfo.setText(resumeModel.work_year
-        + "年经验|"
+        + "年经验 | "
         + RecruitBusinessUtils.getAge(resumeModel.birthday)
-        + "|"
+        + " | "
         + resumeModel.height
         + "cm,"
         + resumeModel.weight
-        + "kg|"
+        + "kg | "
         + RecruitBusinessUtils.getDegree(getBaseContext(), resumeModel.max_education));
     tvResumeDetail.setText(
         resumeModel.exp_job + " · " + resumeModel.city + " · " + RecruitBusinessUtils.getSalary(
             resumeModel.min_salary, resumeModel.max_education));
   }
 
-  private void showTopRercuit(Message mMessage) {
+  private void showTopRercuit(final Message mMessage) {
     frameDetailLayout.setVisibility(View.VISIBLE);
     layoutRecruit.setVisibility(View.VISIBLE);
     layoutResume.setVisibility(View.GONE);
+    layoutRecruit.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        outLink(getCurAppSchema(getBaseContext()) + "://job/" + ((RecruitModel)((CustomMessage)mMessage).getData()).id + "/");
+      }
+    });
     RecruitModel recruitModel = (RecruitModel) (((CustomMessage) mMessage).getData());
 
     Glide.with(getBaseContext())
@@ -463,10 +488,16 @@ public class ChatActivity extends AppCompatActivity
               : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
           break;
         case TOP_RESUME:
-          showTopResume(message);
+          if (!isLatestResume) {
+            showTopResume(message);
+            isLatestResume = true;
+          }
           break;
         case RECRUIT:
-          showTopRercuit(message);
+          if (!isLatestRecruit) {
+            showTopRercuit(message);
+            isLatestRecruit = true;
+          }
           break;
       }
     }

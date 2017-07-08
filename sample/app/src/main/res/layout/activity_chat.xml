@@ -69,6 +69,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
 
+    <FrameLayout
+        android:id="@+id/frag_bottom_position_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"

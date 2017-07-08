@@ -75,8 +75,8 @@
               android:id="@+id/left_text_tip_invite"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              tools:text="诚挚邀请您投递以下职位"
-              android:textColor="@color/qc_text_grey"
+              android:text="诚挚邀请您投递以下职位"
+              android:textColor="@color/warm_grey"
               android:textSize="12sp"
               android:paddingBottom="5dp"
               android:layout_marginLeft="12dp"
@@ -110,17 +110,19 @@
               android:layout_height="wrap_content"
               tools:text="私人教练"
               android:textColor="@color/qc_text_black"
+              android:maxLength="6"
               android:layout_marginBottom="5dp"
               android:layout_toRightOf="@+id/img_left_invite_recruit"
               android:layout_alignTop="@+id/img_left_invite_recruit"
               android:layout_marginTop="5dp"
               android:layout_marginLeft="10dp"
+              style="@style/QcTextStyleLargeDark"
               />
 
           <TextView
               android:id="@+id/left_invite_recruit_salary"
-              android:layout_width="15dp"
-              android:layout_height="15dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
               tools:text="10-15K"
               android:textColor="@color/btn_red"
               style="@style/QcTextStyleLargeDark"
@@ -140,7 +142,7 @@
               android:layout_below="@id/tv_left_invite_name"
               android:layout_toRightOf="@id/img_left_invite_recruit"
               android:layout_alignLeft="@id/tv_left_invite_name"
-              style="@style/QcTextStyleLargeDark"
+              style="@style/QcTextStyleMediumDark"
               />
 
         </RelativeLayout>
@@ -196,8 +198,8 @@
             android:id="@+id/right_text_tip_invite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="诚挚邀请您投递以下职位"
-            android:textColor="@color/qc_text_grey"
+            android:text="诚挚邀请您投递以下职位"
+            android:textColor="@color/warm_grey"
             android:textSize="12sp"
             android:paddingBottom="5dp"
             android:layout_marginLeft="12dp"
@@ -231,6 +233,7 @@
             android:layout_height="wrap_content"
             tools:text="私人教练"
             android:textColor="@color/qc_text_black"
+            android:maxLength="6"
             android:layout_marginBottom="5dp"
             android:layout_toRightOf="@+id/img_right_invite_recruit"
             android:layout_alignTop="@+id/img_right_invite_recruit"
@@ -240,8 +243,8 @@
 
         <TextView
             android:id="@+id/right_invite_recruit_salary"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             tools:text="10-15K"
             android:textColor="@color/btn_red"
             style="@style/QcTextStyleLargeDark"

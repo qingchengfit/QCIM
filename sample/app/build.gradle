@@ -51,7 +51,7 @@ uploadArchives{
 //    }
     repositories {
         mavenDeployer {
-            repository(url: uri('../../../../../android-fitcoach/repo'))
+            repository(url: uri('../../../../../repo'))
 //            repository(url: uri('../../../../../android-fitstaff/repo'))
             pom.artifactId = 'chat'
 

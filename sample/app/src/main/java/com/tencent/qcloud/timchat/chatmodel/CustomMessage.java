@@ -18,10 +18,10 @@ public class CustomMessage extends Message {
   private String TAG = getClass().getSimpleName();
 
   private final int TYPE_TYPING = 14;
-  private final int TYPE_RECRUIT = 1001;
-  private final int TYPE_RESUME = 1002;
-  private final int TYPE_SEND_RECRUIT = 1003;
-  private final int TYPE_TOP_RESUME = 1004;
+  private final int TYPE_RECRUIT = 1001;      //顶部的职位信息 -- 求职端
+  private final int TYPE_RESUME = 1002;       //发送的简历信息 --求职端
+  private final int TYPE_SEND_RECRUIT = 1003; //发送的邀约信息 -- 招聘端
+  private final int TYPE_TOP_RESUME = 1004;   //顶部的简历信息 -- 招聘端
 
 
   private Type type;
@@ -90,8 +90,8 @@ public class CustomMessage extends Message {
           if (dataObject.has("city")) resumeModel.city = dataObject.getString("city");
           if (dataObject.has("min_salary")) resumeModel.min_salary = dataObject.getInt("min_salary");
           if (dataObject.has("max_salary")) resumeModel.max_salary = dataObject.getInt("max_salary");
-          if (dataObject.has("height")) resumeModel.height = (int) dataObject.get("height");
-          if (dataObject.has("weight")) resumeModel.weight = (int) dataObject.get("weight");
+          if (dataObject.has("height")) resumeModel.height = String.valueOf(dataObject.get("height"));
+          if (dataObject.has("weight")) resumeModel.weight = String.valueOf(dataObject.get("height"));
 
           dataObj = resumeModel;
           break;
@@ -175,9 +175,13 @@ public class CustomMessage extends Message {
    */
   @Override public String getSummary() {
     if (type == Type.RECRUIT){
-      return "职位【" + ((RecruitModel) getData()).name + "】";
+      return "对【" + ((RecruitModel) getData()).name + "】感兴趣";
     }else if (type == Type.RESUME){
-      return "投递简历【" + ((ResumeModel) getData()).username + "的简历】";
+      return "简历投递【" + ((ResumeModel) getData()).username + "的简历】";
+    }else if (type == Type.TOP_RESUME){
+      return "对【" + ((ResumeModel) getData()).username + "的简历】感兴趣";
+    }else if(type == Type.SEND_RECRUIT){
+      return "职位邀请【" + ((RecruitModel) getData()).name + "】";
     }else {
       return "";
     }

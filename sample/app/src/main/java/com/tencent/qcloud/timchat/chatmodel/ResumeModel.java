@@ -14,8 +14,8 @@ public class ResumeModel {
   public String birthday;
   public int gender;
   public String city;
-  public int weight;
-  public int height;
+  public String weight;
+  public String height;
   public Integer max_salary; //薪水
   public Integer min_salary;
   public String exp_job;

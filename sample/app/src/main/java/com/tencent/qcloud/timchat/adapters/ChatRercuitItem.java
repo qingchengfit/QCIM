@@ -75,7 +75,7 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
     if (recruitModel == null) {
       return;
     }
-    if (message.isSelf()) {
+    if (!message.isSelf()) {
       Glide.with(context).load(PhotoUtils.getSmall(recruitModel.photo)).asBitmap().into(holder.imgLeftInviteRecruit);
 
       holder.tvLeftInviteName.setText(recruitModel.name);

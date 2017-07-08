@@ -45,6 +45,7 @@
     <color name="qc_text_grey">#9d9d9d</color>
     <color name="bg_red">#1aea6161</color>
     <color name="less_grey">#dddddd</color>
+    <color name="warm_grey">#888888</color>
 
 
 </resources>

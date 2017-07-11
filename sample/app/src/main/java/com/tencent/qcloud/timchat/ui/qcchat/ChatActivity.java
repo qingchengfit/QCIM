@@ -136,8 +136,7 @@ public class ChatActivity extends AppCompatActivity
   private RelativeLayout root;
   private List<ChatItem> tempItemList = new ArrayList<>();
   private String resumeJson;
-  private boolean isLatestResume;
-  private boolean isLatestRecruit;
+  private boolean isLatestMessage;
 
   public static void navToChat(Context context, String identify, TIMConversationType type) {
     Intent intent = new Intent(context, ChatActivity.class);
@@ -335,9 +334,9 @@ public class ChatActivity extends AppCompatActivity
               handler.postDelayed(resetTitle, 3000);
               break;
             case RECRUIT:
-              if (!isLatestRecruit) {
+              if (!isLatestMessage) {
                 showTopRercuit(mMessage);
-                isLatestRecruit = true;
+                isLatestMessage = true;
               }
               break;
             case RESUME:
@@ -352,9 +351,9 @@ public class ChatActivity extends AppCompatActivity
               flexibleAdapter.notifyDataSetChanged();
               break;
             case TOP_RESUME:
-              if (!isLatestResume) {
+              if (!isLatestMessage) {
                 showTopResume(mMessage);
-                isLatestRecruit = true;
+                isLatestMessage = true;
               }
               break;
             default:
@@ -488,15 +487,15 @@ public class ChatActivity extends AppCompatActivity
               : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
           break;
         case TOP_RESUME:
-          if (!isLatestResume) {
+          if (!isLatestMessage) {
             showTopResume(message);
-            isLatestResume = true;
+            isLatestMessage = true;
           }
           break;
         case RECRUIT:
-          if (!isLatestRecruit) {
+          if (!isLatestMessage) {
             showTopRercuit(message);
-            isLatestRecruit = true;
+            isLatestMessage = true;
           }
           break;
       }

@@ -74,10 +74,14 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
                             .asBitmap()
                             .into(holder.avator);
                     holder.tvName.setText(profile.getNickName());
-
+                    onChangeName(holder);
                 }
             }
         });
+    }
+
+    public void onChangeName(ConversationViewHolder holder){
+
     }
 
     private void getGroupAvator(List<String> list, final ConversationViewHolder holder){
@@ -156,9 +160,9 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
         }
     }
 
-    class ConversationViewHolder extends FlexibleViewHolder{
+    public static class ConversationViewHolder extends FlexibleViewHolder{
 
-        private TextView tvName;
+        public TextView tvName;
         private CircleImageView avator;
         private TextView lastMessage;
         private TextView time;

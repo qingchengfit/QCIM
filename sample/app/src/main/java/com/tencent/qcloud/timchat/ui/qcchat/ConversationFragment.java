@@ -1,6 +1,5 @@
 package com.tencent.qcloud.timchat.ui.qcchat;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -39,361 +38,346 @@ import java.util.List;
 /**
  * 会话列表界面
  */
-public class ConversationFragment extends Fragment implements ConversationView,
-        FriendshipMessageView,GroupManageMessageView, AddConversationProcessor.OnCreateConversation,
-        FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener{
+public class ConversationFragment extends Fragment
+    implements ConversationView, FriendshipMessageView, GroupManageMessageView,
+    AddConversationProcessor.OnCreateConversation, FlexibleAdapter.OnItemClickListener,
+    FlexibleAdapter.OnItemLongClickListener {
 
-    private final String TAG = "ConversationFragment";
+  private final String TAG = "ConversationFragment";
 
-    private View view;
-    private List<ConversationFlexItem> flexItemList = new ArrayList<>();
-    private FlexibleAdapter flexibleAdapter;
-    private RecyclerView listView;
-    private ConversationPresenter presenter;
-    private GroupManagerPresenter groupManagerPresenter;
-    private List<String> groupList;
-    private AddConversationProcessor addConversationProcessor;
-    private FriendshipManagerPresenter friendshipManagerPresenter;
-    private OnUnReadMessageListener onUnReadMessageListener;
+  private View view;
+  private List<ConversationFlexItem> flexItemList = new ArrayList<>();
+  private FlexibleAdapter flexibleAdapter;
+  private RecyclerView listView;
+  private ConversationPresenter presenter;
+  private GroupManagerPresenter groupManagerPresenter;
+  private List<String> groupList;
+  private AddConversationProcessor addConversationProcessor;
+  private FriendshipManagerPresenter friendshipManagerPresenter;
+  private OnUnReadMessageListener onUnReadMessageListener;
 
-    public ConversationFragment() {
-        // Required empty public constructor
+  public ConversationFragment() {
+    // Required empty public constructor
+  }
+
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    if (view == null) {
+      view = inflater.inflate(R.layout.fragment_conversation, container, false);
+      listView = (RecyclerView) view.findViewById(R.id.recyclerView);
+
+      addConversationProcessor = new AddConversationProcessor(getContext());
+      addConversationProcessor.setOnCreateConversation(this);
+      friendshipManagerPresenter = new FriendshipManagerPresenter(this);
+      groupManagerPresenter = new GroupManagerPresenter(this);
+      presenter = new ConversationPresenter(this);
+      presenter.getConversation();
+      listView.setLayoutManager(new LinearLayoutManager(getContext()));
+      listView.setItemAnimator(new DefaultItemAnimator());
+      listView.addItemDecoration(
+          new DividerItemDecoration(getContext(), R.drawable.divider_card_list));
+      listView.setNestedScrollingEnabled(false);
+      flexibleAdapter = new FlexibleAdapter(flexItemList, this);
+      flexibleAdapter.addListener(this);
+      listView.setAdapter(flexibleAdapter);
+
+      registerForContextMenu(listView);
     }
+    flexibleAdapter.notifyDataSetChanged();
+    return view;
+  }
 
+  @Override public void onResume() {
+    super.onResume();
+    //        refresh();
+    PushUtil.getInstance().reset();
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (view == null){
-            view = inflater.inflate(R.layout.fragment_conversation, container, false);
-            listView = (RecyclerView) view.findViewById(R.id.recyclerView);
+  public void setOnUnReadMessageListener(OnUnReadMessageListener onUnReadMessageListener) {
+    this.onUnReadMessageListener = onUnReadMessageListener;
+  }
 
-            addConversationProcessor = new AddConversationProcessor(getContext());
-            addConversationProcessor.setOnCreateConversation(this);
-            friendshipManagerPresenter = new FriendshipManagerPresenter(this);
-            groupManagerPresenter = new GroupManagerPresenter(this);
-            presenter = new ConversationPresenter(this);
-            presenter.getConversation();
-            listView.setLayoutManager(new LinearLayoutManager(getContext()));
-            listView.setItemAnimator(new DefaultItemAnimator());
-            listView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.divider_card_list));
-            listView.setNestedScrollingEnabled(false);
-            flexibleAdapter = new FlexibleAdapter(flexItemList, this);
-            flexibleAdapter.addListener(this);
-            listView.setAdapter(flexibleAdapter);
+  /**
+   * 初始化界面或刷新界面
+   */
+  @Override public void initView(List<TIMConversation> conversationList) {
+    this.flexItemList.clear();
+    groupList = new ArrayList<>();
+    for (TIMConversation item : conversationList) {
+      if (item.getIdentifer().equals("新朋友")) {
+        continue;
+      }
+      switch (item.getType()) {
+        case C2C:
+        case Group:
+          this.flexItemList.add(
+              new ConversationFlexItem(getContext(), new NomalConversation(item)));
+          groupList.add(item.getPeer());
+          break;
+      }
+    }
+    groupManagerPresenter.getGroupManageLastMessage();
+  }
 
-            registerForContextMenu(listView);
-        }
+  /**
+   * 更新最新消息显示
+   *
+   * @param message 最后一条消息
+   */
+  @Override public void updateMessage(TIMMessage message) {
+    if (message == null) {
+      flexibleAdapter.notifyDataSetChanged();
+      return;
+    }
+    if (message.getConversation().getType() == TIMConversationType.System) {
+      groupManagerPresenter.getGroupManageLastMessage();
+      return;
+    }
+    if (MessageFactory.getMessage(message) instanceof CustomMessage
+        && ((CustomMessage) MessageFactory.getMessage(message)).getType()
+        == CustomMessage.Type.TYPING) {
+      return;
+    }
+    NomalConversation conversation = new NomalConversation(message.getConversation());
+    Iterator<ConversationFlexItem> iterator = flexItemList.iterator();
+    while (iterator.hasNext()) {
+      Conversation c = iterator.next().getConversation();
+      if (conversation.equals(c)) {
+        conversation = (NomalConversation) c;
+        iterator.remove();
+        break;
+      }
+    }
+    conversation.setLastMessage(MessageFactory.getMessage(message));
+    flexItemList.add(new ConversationFlexItem(getContext(), conversation));
+    refresh();
+  }
+
+  /**
+   * 更新好友关系链消息
+   */
+  @Override public void updateFriendshipMessage() {
+    friendshipManagerPresenter.getFriendshipLastMessage();
+  }
+
+  /**
+   * 删除会话
+   */
+  @Override public void removeConversation(String identify) {
+    Iterator<ConversationFlexItem> iterator = flexItemList.iterator();
+    while (iterator.hasNext()) {
+      Conversation conversation = iterator.next().getConversation();
+      if (conversation.getIdentify() != null && conversation.getIdentify().equals(identify)) {
+        iterator.remove();
         flexibleAdapter.notifyDataSetChanged();
-        return view;
-
+        return;
+      }
     }
+  }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-//        refresh();
-        PushUtil.getInstance().reset();
-    }
-
-    public void setOnUnReadMessageListener(OnUnReadMessageListener onUnReadMessageListener) {
-        this.onUnReadMessageListener = onUnReadMessageListener;
-    }
-
-    /**
-     * 初始化界面或刷新界面
-     *
-     * @param conversationList
-     */
-    @Override
-    public void initView(List<TIMConversation> conversationList) {
-        this.flexItemList.clear();
-        groupList = new ArrayList<>();
-        for (TIMConversation item:conversationList){
-            if (item.getIdentifer().equals("新朋友")){
-                continue;
-            }
-            switch (item.getType()){
-                case C2C:
-                case Group:
-                    this.flexItemList.add(new ConversationFlexItem(getContext(), new NomalConversation(item)));
-                    groupList.add(item.getPeer());
-                    break;
-            }
-        }
-        groupManagerPresenter.getGroupManageLastMessage();
-    }
-
-    /**
-     * 更新最新消息显示
-     *
-     * @param message 最后一条消息
-     */
-    @Override
-    public void updateMessage(TIMMessage message) {
-        if (message == null){
-            flexibleAdapter.notifyDataSetChanged();
-            return;
-        }
-        if (message.getConversation().getType() == TIMConversationType.System){
-            groupManagerPresenter.getGroupManageLastMessage();
-            return;
-        }
-        if (MessageFactory.getMessage(message) instanceof CustomMessage && ((CustomMessage) MessageFactory.getMessage(message)).getType() == CustomMessage.Type.TYPING) return;
-        NomalConversation conversation = new NomalConversation(message.getConversation());
-        Iterator<ConversationFlexItem> iterator =flexItemList.iterator();
-        while (iterator.hasNext()){
-            Conversation c = iterator.next().getConversation();
-            if (conversation.equals(c)){
-                conversation = (NomalConversation) c;
-                iterator.remove();
-                break;
-            }
-        }
-        conversation.setLastMessage(MessageFactory.getMessage(message));
-        flexItemList.add(new ConversationFlexItem(getContext(), conversation));
-//        Collections.sort(flexItemList);
-        refresh();
-    }
-
-    /**
-     * 更新好友关系链消息
-     */
-    @Override
-    public void updateFriendshipMessage() {
-        friendshipManagerPresenter.getFriendshipLastMessage();
-    }
-
-    /**
-     * 删除会话
-     *
-     * @param identify
-     */
-    @Override
-    public void removeConversation(String identify) {
-        Iterator<ConversationFlexItem> iterator = flexItemList.iterator();
-        while(iterator.hasNext()){
-            Conversation conversation = iterator.next().getConversation();
-            if (conversation.getIdentify()!=null&&conversation.getIdentify().equals(identify)){
-                iterator.remove();
-                flexibleAdapter.notifyDataSetChanged();
-                return;
-            }
-        }
-    }
-
-    /**
-     * 更新群信息
-     *
-     * @param info
-     */
-    @Override
-    public void updateGroupInfo(TIMGroupCacheInfo info) {
-        for (ConversationFlexItem conversationItem : flexItemList){
-            if (conversationItem.getConversation().getIdentify()!=null && conversationItem.getConversation()
-                    .getIdentify().equals(info.getGroupInfo().getGroupId())){
-                flexibleAdapter.notifyDataSetChanged();
-                return;
-            }
-        }
-    }
-
-    /**
-     * 刷新
-     */
-    @Override
-    public void refresh() {
-        if (onUnReadMessageListener != null){
-            onUnReadMessageListener.onUnReadMessage(getTotalUnreadNum());
-        }
-        Collections.sort(flexItemList);
+  /**
+   * 更新群信息
+   */
+  @Override public void updateGroupInfo(TIMGroupCacheInfo info) {
+    for (ConversationFlexItem conversationItem : flexItemList) {
+      if (conversationItem.getConversation().getIdentify() != null
+          && conversationItem.getConversation()
+          .getIdentify()
+          .equals(info.getGroupInfo().getGroupId())) {
         flexibleAdapter.notifyDataSetChanged();
+        return;
+      }
     }
+  }
 
-    @Override
-    public void createGroup(List<String> datas, List<String> memberList) {
-        addConversationProcessor.createGroupWithArg(datas, "");
-
+  /**
+   * 刷新
+   */
+  @Override public void refresh() {
+    if (onUnReadMessageListener != null) {
+      onUnReadMessageListener.onUnReadMessage(getTotalUnreadNum());
     }
+    Collections.sort(flexItemList);
+    flexibleAdapter.notifyDataSetChanged();
+  }
 
+  @Override public void createGroup(List<String> datas, List<String> memberList) {
+    addConversationProcessor.createGroupWithArg(datas, "");
+  }
 
-    /**
-     * 获取好友关系链管理系统最后一条消息的回调
-     *
-     * @param message 最后一条消息
-     * @param unreadCount 未读数
-     */
-    @Override
-    public void onGetFriendshipLastMessage(TIMFriendFutureItem message, long unreadCount) {
-//        if (friendshipConversation == null){
-//            friendshipConversation = new FriendshipConversation(message);
-//            flexItemList.add(new ConversationFlexItem(getContext(), friendshipConversation));
-//        }else{
-//            friendshipConversation.setLastMessage(message);
-//        }
-//        friendshipConversation.setUnreadCount(unreadCount);
-//        Collections.sort(flexItemList);
-//        refresh();
+  /**
+   * 获取好友关系链管理系统最后一条消息的回调
+   *
+   * @param message 最后一条消息
+   * @param unreadCount 未读数
+   */
+  @Override public void onGetFriendshipLastMessage(TIMFriendFutureItem message, long unreadCount) {
+    //        if (friendshipConversation == null){
+    //            friendshipConversation = new FriendshipConversation(message);
+    //            flexItemList.add(new ConversationFlexItem(getContext(), friendshipConversation));
+    //        }else{
+    //            friendshipConversation.setLastMessage(message);
+    //        }
+    //        friendshipConversation.setUnreadCount(unreadCount);
+    //        Collections.sort(flexItemList);
+    //        refresh();
+  }
+
+  /**
+   * 获取好友关系链管理最后一条系统消息的回调
+   *
+   * @param message 消息列表
+   */
+  @Override public void onGetFriendshipMessage(List<TIMFriendFutureItem> message) {
+    //        friendshipManagerPresenter.getFriendshipLastMessage();
+  }
+
+  /**
+   * 获取群管理最后一条系统消息的回调
+   *
+   * @param message 最后一条消息
+   * @param unreadCount 未读数
+   */
+  @Override public void onGetGroupManageLastMessage(TIMGroupPendencyItem message,
+      long unreadCount) {
+    //        if (groupManageConversation == null){
+    //            groupManageConversation = new GroupManageConversation(message);
+    ////            conversationList.add(groupManageConversation);
+    //            flexItemList.add(new ConversationFlexItem(getContext(), groupManageConversation));
+    //        }else{
+    //            groupManageConversation.setLastMessage(message);
+    //        }
+    //        groupManageConversation.setUnreadCount(unreadCount);
+    //        Collections.sort(flexItemList);
+    //        refresh();
+  }
+
+  /**
+   * 获取群管理系统消息的回调
+   *
+   * @param message 分页的消息列表
+   */
+  @Override public void onGetGroupManageMessage(List<TIMGroupPendencyItem> message) {
+
+  }
+
+  //    @Override
+  //    public void onCreateContextMenu(ContextMenu menu, View v,
+  //                                    ContextMenu.ContextMenuInfo menuInfo) {
+  //        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+  //        Conversation conversation = flexItemList.get(info.position).getConversation();
+  //        if (conversation instanceof NomalConversation){
+  //            menu.add(0, 1, Menu.NONE, getString(R.string.conversation_del));
+  //        }
+  //    }
+  //
+  //
+  //    @Override
+  //    public boolean onContextItemSelected(MenuItem item) {
+  //        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+  //        ConversationFlexItem selectItem = flexItemList.get(info.position);
+  //        NomalConversation conversation = null;
+  //        if (selectItem != null) {
+  //            conversation = ((NomalConversation) selectItem.getConversation());
+  //        }
+  //        switch (item.getItemId()) {
+  //            case 1:
+  //                if (conversation != null){
+  //                    if (presenter.delConversation((conversation).getType(),
+  //                            conversation.getIdentify())){
+  //                        flexItemList.remove(selectItem);
+  //                        flexibleAdapter.notifyDataSetChanged();
+  //                    }
+  //                }
+  //                break;
+  //            default:
+  //                break;
+  //        }
+  //        return super.onContextItemSelected(item);
+  //    }
+
+  /**
+   * @return 返回未读消息的总数
+   */
+  public long getTotalUnreadNum() {
+    long num = 0;
+    for (ConversationFlexItem item : flexItemList) {
+      num += item.getConversation().getUnreadNum();
     }
+    return num;
+  }
 
-    /**
-     * 获取好友关系链管理最后一条系统消息的回调
-     *
-     * @param message 消息列表
-     */
-    @Override
-    public void onGetFriendshipMessage(List<TIMFriendFutureItem> message) {
-//        friendshipManagerPresenter.getFriendshipLastMessage();
+  /**
+   * 设置全部已读
+   */
+  public void setAllMessageRead() {
+    NomalConversation conversation;
+    for (int i = 0; i < flexItemList.size(); i++) {
+      conversation = (NomalConversation) flexItemList.get(i).getConversation();
+      TIMManager.getInstance()
+          .getConversation(conversation.getType(), conversation.getIdentify())
+          .setReadMessage();
     }
+    flexibleAdapter.notifyDataSetChanged();
+  }
 
-    /**
-     * 获取群管理最后一条系统消息的回调
-     *
-     * @param message     最后一条消息
-     * @param unreadCount 未读数
-     */
-    @Override
-    public void onGetGroupManageLastMessage(TIMGroupPendencyItem message, long unreadCount) {
-//        if (groupManageConversation == null){
-//            groupManageConversation = new GroupManageConversation(message);
-////            conversationList.add(groupManageConversation);
-//            flexItemList.add(new ConversationFlexItem(getContext(), groupManageConversation));
-//        }else{
-//            groupManageConversation.setLastMessage(message);
-//        }
-//        groupManageConversation.setUnreadCount(unreadCount);
-//        Collections.sort(flexItemList);
-//        refresh();
+  /**
+   * @return 返回会话item的数量
+   */
+  public int getTotalItemCount() {
+    return flexItemList.size();
+  }
+
+  @Override public void onCreateSuccess(String id) {
+    if (getActivity() != null) {
+      ChatActivity.navToChat(getActivity(), id, TIMConversationType.Group);
     }
+  }
 
-    /**
-     * 获取群管理系统消息的回调
-     *
-     * @param message 分页的消息列表
-     */
-    @Override
-    public void onGetGroupManageMessage(List<TIMGroupPendencyItem> message) {
+  @Override public void onCreateFailed(int errorCode, String s) {
+    Toast.makeText(getContext(), "创建群组失败", Toast.LENGTH_SHORT).show();
+  }
 
+  @Override public boolean onItemClick(int position) {
+    NomalConversation conversation =
+        (NomalConversation) flexItemList.get(position).getConversation();
+    TIMManager.getInstance()
+        .getConversation(conversation.getType(), conversation.getIdentify())
+        .setReadMessage();
+    flexibleAdapter.notifyItemChanged(position);
+    conversation.navToDetail(getActivity());
+    //        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
+    //            groupManagerPresenter.getGroupManageLastMessage();
+    //        }
+    return false;
+  }
+
+  public void deleteConversationItem(int position) {
+    ConversationFlexItem selectItem = flexItemList.get(position);
+    NomalConversation conversation = null;
+    if (selectItem != null) {
+      conversation = ((NomalConversation) selectItem.getConversation());
     }
-
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v,
-//                                    ContextMenu.ContextMenuInfo menuInfo) {
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-//        Conversation conversation = flexItemList.get(info.position).getConversation();
-//        if (conversation instanceof NomalConversation){
-//            menu.add(0, 1, Menu.NONE, getString(R.string.conversation_del));
-//        }
-//    }
-//
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//        ConversationFlexItem selectItem = flexItemList.get(info.position);
-//        NomalConversation conversation = null;
-//        if (selectItem != null) {
-//            conversation = ((NomalConversation) selectItem.getConversation());
-//        }
-//        switch (item.getItemId()) {
-//            case 1:
-//                if (conversation != null){
-//                    if (presenter.delConversation((conversation).getType(),
-//                            conversation.getIdentify())){
-//                        flexItemList.remove(selectItem);
-//                        flexibleAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//        return super.onContextItemSelected(item);
-//    }
-
-    /**
-     * @return 返回未读消息的总数
-     */
-    public long getTotalUnreadNum(){
-        long num = 0;
-        for (ConversationFlexItem item : flexItemList){
-            num += item.getConversation().getUnreadNum();
-        }
-        return num;
-    }
-
-    /**
-     * 设置全部已读
-     */
-    public void setAllMessageRead() {
-        NomalConversation conversation;
-        for (int i = 0; i < flexItemList.size(); i++) {
-            conversation = (NomalConversation) flexItemList.get(i).getConversation();
-            TIMManager.getInstance().getConversation(conversation.getType(),
-                    conversation.getIdentify()).setReadMessage();
-        }
+    if (conversation != null) {
+      TIMManager.getInstance()
+          .getConversation(conversation.getType(), conversation.getIdentify())
+          .setReadMessage();
+      if (presenter.delConversation((conversation).getType(), conversation.getIdentify())) {
+        flexibleAdapter.removeItem(position);
         flexibleAdapter.notifyDataSetChanged();
+      }
     }
+  }
 
-    /**
-     *
-     * @return  返回会话item的数量
-     */
-    public int getTotalItemCount(){
-        return flexItemList.size();
-    }
+  @Override public void onItemLongClick(final int position) {
+    onUnReadMessageListener.onLongClickListener(position);
+  }
 
-    @Override
-    public void onCreateSuccess(String id) {
-        if (getActivity() != null) {
-            ChatActivity.navToChat(getActivity(), id, TIMConversationType.Group);
-        }
-    }
+  public interface OnUnReadMessageListener {
+    void onUnReadMessage(long count);
 
-    @Override
-    public void onCreateFailed(int errorCode, String s) {
-        Toast.makeText(getContext(), "创建群组失败", Toast.LENGTH_SHORT).show();
-    }
+    void onLongClickListener(int position);
 
-    @Override
-    public boolean onItemClick(int position) {
-        NomalConversation conversation = (NomalConversation) flexItemList.get(position).getConversation();
-        TIMManager.getInstance().getConversation(conversation.getType(),
-            conversation.getIdentify()).setReadMessage();
-        flexibleAdapter.notifyItemChanged(position);
-        conversation.navToDetail(getActivity());
-//        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
-//            groupManagerPresenter.getGroupManageLastMessage();
-//        }
-        return false;
-    }
-
-    public void deleteConversationItem(int position){
-        ConversationFlexItem selectItem = flexItemList.get(position);
-        NomalConversation conversation = null;
-        if (selectItem != null) {
-            conversation = ((NomalConversation) selectItem.getConversation());
-        }
-        if (conversation != null) {
-            TIMManager.getInstance().getConversation(conversation.getType(),
-                    conversation.getIdentify()).setReadMessage();
-            if (presenter.delConversation((conversation).getType(),
-                    conversation.getIdentify())) {
-                flexibleAdapter.removeItem(position);
-                flexibleAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    @Override
-    public void onItemLongClick(final int position) {
-        onUnReadMessageListener.onLongClickListener(position);
-    }
-
-    public interface OnUnReadMessageListener{
-        void onUnReadMessage(long count);
-
-        void onLongClickListener(int position);
-    }
-
+    void onUpdateRecruitListener(String msg);
+  }
 }

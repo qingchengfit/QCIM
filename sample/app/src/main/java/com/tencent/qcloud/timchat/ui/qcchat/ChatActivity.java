@@ -440,7 +440,7 @@ public class ChatActivity extends AppCompatActivity
     tvWorkYear.setText(
         RecruitBusinessUtils.getWorkYear(recruitModel.min_work_year, recruitModel.max_work_year,
             "经验"));
-    tvGender.setText(recruitModel.gender == 1 ? "男性" : "女性");
+    tvGender.setText(RecruitBusinessUtils.getGender(recruitModel.gender, "性别"));
     tvAge.setText(RecruitBusinessUtils.getAge(recruitModel.min_age, recruitModel.max_age, "年龄"));
     tvHeight.setText(
         RecruitBusinessUtils.getHeight(recruitModel.min_height, recruitModel.max_height, "身高"));

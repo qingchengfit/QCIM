@@ -25,5 +25,6 @@ public class RecruitModel {
   public String gym_name;
 
   public int deliveried;   // 1 表示已投递
+  public String brand_name;
 
 }

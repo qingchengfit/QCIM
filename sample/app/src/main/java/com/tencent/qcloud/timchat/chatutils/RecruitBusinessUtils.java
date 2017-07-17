@@ -58,8 +58,8 @@ public class RecruitBusinessUtils {
     public static String getSalary(float min, float max ,String replace) {
         if (min == -1 && max == -1) {
             return replace;
-        }else if (min == 0 && max == 0){
-            return "";
+        }else if (min <= 0 && max <= 0){
+            return replace;
         }else if (min == 0) {
             return "<" + getMoney(max);
         } else if (max == 0) {

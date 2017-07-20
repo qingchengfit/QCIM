@@ -78,9 +78,9 @@ public class ChatImageItem extends ChatItem<ChatImageItem.ChatImageVH> implement
 
   @Override public void onClick(View view) {
     if (e.getImageList() != null && e.getImageList().size() > 0){
-      for (TIMImage image : e.getImageList()){
-        imageMessage.navToImageview(image, context);
-      }
+      //for (TIMImage image : e.getImageList()){
+        imageMessage.navToImageview(e.getImageList().get(0), context);
+      //}
     }
   }
 

@@ -59,7 +59,11 @@ public class ChatImageItem extends ChatItem<ChatImageItem.ChatImageVH> implement
       List payloads) {
     super.bindViewHolder(adapter, holder, position, payloads);
     TIMMessage message = imageMessage.getMessage();
-    e = (TIMImageElem) message.getElement(0);
+    if (message.getElement(0) instanceof TIMImageElem) {
+      e = (TIMImageElem) message.getElement(0);
+    }else{
+      return;
+    }
     if(message.isSelf()){
       Glide.with(context).load(e.getPath()).asBitmap().override(368, 368).fitCenter().transform(new CustomShapeTransformation(context, R.drawable.chat_bubble_green)).into(holder.rightImageMessage);
     }else{

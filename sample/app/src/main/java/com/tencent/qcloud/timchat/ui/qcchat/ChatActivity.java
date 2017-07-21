@@ -412,8 +412,9 @@ public class ChatActivity extends AppCompatActivity
         + "kg | "
         + RecruitBusinessUtils.getDegree(getBaseContext(), resumeModel.max_education));
     tvResumeDetail.setText(
-        resumeModel.exp_job + " · " + resumeModel.city + " · " + RecruitBusinessUtils.getSalary(
-            resumeModel.min_salary, resumeModel.max_education));
+        RecruitBusinessUtils.dealData(resumeModel.exp_job) + " · " + RecruitBusinessUtils.dealData(
+            resumeModel.city) + " · " + RecruitBusinessUtils.getSalary(
+            resumeModel.min_salary, resumeModel.max_salary));
   }
 
   private void showTopRercuit(final Message mMessage) {

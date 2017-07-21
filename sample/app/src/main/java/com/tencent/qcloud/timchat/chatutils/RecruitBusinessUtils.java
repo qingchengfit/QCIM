@@ -52,7 +52,10 @@ public class RecruitBusinessUtils {
         return (curYear-c.get(Calendar.YEAR))+"";
     }
 
-    public static String getSalary(float min, float max) {
+    public static String getSalary(Integer min, Integer max) {
+        if (min == null || max == null){
+            return "--";
+        }
         return getSalary(min,max,"不限");
     }
     public static String getSalary(float min, float max ,String replace) {
@@ -178,6 +181,13 @@ public class RecruitBusinessUtils {
         } else {
             return min + "-" + max + "kg";
         }
+    }
+
+    public static Object dealData(Object data){
+        if (data == null){
+            return "--";
+        }
+        return data;
     }
 
 }

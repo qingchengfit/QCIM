@@ -54,19 +54,19 @@ public class RecruitBusinessUtils {
 
     public static String getSalary(Integer min, Integer max) {
         if (min == null || max == null){
-            return "--";
+            return "";
         }
-        return getSalary(min,max,"不限");
+        return getSalary(min,max,"面议");
     }
     public static String getSalary(float min, float max ,String replace) {
-        if (min == -1 && max == -1) {
+        if (min < 0 && max <= 0) {
             return replace;
-        }else if (min <= 0 && max <= 0){
+        } else if (min == 0 && max == 0) {
             return replace;
-        }else if (min == 0) {
+        } else if (min <= 0) {
             return "<" + getMoney(max);
-        } else if (max == 0) {
-            return "<" + getMoney(min);
+        } else if (max <= 0) {
+            return ">" + getMoney(min);
         } else {
             return getMoney(min).replace("K", "") + "-" + getMoney(max);
         }
@@ -114,15 +114,15 @@ public class RecruitBusinessUtils {
     /**
      * 获取工作年龄限制
      */
-    public static String getWorkYear(int min) {
-        if (min == 0){
-            return "应届";
-        }return min+"";
+    public static String getWorkYear(int min, int max) {
+        return getWorkYear(min, max, "");
     }
 
     public static String getWorkYear(int min, int max, String plus) {
         if (min == -1 && max == -1) {
             return plus + "不限";
+        } else if (min == 0 && max == 0) {
+            return "应届生";
         } else if (min == -1) {
             return "<" + max + "年";
         } else if (max == -1) {
@@ -130,6 +130,13 @@ public class RecruitBusinessUtils {
         } else {
             return min + "-" + max + "年";
         }
+    }
+
+    public static String getResumeWorkYear(int year){
+        if (year == 0){
+            return "应届生";
+        }
+        return year + "年经验";
     }
 
     /**
@@ -185,9 +192,17 @@ public class RecruitBusinessUtils {
 
     public static Object dealData(Object data){
         if (data == null){
-            return "--";
+            return "";
         }
-        return data;
+        return data + " · ";
     }
+
+    public static String getResumeHeight(String height){
+        if (height.contains(".")){
+            return height.split("\\.")[0];
+        }
+        return height;
+    }
+
 
 }

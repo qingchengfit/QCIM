@@ -400,20 +400,19 @@ public class ChatActivity extends AppCompatActivity
         .into(imgHeadResume);
 
     tvResumeName.setText(resumeModel.username);
-    imgResumeGender.setImageResource(resumeModel.gender == 1 ? R.drawable.ic_gender_signal_male
+    imgResumeGender.setImageResource(resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
         : R.drawable.ic_gender_signal_female);
-    tvResumeInfo.setText(resumeModel.work_year
-        + "年经验 | "
+    tvResumeInfo.setText( RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year) + " | "
         + RecruitBusinessUtils.getAge(resumeModel.birthday)
-        + " | "
-        + resumeModel.height
+        + "岁 | "
+        + RecruitBusinessUtils.getResumeHeight(resumeModel.height)
         + "cm,"
-        + resumeModel.weight
+        + RecruitBusinessUtils.getResumeHeight(resumeModel.weight)
         + "kg | "
         + RecruitBusinessUtils.getDegree(getBaseContext(), resumeModel.max_education));
     tvResumeDetail.setText(
-        RecruitBusinessUtils.dealData(resumeModel.exp_job) + " · " + RecruitBusinessUtils.dealData(
-            resumeModel.city) + " · " + RecruitBusinessUtils.getSalary(
+        String.valueOf(RecruitBusinessUtils.dealData(resumeModel.exp_job)) + String.valueOf(RecruitBusinessUtils.dealData(
+            resumeModel.city)) + RecruitBusinessUtils.getSalary(
             resumeModel.min_salary, resumeModel.max_salary));
   }
 

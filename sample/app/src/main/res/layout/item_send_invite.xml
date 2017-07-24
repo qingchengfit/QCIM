@@ -142,7 +142,8 @@
               android:layout_below="@id/tv_left_invite_name"
               android:layout_toRightOf="@id/img_left_invite_recruit"
               android:layout_alignLeft="@id/tv_left_invite_name"
-              style="@style/QcTextStyleMediumDark"
+              android:textSize="11sp"
+              android:textColor="@color/text_dark"
               />
 
         </RelativeLayout>
@@ -232,13 +233,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="私人教练"
-            android:textColor="@color/qc_text_black"
             android:maxLength="6"
             android:layout_marginBottom="5dp"
             android:layout_toRightOf="@+id/img_right_invite_recruit"
             android:layout_alignTop="@+id/img_right_invite_recruit"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
+            style="@style/QcTextStyleLargeDark"
             />
 
         <TextView
@@ -264,7 +265,8 @@
             android:layout_below="@id/tv_right_invite_name"
             android:layout_toRightOf="@id/img_right_invite_recruit"
             android:layout_alignLeft="@id/tv_right_invite_name"
-            style="@style/QcTextStyleLargeDark"
+            android:textSize="11sp"
+            android:textColor="@color/text_dark"
             />
       </RelativeLayout>
 

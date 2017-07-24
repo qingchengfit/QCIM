@@ -84,7 +84,7 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
       holder.resumeTextAge.setText(RecruitBusinessUtils.getAge(resumeModel.birthday));
       holder.resumeTextAgree.setText(
           RecruitBusinessUtils.getDegree(context, resumeModel.max_education));
-      holder.resumeTextWorkYear.setText(RecruitBusinessUtils.getWorkYear(resumeModel.work_year));
+      holder.resumeTextWorkYear.setText(RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year));
       holder.textClickResume.setText(
           context.getString(R.string.text_click_resume_name, resumeModel.username));
       holder.resumeGender.setImageResource(
@@ -100,7 +100,7 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
       holder.leftResumeTextAgree.setText(
           RecruitBusinessUtils.getDegree(context, resumeModel.max_education));
       holder.leftResumeTextWorkYear.setText(
-          RecruitBusinessUtils.getWorkYear(resumeModel.work_year));
+          RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year));
       holder.leftTextClickResume.setText(
           context.getString(R.string.text_click_resume_name, resumeModel.username));
       holder.leftResumeGender.setImageResource(

@@ -61,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="3dp"
-            android:background="#ee2f"
             android:clickable="true"
             android:longClickable="true"
             android:maxHeight="212dp"
@@ -101,7 +100,6 @@
           android:maxHeight="212dp"
           android:maxWidth="212dp"
           android:scaleType="fitXY"
-          tools:background="#ee2f"
           tools:src="@drawable/btn_minus"
           />
 

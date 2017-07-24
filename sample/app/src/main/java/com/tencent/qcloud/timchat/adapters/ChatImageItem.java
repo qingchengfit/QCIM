@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
@@ -50,8 +51,6 @@ public class ChatImageItem extends ChatItem<ChatImageItem.ChatImageVH> implement
   @Override public ChatImageVH createViewHolder(FlexibleAdapter adapter, LayoutInflater inflater,
       ViewGroup parent) {
     ChatImageVH holder = new ChatImageVH(inflater.inflate(getLayoutRes(), parent, false), adapter);
-    holder.leftImageMessage.setOnClickListener(this);
-    holder.rightImageMessage.setOnClickListener(this);
     return holder;
   }
 
@@ -63,9 +62,17 @@ public class ChatImageItem extends ChatItem<ChatImageItem.ChatImageVH> implement
     if(message.isSelf()){
       Glide.with(context).load(e.getPath()).asBitmap().override(368, 368).fitCenter().transform(new CustomShapeTransformation(context, R.drawable.chat_bubble_green)).into(holder.rightImageMessage);
     }else{
-      Glide.with(context).load(e.getPath()).asBitmap().override(368, 368).fitCenter().transform(new CustomShapeTransformation(context, R.drawable.chat_bubble_grey)).into(holder.leftImageMessage);
+      Glide.with(context).load(e.getImageList().get(0).getUrl()).asBitmap().override(400, 400).centerCrop().transform(new CustomShapeTransformation(context, R.drawable.chat_bubble_grey)).into(holder.leftImageMessage);
     }
     imageMessage.showStatus(holder);
+  }
+
+  public TIMImageElem getElem() {
+    return e;
+  }
+
+  public ImageMessage getImageMessage(){
+    return imageMessage;
   }
 
   @Override public int getLayoutRes() {
@@ -73,10 +80,11 @@ public class ChatImageItem extends ChatItem<ChatImageItem.ChatImageVH> implement
   }
 
   @Override public void onClick(View view) {
-    if (e.getImageList() != null && e.getImageList().size() > 0){
-      for (TIMImage image : e.getImageList()){
-        imageMessage.navToImageview(image, context);
-      }
+    TIMImageElem elem = (TIMImageElem) imageMessage.getMessage().getElement(0);
+    if (elem.getImageList() != null && elem.getImageList().size() > 0){
+      //for (TIMImage image : elem.getImageList()){
+        imageMessage.navToImageview(elem.getImageList().get(0), context);
+      //}
     }
   }
 

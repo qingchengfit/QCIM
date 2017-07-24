@@ -45,10 +45,10 @@ public class CustomShapeTransformation extends BitmapTransformation {
 
     if (width > height) {
       // 如果图片的宽大于高，则以高为基准，以形状的宽高比重新设置宽度
-      width = (int) (height * (shapeWidth / shapeHeight));
+      width = (int) (height * (shapeWidth / shapeHeight) * 1.5);
     } else {
       // 如果图片的宽小于等于高，则以宽为基准，以形状的宽高比重新设置高度度
-      height = (int) (width * (shapeHeight / shapeWidth));
+      height = (int) (width * (shapeHeight / shapeWidth) * 1.5);
     }
 
     // 居中裁剪图片，调用Glide库中TransformationUtils类的centerCrop()方法完成裁剪，保证图片居中且填满

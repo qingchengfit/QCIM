@@ -12,6 +12,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.Request;
@@ -49,6 +50,13 @@ public class ChatImageView extends android.support.v7.widget.AppCompatImageView 
       p.setAntiAlias(true);
       p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
     }
+  }
+
+  @Override public boolean onTouchEvent(MotionEvent event) {
+    if (event.getAction() == MotionEvent.ACTION_DOWN){
+      return false;
+    }
+    return super.onTouchEvent(event);
   }
 
   public void setBitmap(String url, final Bitmap mask) {

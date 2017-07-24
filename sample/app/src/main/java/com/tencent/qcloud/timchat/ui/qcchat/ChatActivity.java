@@ -870,6 +870,10 @@ public class ChatActivity extends AppCompatActivity
       return false;
     }
     if (flexibleAdapter.getItem(position) instanceof ChatImageItem) {
+      ((ChatImageItem) flexibleAdapter.getItem(position)).getImageMessage()
+          .navToImageview(
+              ((ChatImageItem) flexibleAdapter.getItem(position)).getElem().getImageList().get(0),
+              getBaseContext());
       return false;
     }
     if (flexibleAdapter.getItem(position) instanceof ChatVoiceItem) {

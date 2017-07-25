@@ -404,7 +404,7 @@ public class ChatActivity extends AppCompatActivity
         : R.drawable.ic_gender_signal_female);
     tvResumeInfo.setText( RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year) + " | "
         + RecruitBusinessUtils.getAge(resumeModel.birthday)
-        + "岁 | "
+        + RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday))
         + RecruitBusinessUtils.getResumeHeight(resumeModel.height)
         + "cm,"
         + RecruitBusinessUtils.getResumeHeight(resumeModel.weight)
@@ -415,6 +415,7 @@ public class ChatActivity extends AppCompatActivity
             resumeModel.city)) + RecruitBusinessUtils.getSalary(
             resumeModel.min_salary, resumeModel.max_salary));
   }
+
 
   private void showTopRercuit(final Message mMessage) {
     frameDetailLayout.setVisibility(View.VISIBLE);

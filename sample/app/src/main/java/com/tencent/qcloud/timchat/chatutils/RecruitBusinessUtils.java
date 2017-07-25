@@ -1,6 +1,7 @@
 package com.tencent.qcloud.timchat.chatutils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.tencent.qcloud.timchat.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +53,15 @@ public class RecruitBusinessUtils {
         return (curYear-c.get(Calendar.YEAR))+"";
     }
 
+    public static String judgeAge(String age){
+        if(!TextUtils.isEmpty(age) && !RecruitBusinessUtils.getAge(age).equals("0")) {
+            return "岁 | ";
+        }else{
+            return "";
+        }
+
+    }
+
     public static String getSalary(Integer min, Integer max) {
         if (min == null || max == null){
             return "";
@@ -73,7 +83,7 @@ public class RecruitBusinessUtils {
     }
 
     public static String getDegree(Context context, int x) {
-        if (x < 0) return "不限";
+        if (x < 0) return "";
         String[] degrees = context.getResources().getStringArray(R.array.education_degree);
         if (x > 0 && x < degrees.length) {
             return degrees[x];

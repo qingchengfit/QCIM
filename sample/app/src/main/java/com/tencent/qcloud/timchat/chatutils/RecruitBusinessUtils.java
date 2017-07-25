@@ -89,6 +89,8 @@ public class RecruitBusinessUtils {
             } else {
                 return String.format(Locale.CHINA, "%.0fK", m / 1000);
             }
+        } else if (m == 1000) {
+            return "1K";
         } else {
             return String.format(Locale.CHINA, "%.1f", m);
         }

@@ -56,7 +56,7 @@
             android:textSize="11sp"
             android:visibility="visible"
             />
-        <RelativeLayout
+        <com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout
             android:id="@+id/leftMessage"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -104,24 +104,28 @@
               android:layout_alignTop="@+id/img_left_resume"
               android:layout_marginTop="5dp"
               />
-
+          <RelativeLayout
+              android:id="@+id/left_layout_info"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toRightOf="@+id/img_left_resume"
+              android:layout_below="@+id/left_resume_name"
+              android:layout_marginLeft="10dp"
+              >
           <ImageView
               android:id="@+id/left_resume_word_year"
               android:layout_width="15dp"
               android:layout_height="13dp"
-              android:layout_toRightOf="@+id/img_left_resume"
               app:srcCompat="@drawable/vd_recruit_jobintro_experience"
-              android:layout_below="@+id/left_resume_name"
-              android:layout_marginLeft="10dp"
               />
 
           <TextView
               android:id="@+id/left_resume_text_work_year"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_below="@+id/left_resume_name"
               tools:text="2年"
               android:textSize="12sp"
+              android:layout_alignBottom="@id/left_resume_word_year"
               android:textColor="@color/qc_text_black"
               android:layout_toRightOf="@+id/left_resume_word_year"
               android:layout_marginLeft="3dp"
@@ -134,17 +138,16 @@
               android:layout_toRightOf="@+id/left_resume_text_work_year"
               android:layout_marginLeft="15dp"
               app:srcCompat="@drawable/vd_recruit_jobintro_education"
-              android:layout_below="@+id/left_resume_name"
               />
 
           <TextView
               android:id="@+id/left_resume_text_agree"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_below="@+id/left_resume_name"
               tools:text="2年"
               android:textSize="12sp"
               android:textColor="@color/qc_text_black"
+              android:layout_alignBottom="@id/left_resume_agree"
               android:layout_toRightOf="@+id/left_resume_agree"
               android:layout_marginLeft="3dp"
               />
@@ -156,27 +159,27 @@
               android:layout_toRightOf="@+id/left_resume_text_agree"
               android:layout_marginLeft="15dp"
               app:srcCompat="@drawable/vd_recruit_jobintro_age"
-              android:layout_below="@+id/left_resume_name"
               />
 
           <TextView
               android:id="@+id/left_resume_text_age"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_below="@+id/left_resume_name"
               tools:text="2年"
               android:textSize="12sp"
               android:textColor="@color/qc_text_black"
+              android:layout_alignBottom="@id/left_resume_age"
               android:layout_toRightOf="@+id/left_resume_age"
               android:layout_marginLeft="3dp"
               />
 
+          </RelativeLayout>
           <include
               android:id="@+id/divider"
               layout="@layout/divider_grey"
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:layout_below="@+id/left_resume_text_age"
+              android:layout_below="@+id/left_layout_info"
               android:layout_marginTop="15dp"
               android:layout_marginRight="12dp"
               android:layout_marginLeft="12dp"/>
@@ -195,7 +198,7 @@
               android:layout_marginLeft="12dp"
               />
 
-        </RelativeLayout>
+        </com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout>
 
       </LinearLayout>
 
@@ -229,7 +232,7 @@
           android:layout_alignParentRight="true"
           android:src="@drawable/head_me"
           />
-      <RelativeLayout
+      <com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout
           android:id="@+id/rightMessage"
           android:layout_width="251dp"
           android:layout_height="wrap_content"
@@ -266,7 +269,6 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
             />
-
         <ImageView
             android:id="@+id/resume_gender"
             android:layout_width="15dp"
@@ -278,21 +280,28 @@
             android:layout_marginTop="5dp"
             />
 
+        <LinearLayout
+            android:id="@+id/layout_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/img_resume"
+            android:layout_toRightOf="@id/img_resume"
+            android:layout_below="@id/resume_name"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            >
         <ImageView
             android:id="@+id/resume_word_year"
             android:layout_width="15dp"
             android:layout_height="13dp"
-            android:layout_toRightOf="@id/img_resume"
             app:srcCompat="@drawable/vd_recruit_jobintro_experience"
-            android:layout_below="@id/resume_name"
-            android:layout_marginLeft="10dp"
             />
 
         <TextView
             android:id="@+id/resume_text_work_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/resume_name"
             tools:text="2年"
             android:textSize="12sp"
             android:textColor="@color/qc_text_black"
@@ -303,18 +312,17 @@
         <ImageView
             android:id="@+id/resume_agree"
             android:layout_width="15dp"
-            android:layout_height="13dp"
+            android:layout_height="15dp"
             android:layout_toRightOf="@id/resume_text_work_year"
             android:layout_marginLeft="15dp"
             app:srcCompat="@drawable/vd_recruit_jobintro_education"
-            android:layout_below="@id/resume_name"
+
             />
 
         <TextView
             android:id="@+id/resume_text_agree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/resume_name"
             tools:text="2年"
             android:textSize="12sp"
             android:textColor="@color/qc_text_black"
@@ -329,14 +337,12 @@
             android:layout_toRightOf="@id/resume_text_agree"
             android:layout_marginLeft="15dp"
             app:srcCompat="@drawable/vd_recruit_jobintro_age"
-            android:layout_below="@id/resume_name"
             />
 
         <TextView
             android:id="@+id/resume_text_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/resume_name"
             tools:text="2年"
             android:textSize="12sp"
             android:textColor="@color/qc_text_black"
@@ -344,12 +350,14 @@
             android:layout_marginLeft="3dp"
             />
 
+      </LinearLayout>
+
         <include
             android:id="@+id/divider"
             layout="@layout/divider_grey"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/resume_text_age"
+            android:layout_below="@id/layout_info"
             android:layout_marginTop="15dp"
             android:layout_marginRight="12dp"/>
 
@@ -365,7 +373,7 @@
             android:textSize="12sp"
             android:paddingBottom="5dp"
             />
-      </RelativeLayout>
+      </com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout>
 
       <TextView
           android:id="@+id/rightDesc"

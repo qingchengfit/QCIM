@@ -19,6 +19,7 @@ import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.RecruitModel;
 import com.tencent.qcloud.timchat.chatutils.RecruitBusinessUtils;
 import com.tencent.qcloud.timchat.widget.CircleImageView;
+import com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import java.util.List;
@@ -110,7 +111,7 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
     @BindView(R2.id.tv_right_invite_name) TextView tvRightInviteName;
     @BindView(R2.id.right_invite_recruit_salary) TextView rightInviteRecruitSalary;
     @BindView(R2.id.right_invite_address) TextView rightInviteAddress;
-    @BindView(R2.id.rightMessage) RelativeLayout rightMessage;
+    @BindView(R2.id.rightMessage) DispatchTouchRelatveLayout rightMessage;
 
     public RecruitVH(View view, FlexibleAdapter adapter) {
       super(view, adapter);

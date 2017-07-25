@@ -18,6 +18,7 @@ import com.tencent.qcloud.timchat.chatmodel.CustomMessage;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.ResumeModel;
 import com.tencent.qcloud.timchat.chatutils.RecruitBusinessUtils;
+import com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -127,21 +128,21 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
     @BindView(R2.id.left_resume_text_agree) TextView leftResumeTextAgree;
     @BindView(R2.id.left_resume_text_age) TextView leftResumeTextAge;
     @BindView(R2.id.left_text_click_resume) TextView leftTextClickResume;
-    @BindView(R2.id.leftMessage) RelativeLayout leftMessage;
-    @BindView(R2.id.rightMessage) RelativeLayout rightMessage;
+    @BindView(R2.id.leftMessage) DispatchTouchRelatveLayout leftMessage;
+    @BindView(R2.id.rightMessage) DispatchTouchRelatveLayout rightMessage;
     public ResumeVH(View view, final FlexibleAdapter adapter) {
       super(view, adapter);
       ButterKnife.bind(this, view);
-      leftMessage.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          jumpToResumeId(adapter);
-        }
-      });
-      rightMessage.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          jumpToResumeId(adapter);
-        }
-      });
+      //leftMessage.setOnClickListener(new View.OnClickListener() {
+      //  @Override public void onClick(View v) {
+      //    jumpToResumeId(adapter);
+      //  }
+      //});
+      //rightMessage.setOnClickListener(new View.OnClickListener() {
+      //  @Override public void onClick(View v) {
+      //    jumpToResumeId(adapter);
+      //  }
+      //});
 
     }
 

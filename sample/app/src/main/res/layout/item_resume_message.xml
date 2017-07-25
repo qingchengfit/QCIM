@@ -104,13 +104,15 @@
               android:layout_alignTop="@+id/img_left_resume"
               android:layout_marginTop="5dp"
               />
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/left_layout_info"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_toRightOf="@+id/img_left_resume"
               android:layout_below="@+id/left_resume_name"
               android:layout_marginLeft="10dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
               >
           <ImageView
               android:id="@+id/left_resume_word_year"
@@ -173,7 +175,7 @@
               android:layout_marginLeft="3dp"
               />
 
-          </RelativeLayout>
+          </LinearLayout>
           <include
               android:id="@+id/divider"
               layout="@layout/divider_grey"

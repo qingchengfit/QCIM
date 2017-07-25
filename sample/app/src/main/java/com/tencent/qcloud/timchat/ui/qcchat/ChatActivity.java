@@ -403,8 +403,7 @@ public class ChatActivity extends AppCompatActivity
     imgResumeGender.setImageResource(resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
         : R.drawable.ic_gender_signal_female);
     tvResumeInfo.setText( RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year) + " | "
-        + RecruitBusinessUtils.getAge(resumeModel.birthday)
-        + RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday))
+        + RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday), true)
         + RecruitBusinessUtils.getResumeHeight(resumeModel.height)
         + "cm,"
         + RecruitBusinessUtils.getResumeHeight(resumeModel.weight)

@@ -53,9 +53,9 @@ public class RecruitBusinessUtils {
         return (curYear-c.get(Calendar.YEAR))+"";
     }
 
-    public static String judgeAge(String age){
-        if(!TextUtils.isEmpty(age) && !RecruitBusinessUtils.getAge(age).equals("0")) {
-            return "岁 | ";
+    public static String judgeAge(String age, boolean isTop){
+        if(!TextUtils.isEmpty(age) && !age.equals("0")) {
+            return age + "岁 " + (isTop ? "| " : "");
         }else{
             return "";
         }

@@ -3,11 +3,11 @@ package com.tencent.qcloud.timchat.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,12 +24,13 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 /**
  * Created by fb on 2017/6/14.
  */
 
 public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
-
 
   private Message message;
   private Context context;
@@ -82,22 +83,30 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
           .asBitmap()
           .into(holder.imgResume);
       holder.resumeName.setText(resumeModel.username);
-      holder.resumeTextAge.setText(RecruitBusinessUtils.getAge(resumeModel.birthday));
+      holder.resumeTextAge.setText(
+          RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday), false));
       holder.resumeTextAgree.setText(
           RecruitBusinessUtils.getDegree(context, resumeModel.max_education));
-      holder.resumeTextWorkYear.setText(RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year));
+      holder.resumeTextWorkYear.setText(
+          RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year));
       holder.textClickResume.setText(
           context.getString(R.string.text_click_resume_name, resumeModel.username));
       holder.resumeGender.setImageResource(
           resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
               : R.drawable.ic_gender_signal_female);
+      if (TextUtils.isEmpty(holder.resumeTextAge.getText().toString())) {
+        holder.resumeAge.setVisibility(GONE);
+      }
+      if (TextUtils.isEmpty(holder.resumeTextAgree.getText().toString())) {
+        holder.resumeAgree.setVisibility(GONE);
+      }
     } else {
       Glide.with(context)
           .load(PhotoUtils.getSmall(resumeModel.avatar))
           .asBitmap()
           .into(holder.imgLeftResume);
       holder.leftResumeName.setText(resumeModel.username);
-      holder.leftResumeTextAge.setText(RecruitBusinessUtils.getAge(resumeModel.birthday));
+      holder.leftResumeTextAge.setText(RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday), false));
       holder.leftResumeTextAgree.setText(
           RecruitBusinessUtils.getDegree(context, resumeModel.max_education));
       holder.leftResumeTextWorkYear.setText(
@@ -107,6 +116,13 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
       holder.leftResumeGender.setImageResource(
           resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
               : R.drawable.ic_gender_signal_female);
+
+      if (TextUtils.isEmpty(holder.leftResumeTextAge.getText().toString())) {
+        holder.leftResumeAge.setVisibility(GONE);
+      }
+      if (TextUtils.isEmpty(holder.leftResumeTextAgree.getText().toString())) {
+        holder.leftResumeAgree.setVisibility(GONE);
+      }
     }
     message.showStatus(holder);
   }
@@ -130,6 +146,9 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
     @BindView(R2.id.left_text_click_resume) TextView leftTextClickResume;
     @BindView(R2.id.leftMessage) DispatchTouchRelatveLayout leftMessage;
     @BindView(R2.id.rightMessage) DispatchTouchRelatveLayout rightMessage;
+    @BindView(R2.id.left_resume_agree) ImageView leftResumeAgree;
+    @BindView(R2.id.left_resume_age) ImageView leftResumeAge;
+
     public ResumeVH(View view, final FlexibleAdapter adapter) {
       super(view, adapter);
       ButterKnife.bind(this, view);
@@ -147,21 +166,23 @@ public class ChatResumeItem extends ChatItem<ChatResumeItem.ResumeVH> {
     }
 
     // TODO: 2017/6/24 硬编码 要改
-    public void jumpToResumeId(FlexibleAdapter adapter){
+    public void jumpToResumeId(FlexibleAdapter adapter) {
       IFlexible item = adapter.getItem(getAdapterPosition());
-      if (item instanceof ChatResumeItem){
+      if (item instanceof ChatResumeItem) {
         String id = ((ChatResumeItem) item).getResumeId();
         String packagename = context.getPackageName();
         String uri = "";
         if (packagename.contains("coach")) {
-          uri = uri+"qccoach://resume/?id="+id;
-        }else uri = uri+"qcstaff://resume/?id="+id;
-        try{
+          uri = uri + "qccoach://resume/?id=" + id;
+        } else {
+          uri = uri + "qcstaff://resume/?id=" + id;
+        }
+        try {
           Intent toOut = new Intent();
           toOut.setPackage(context.getPackageName());
           toOut.setData(Uri.parse(uri));
           context.startActivity(toOut);
-        }catch (Exception e){
+        } catch (Exception e) {
           e.printStackTrace();
         }
       }

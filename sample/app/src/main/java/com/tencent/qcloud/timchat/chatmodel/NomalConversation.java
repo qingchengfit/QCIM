@@ -55,6 +55,10 @@ public class NomalConversation extends Conversation {
         ChatActivity.navToChat(context,identify,type);
     }
 
+    public void startChat(Context context, String faceUrl){
+        ChatActivity.navToChat(context,identify, faceUrl, type);
+    }
+
     /**
      * 获取最后一条消息摘要
      */

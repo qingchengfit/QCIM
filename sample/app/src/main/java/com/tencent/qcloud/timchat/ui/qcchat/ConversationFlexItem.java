@@ -41,6 +41,7 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
 
     private Conversation conversation;
     private Context context;
+    private String faceUrl;
 
     public ConversationFlexItem(Context context, Conversation conversation) {
         this.context = context;
@@ -73,11 +74,16 @@ public class ConversationFlexItem extends AbstractFlexibleItem<ConversationFlexI
                                     AppData.defaultAvatar : profile.getFaceUrl()))
                             .asBitmap()
                             .into(holder.avator);
+                    faceUrl = profile.getFaceUrl();
                     holder.tvName.setText(profile.getNickName());
                     onChangeName(holder);
                 }
             }
         });
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
     }
 
     public void onChangeName(ConversationViewHolder holder){

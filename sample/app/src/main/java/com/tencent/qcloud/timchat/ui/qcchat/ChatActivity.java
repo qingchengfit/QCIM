@@ -106,12 +106,9 @@ public class ChatActivity extends AppCompatActivity
   @BindView(R2.id.frame_detail_layout) FrameLayout frameDetailLayout;
   @BindView(R2.id.layout_recruit) View layoutRecruit;
   @BindView(R2.id.layout_resume) View layoutResume;
-  @BindView(R2.id.chat_send_resume)
-  public LinearLayout chatSendResume;
-  @BindView(R2.id.chat_send_button)
-  public TextView tvSendResume;
-  @BindView(R2.id.frag_bottom_position_select)
-  public FrameLayout fragBottomPosition;
+  @BindView(R2.id.chat_send_resume) public LinearLayout chatSendResume;
+  @BindView(R2.id.chat_send_button) public TextView tvSendResume;
+  @BindView(R2.id.frag_bottom_position_select) public FrameLayout fragBottomPosition;
 
   private List<ChatItem> itemList = new ArrayList<>();
   private FlexibleAdapter flexibleAdapter;
@@ -137,11 +134,21 @@ public class ChatActivity extends AppCompatActivity
   private List<ChatItem> tempItemList = new ArrayList<>();
   private String resumeJson;
   private boolean isLatestMessage;
+  private String faceUrl;
 
   public static void navToChat(Context context, String identify, TIMConversationType type) {
     Intent intent = new Intent(context, ChatActivity.class);
     intent.putExtra(Configs.IDENTIFY, identify);
     intent.putExtra(Configs.CONVERSATION_TYPE, type);
+    context.startActivity(intent);
+  }
+
+  public static void navToChat(Context context, String identify, String faceUrl,
+      TIMConversationType type) {
+    Intent intent = new Intent(context, ChatActivity.class);
+    intent.putExtra(Configs.IDENTIFY, identify);
+    intent.putExtra(Configs.CONVERSATION_TYPE, type);
+    intent.putExtra(Configs.FACEURL, faceUrl);
     context.startActivity(intent);
   }
 
@@ -162,7 +169,9 @@ public class ChatActivity extends AppCompatActivity
     root = (RelativeLayout) findViewById(R.id.root);
     frameDetailLayout.setVisibility(View.GONE);
     chatSendResume.setVisibility(View.GONE);
-
+    if (getIntent().getStringExtra(Configs.FACEURL) != null) {
+      faceUrl = getIntent().getStringExtra(Configs.FACEURL);
+    }
     identify = getIntent().getStringExtra(Configs.IDENTIFY);
     if (getIntent().getStringExtra("groupName") != null) {
       titleStr = getIntent().getStringExtra("groupName");
@@ -288,7 +297,7 @@ public class ChatActivity extends AppCompatActivity
     }
   }
 
-  public int getFragId(){
+  public int getFragId() {
     return R.id.frag_bottom_position_select;
   }
 
@@ -341,13 +350,17 @@ public class ChatActivity extends AppCompatActivity
               break;
             case RESUME:
               itemList.add(0, new ChatResumeItem(this, mMessage,
-                  isC2C() || mMessage.isSelf() ? avatar
-                      : mMessage.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+                  (isC2C() && message.isSelf()) ? avatar
+                      : TextUtils.isEmpty(faceUrl) ? message.getSenderProfile().getFaceUrl()
+                          : faceUrl, ChatActivity.this));
               flexibleAdapter.notifyDataSetChanged();
               break;
             case SEND_RECRUIT:
               itemList.add(0, new ChatRercuitItem(getBaseContext(),
-                  (RecruitModel) (((CustomMessage) mMessage).getData()), mMessage));
+                  (RecruitModel) (((CustomMessage) mMessage).getData()), mMessage,
+                  (isC2C() && message.isSelf()) ? avatar
+                      : TextUtils.isEmpty(faceUrl) ? message.getSenderProfile().getFaceUrl()
+                          : faceUrl, ChatActivity.this));
               flexibleAdapter.notifyDataSetChanged();
               break;
             case TOP_RESUME:
@@ -374,12 +387,11 @@ public class ChatActivity extends AppCompatActivity
     }
   }
 
-  @OnClick(R2.id.chat_send_button)
-  public void onSendResume(){
+  @OnClick(R2.id.chat_send_button) public void onSendResume() {
     sendResume();
   }
 
-  public void sendResume(){
+  public void sendResume() {
     sendResumeMessage(resumeJson);
   }
 
@@ -389,7 +401,9 @@ public class ChatActivity extends AppCompatActivity
     layoutResume.setVisibility(View.VISIBLE);
     layoutResume.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        outLink(getCurAppSchema(getBaseContext()) + "://resume/?id=" + ((ResumeModel)((CustomMessage)mMessage).getData()).id);
+        outLink(getCurAppSchema(getBaseContext())
+            + "://resume/?id="
+            + ((ResumeModel) ((CustomMessage) mMessage).getData()).id);
       }
     });
     ResumeModel resumeModel = (ResumeModel) ((CustomMessage) mMessage).getData();
@@ -402,19 +416,20 @@ public class ChatActivity extends AppCompatActivity
     tvResumeName.setText(resumeModel.username);
     imgResumeGender.setImageResource(resumeModel.gender == 0 ? R.drawable.ic_gender_signal_male
         : R.drawable.ic_gender_signal_female);
-    tvResumeInfo.setText( RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year) + " | "
-        + RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday), true)
-        + RecruitBusinessUtils.getResumeHeight(resumeModel.height)
-        + "cm,"
-        + RecruitBusinessUtils.getResumeHeight(resumeModel.weight)
-        + "kg | "
-        + RecruitBusinessUtils.getDegree(getBaseContext(), resumeModel.max_education));
+    tvResumeInfo.setText(
+        RecruitBusinessUtils.getResumeWorkYear(resumeModel.work_year)
+            + " | "
+            + RecruitBusinessUtils.judgeAge(RecruitBusinessUtils.getAge(resumeModel.birthday), true)
+            + RecruitBusinessUtils.getResumeHeight(resumeModel.height)
+            + "cm,"
+            + RecruitBusinessUtils.getResumeHeight(resumeModel.weight)
+            + "kg | "
+            + RecruitBusinessUtils.getDegree(getBaseContext(), resumeModel.max_education));
     tvResumeDetail.setText(
-        String.valueOf(RecruitBusinessUtils.dealData(resumeModel.exp_job)) + String.valueOf(RecruitBusinessUtils.dealData(
-            resumeModel.city)) + RecruitBusinessUtils.getSalary(
+        String.valueOf(RecruitBusinessUtils.dealData(resumeModel.exp_job)) + String.valueOf(
+            RecruitBusinessUtils.dealData(resumeModel.city)) + RecruitBusinessUtils.getSalary(
             resumeModel.min_salary, resumeModel.max_salary));
   }
-
 
   private void showTopRercuit(final Message mMessage) {
     frameDetailLayout.setVisibility(View.VISIBLE);
@@ -422,7 +437,10 @@ public class ChatActivity extends AppCompatActivity
     layoutResume.setVisibility(View.GONE);
     layoutRecruit.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        outLink(getCurAppSchema(getBaseContext()) + "://job/" + ((RecruitModel)((CustomMessage)mMessage).getData()).id + "/");
+        outLink(getCurAppSchema(getBaseContext())
+            + "://job/"
+            + ((RecruitModel) ((CustomMessage) mMessage).getData()).id
+            + "/");
       }
     });
     RecruitModel recruitModel = (RecruitModel) (((CustomMessage) mMessage).getData());
@@ -449,30 +467,36 @@ public class ChatActivity extends AppCompatActivity
 
     if (message instanceof TextMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatTextItem(this, message, isC2C() || message.isSelf() ? avatar
-            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(0, new ChatTextItem(this, message, (isC2C() && message.isSelf()) ? avatar
+            : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                : faceUrl, ChatActivity.this));
       } else {
-        itemList.add(new ChatTextItem(this, message, isC2C() || message.isSelf() ? avatar
-            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(new ChatTextItem(this, message, (isC2C() && message.isSelf()) ? avatar
+            : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                : faceUrl, ChatActivity.this));
       }
     }
     if (message instanceof ImageMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatImageItem(this, message, isC2C() || message.isSelf() ? avatar
-            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(0, new ChatImageItem(this, message, (isC2C() && message.isSelf()) ? avatar
+            : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                : faceUrl, ChatActivity.this));
       } else {
-        itemList.add(new ChatImageItem(this, message, isC2C() || message.isSelf() ? avatar
-            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(new ChatImageItem(this, message, (isC2C() && message.isSelf()) ? avatar
+            : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                : faceUrl, ChatActivity.this));
       }
     }
 
     if (message instanceof VoiceMessage) {
       if (isSingle) {
-        itemList.add(0, new ChatVoiceItem(this, message, isC2C() || message.isSelf() ? avatar
-            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(0, new ChatVoiceItem(this, message, (isC2C() && message.isSelf()) ? avatar
+            : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                : faceUrl, ChatActivity.this));
       } else {
-        itemList.add(new ChatVoiceItem(this, message, isC2C() || message.isSelf() ? avatar
-            : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+        itemList.add(new ChatVoiceItem(this, message, (isC2C() && message.isSelf()) ? avatar
+            : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                : faceUrl, ChatActivity.this));
       }
     }
     if (message instanceof CustomMessage) {
@@ -480,11 +504,14 @@ public class ChatActivity extends AppCompatActivity
         case SEND_RECRUIT:
           itemList.add(
               new ChatRercuitItem(this, (RecruitModel) (((CustomMessage) message).getData()),
-                  message));
+                  message, (isC2C() && message.isSelf()) ? avatar
+                  : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl() : faceUrl,
+                  ChatActivity.this));
           break;
         case RESUME:
-          itemList.add(new ChatResumeItem(this, message, isC2C() || message.isSelf() ? avatar
-              : message.getMessage().getSenderProfile().getFaceUrl(), ChatActivity.this));
+          itemList.add(new ChatResumeItem(this, message, (isC2C() && message.isSelf()) ? avatar
+              : TextUtils.isEmpty(faceUrl) ? message.getMessage().getSenderProfile().getFaceUrl()
+                  : faceUrl, ChatActivity.this));
           break;
         case TOP_RESUME:
           if (!isLatestMessage) {

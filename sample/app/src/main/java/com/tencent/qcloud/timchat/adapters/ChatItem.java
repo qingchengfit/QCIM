@@ -101,14 +101,17 @@ public class ChatItem<T extends ChatItem.ViewHolder> extends AbstractFlexibleIte
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, T holder, int position, List payloads) {
-        Glide.with(context)
+        if (!message.isSelf()) {
+            Glide.with(context)
                 .load(PhotoUtils.getSmall(TextUtils.isEmpty(avatar) ? AppData.defaultAvatar : avatar))
                 .asBitmap()
                 .into(holder.leftAvatar);
-        Glide.with(context)
+        }else {
+            Glide.with(context)
                 .load(PhotoUtils.getSmall(AppData.getAvatar(context)))
                 .asBitmap()
                 .into(holder.rightAvatar);
+        }
 
       message.getBubbleView(holder);
     }

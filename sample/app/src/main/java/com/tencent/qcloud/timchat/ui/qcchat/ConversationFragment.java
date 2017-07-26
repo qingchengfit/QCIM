@@ -345,7 +345,7 @@ public class ConversationFragment extends Fragment
         .getConversation(conversation.getType(), conversation.getIdentify())
         .setReadMessage();
     flexibleAdapter.notifyItemChanged(position);
-    conversation.navToDetail(getActivity());
+    conversation.startChat(getActivity(), ((ConversationFlexItem)flexItemList.get(position)).getFaceUrl());
     //        if (flexItemList.get(position).getConversation() instanceof GroupManageConversation) {
     //            groupManagerPresenter.getGroupManageLastMessage();
     //        }

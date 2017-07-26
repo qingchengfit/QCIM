@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -18,7 +16,6 @@ import com.tencent.qcloud.timchat.R2;
 import com.tencent.qcloud.timchat.chatmodel.Message;
 import com.tencent.qcloud.timchat.chatmodel.RecruitModel;
 import com.tencent.qcloud.timchat.chatutils.RecruitBusinessUtils;
-import com.tencent.qcloud.timchat.widget.CircleImageView;
 import com.tencent.qcloud.timchat.widget.DispatchTouchRelatveLayout;
 import com.tencent.qcloud.timchat.widget.PhotoUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -29,7 +26,6 @@ import java.util.List;
  */
 
 public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
-
 
   private RecruitModel recruitModel;
   private Context context;
@@ -45,8 +41,9 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
     this.message = message;
   }
 
-  public ChatRercuitItem(Context context, RecruitModel recruitModel, Message message) {
-    super(context);
+  public ChatRercuitItem(Context context, RecruitModel recruitModel, Message message, String avatar,
+      OnDeleteMessageItem onDeleteMessageItem) {
+    super(context, message, avatar, onDeleteMessageItem);
     this.context = context;
     this.recruitModel = recruitModel;
     this.message = message;
@@ -77,21 +74,29 @@ public class ChatRercuitItem extends ChatItem<ChatRercuitItem.RecruitVH> {
       return;
     }
     if (!message.isSelf()) {
-      Glide.with(context).load(PhotoUtils.getSmall(recruitModel.photo)).asBitmap().into(holder.imgLeftInviteRecruit);
+      Glide.with(context)
+          .load(PhotoUtils.getSmall(recruitModel.photo))
+          .asBitmap()
+          .into(holder.imgLeftInviteRecruit);
 
       holder.tvLeftInviteName.setText(recruitModel.name);
       holder.leftInviteRecruitSalary.setText(
           RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary, "面议"));
-      holder.leftInviteAddress.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
-          : "·" + recruitModel.gym_name));
-    }else{
-      Glide.with(context).load(PhotoUtils.getSmall(recruitModel.photo)).asBitmap().into(holder.imgRightInviteRecruit);
+      holder.leftInviteAddress.setText(
+          recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
+              : "·" + recruitModel.gym_name));
+    } else {
+      Glide.with(context)
+          .load(PhotoUtils.getSmall(recruitModel.photo))
+          .asBitmap()
+          .into(holder.imgRightInviteRecruit);
 
       holder.tvRightInviteName.setText(recruitModel.name);
       holder.rightInviteRecruitSalary.setText(
           RecruitBusinessUtils.getSalary(recruitModel.min_salary, recruitModel.max_salary, "面议"));
-      holder.rightInviteAddress.setText(recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
-          : "·" + recruitModel.gym_name));
+      holder.rightInviteAddress.setText(
+          recruitModel.address + (TextUtils.isEmpty(recruitModel.gym_name) ? ""
+              : "·" + recruitModel.gym_name));
     }
     message.showStatus(holder);
   }

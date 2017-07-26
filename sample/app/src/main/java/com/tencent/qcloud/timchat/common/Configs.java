@@ -15,6 +15,7 @@ public class Configs {
     public static final String CHAT_RECRUIT = "conversation_job_recruit";
     public static final String CHAT_RECRUIT_STATE = "conversation_recruit_state";
     public static final String SEND_RESUME = "send_resume";
+    public static final String FACEURL = "conversation_faceurl";
 
     public static final String PREFRENCE_USERSIG = "prefrence_usersig";
     public static final String VALUE_USERSIG = "usersig";
